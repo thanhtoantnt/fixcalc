@@ -1,0 +1,29 @@
+# Postcondition for the test method from the Queens program.
+# Most precise for 3-disjunctive analysis.
+# bool test(int j, int i, int qi, int[int] board) { 
+#   if (j >= i) then { True }
+#   else {
+#     int qj := board[j];
+#     if (qi = qj) then { False }
+#     else {
+#       if ((abs (qi - qj)) = (i - j)) then { False }
+#       else { 
+#         test (j+1, i, qi, board) 
+#       }}}}
+
+test:={[j,i,qi,board] -> [res] -> [j,i,qi]: (exists (PRMj,PRMi,PRMqi : exists (g_149,g_150,g_151,g_152,g_153 : (((j >= 0 && g_150 >= 1 + j && g_152 >= 1 + j) && j = PRMj && g_150 = PRMi && g_152 = board && g_150 = i && g_151 = qi && g_151 = PRMqi && g_153 = res && test(g_149,g_150,g_151,g_152,g_153) && j + 1 = g_149) || ((j >= 0 && board >= 1 + j && i >= 1 + j) && j = PRMj && i = PRMi && PRMqi = qi && 0 = res) || ((j >= i && board >= 1) && j = PRMj && i = PRMi && PRMqi = qi && 1 = res)))))};
+
+F0:={[]: 0=1};
+F1:=test(F0);F1;
+F2:=test(F1);F2;
+F3:=test(F2);F3;F3H:=selhull(F3,3,SimHeur);F3H;
+F4:=test(F3H);F4;F4H:=selhull(F4,3,SimHeur);F4H;
+F3W:=widen(F3H,F4H,SimHeur);F3W;fixtestPost([test],[F3W]);
+
+Fix1:=bottomup(test,1,SimHeur);
+#Fix2:=bottomup(test,2,SimHeur);
+#Fix3:=bottomup(test,3,SimHeur);
+Fix1;#Fix2;Fix3;
+
+#F3W subset Fix3;
+#Fix3 subset F3W;

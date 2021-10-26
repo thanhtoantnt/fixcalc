@@ -1,0 +1,96 @@
+initial base e.g x=0 & y=0
+  => saturate [x>=0,res>=0,x<=0,y<=0]
+  => add transitivity x>=y,y<=x
+  x!=y ==> x>y or x<y
+  => keep a list of possible constraints 
+     that could be kept
+
+saturate after each convex hull
+  => and save into a history (but may cause loop)
+
+saturate after 3 steps & convex hull?
+
+x=y & y=z ==> x=z (do we need this?)
+
+e1>=e2 & e2>=e3 ==> e1>=e3
+
+(1) find all equalities
+    x=0 & y=0 => x=y
+(2) saturate with inequality
+    x=y ==> x>=y & y>=y
+
+e.g
+    x=0 & y=1 => y=x+1 
+
+-res
+R2:={[x] -> [res] -> []: ((x=-1 && -res=1) 
+R1:={[x] -> [res] -> []: ((res=1 && -x=-1) 
+
+pickEq:[[(-x),-1],[(-res),-1]]
+pickEq(simpl):[[(-x),-1],[(-res),-1]]
+pickEq:[[(-res),1],[(-x),1]]
+pickEq(simpl):[[(-res),1],[(-x),1]]
+
+//
+x=c1 & y=c2 ==> x=y+?
+x=e1 & x=e2 ==> e1=e2
+e1=e2 & e1=e3 ==> e2=e3
+
+
+
+ x+0=0 & y+0=0    ==> x-y=0
+ x+0=0 & y-1=0    ==> x+y-1=0
+ x+y=0 & -y+z=0   ==> x+z=0
+ x+y=0 & -2y+z=0  ==> 2x+z=0
+
+ x+2=0 & y-3=0    ==> x+y-(3-2)=0
+
+ x+y=0  & x=1
+
+I have done two preliminary functions that allows me
+to generate implied inequalities from equality, as shown
+below. This would need to be refined further. However,
+one immediate thing that you can do is to add fixcalc
+commands of the form below. Please also study some debug
+commands I have built in Fresh.hs, such as print_DD.
+It should also be quite useful to provide those for Ocaml.
+
+    # F = {[x,y]:x=0 & y=0}
+    F1 := SaturateEQ F
+    # F1 = {[x,y]:x=0 & y=0 & x=y}
+    F2 := PickGEQfromEQ F1
+    # F2 = {[x,y]:x>=0 & x<=0 & y>=0 & y<=0 & x>=y & x<=0};
+    F3 := SaturateGEQ {[x,y,z]:x>=y & y>=z}
+    # F3 = {[x,y,z]:x>=y & y>=z & x>=z}
+
+Some tracing you can do with examples in bugs
+
+tracing saturateEQ :: Formula -> FS [Formula]
+../fixcalc i-mut3.fc -v:-5
+orig5:(0 = 0 && 0 = x && 1 = res)
+sat5:[0 >= x,x >= 0,x >= 0,1 >= res,res >= 1,res >= 0,1 + x >= res,res >= 1 + x,res >= x]
+orig5:(0 = 0 && 0 = res && 0 = x)
+sat5:[0 >= res,res >= 0,res >= 0,0 >= x,x >= 0,x >= 0,x >= res,res >= x]
+((x >= 0 && res >= x) && res >= 1)
+(x >= 0 && res >= x)
+
+tracing pickGEQfromEQ :: Formula -> FS [Formula]
+../fixcalc i-mut3.fc -v:-6
+orig(pickSatEq):(0 = 0 && 0 = x && 1 = res)
+eq:[[0,(-x)],[1,(-res)]]
+sat:[[1,(-res),x]]
+satGEq_f_Eq:[0 >= x,x >= 0,x >= 0,1 >= res,res >= 1,res >= 0,1 + x >= res,res >= 1 + x,res >= x]
+orig(pickSatEq):(0 = 0 && 0 = res && 0 = x)
+eq:[[0,(-res)],[0,(-x)]]
+sat:[[(-res),x]]
+satGEq_f_Eq:[0 >= res,res >= 0,res >= 0,0 >= x,x >= 0,x >= 0,x >= res,res >= x]
+
+// sort2e.fc
+
+@ presence of spurious vars in bottom-up fixpoint with recursion
+
+# P:={ ... };
+# R0:={ ... };
+((0 = 0 && a = b) || (b >= 1 + a && a_675 >= r_674))
+a_675 >= r_674
+

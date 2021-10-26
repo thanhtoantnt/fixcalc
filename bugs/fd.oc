@@ -1,0 +1,14 @@
+RBU1:={[n,h,m]:((n >= 3 + m && 3 + m + 3h >= n) && n >= 3 + 3h)};
+
+
+RBU2:={[n,h,m]:((n >= m && h >= 0) && n >= 3 + 3h)};
+
+
+RHand:={[n,h,m]:((((n >= 3h + 3 && n >= m) && m + 9 >= n) && h >= 0) || ((n >= 3 + m && n >= 3 + 3h) && 3 + 3h + m >= n))};
+
+RHand subset RBU1;
+RBU1 subset RHand;
+
+RBU1 subset RBU2;
+RBU2 subset RBU1;
+

@@ -1,0 +1,56 @@
+fOK:={[s,i,j]:i>j or 0<=i<=j<s};
+fERR:={[s,i,j]:i<=j & not(0<=i & j<s)};
+
+PairWiseCheck(fOK union fERR);
+fOK intersection fERR;
+
+fERRrhs1:={[s,i,j]:i<=j & ((i+1<=j & not(0<=i+1 & j<s)) or ((i+1>j or 0<=i+1<=j<s) & (i<0 or i>=s)))};
+
+fERR subset fERRrhs1;
+fERRrhs1 subset fERR;
+
+fERRrhs2:={[s,i,j]:i<=j & ((i<0 or i>=s) or (0<=i<s & i+1<=j & not(0<=i+1 & j<s)))};
+
+
+fERR subset fERRrhs2;
+fERRrhs2 subset fERR;
+
+
+f2a:={[s,i,j]:i<=j & ((i<0 or i>=s) or (0<=i<s & 1=0))};
+PairWiseCheck f2a;
+
+
+# {[s,i,j]: (i <= j, -1 or  s <= i <= j)};
+
+f2b:={[s,i,j]:i<=j & ((i<0 or i>=s) or (0<=i<s &
+     (i+1 <= j, -1 or  s <= i+1 <= j)
+  ))};
+PairWiseCheck f2b;
+
+#{[s,i,j]: ((i=s-1 & 1 <= s <= j) or i <= j, -1 or s <= i <= j)}
+
+
+f2c:={[s,i,j]:i<=j & ((i<0 or i>=s) or (0<=i<s &
+     ((i+1=s-1 & 1 <= s <= j) or i+1 <= j, -1 or s <= i+1 <= j)
+  ))};
+
+PairWiseCheck f2c;
+
+# {[s,i,j]: (i <= j, -1 or s <= i <= j or s-2, 0 <= i < s <= j)};
+
+f2d:={[s,i,j]:i<=j & ((i<0 or i>=s) or (0<=i<s &
+     (i+1 <= j, -1 or s <= i+1 <= j or s-2, 0 <= i+1 < s <= j)
+  ))};
+
+PairWiseCheck f2d;
+# {[s,i,j]: (i <= j, -1 or s <= i <= j or  0 <= i < s <= j)};
+f2e:={[s,i,j]:i<=j & ((i<0 or i>=s) or (0<=i<s &
+     (i+1 <= j, -1 or s <= i+1 <= j or  0 <= i+1 < s <= j)
+  ))};
+
+PairWiseCheck f2e;
+PairwiseCheck fERR;
+
+f2e subset fERR;
+fERR subset f2e; 
+

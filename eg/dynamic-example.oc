@@ -1,0 +1,15 @@
+P1 := {[a,b,x,y,z]: a < 0 & b >= -10 & y < 5 & x < y + 1 & y + 1 < 2 & z = 0};
+P2 := {[a,b,x,y,z]: a < 0 & b >= -10 & y < 5 & x >= y + 1 & y + 1 < 2 & z = 0};
+P3 := {[a,b,x,y,z]: a < 0 & b >= -10 & y >= 5 & x < y & y + 1 < 2 & z = 0};
+P4 := {[a,b,x,y,z]: a < 0 & b >= -10 & y >= 5 & x >= y & y < 2 & z = 0};
+
+P5 := {[a,b,x,y,z]: a >= 0 & b >= -10 & y < 5 & x < y + 1 & y + 1 < 2 & z = 0};
+P6 := {[a,b,x,y,z]: a >= 0 & b >= -10 & y < 5 & x >= y + 1 & y + 1 < 2 & z = 0};
+P7 := {[a,b,x,y,z]: a >= 0 & b >= -10 & y >= 5 & x < y & y + 1 < 2 & z = 0};
+P8 := {[a,b,x,y,z]: a >= 0 & b >= -10 & y >= 5 & x >= y & y < 2 & z = 0};
+
+Res := P1 union P2 union P3 union P4 union P5 union P6 union P7 union P8;
+
+#hull(Res);
+pairwisecheck(Res);
+

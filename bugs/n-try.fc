@@ -1,0 +1,5 @@
+P3:={[a,b] -> [] -> []: (a=0 && b=0) || (exists (bn,an:a=an+1 && b=bn+1 && a>0 && P3(an,bn)))};
+#bottomupgen([P3], [2], SimHeur);
+
+P4:={[a,b,n] -> [] -> []: n=0 && P3(a,b) || (exists (bn,nn:n=nn+1 && b=bn+1 && n>0 && P4(a,bn,nn)))};
+bottomupgen([P3,P4], [2,2], SimHeur);

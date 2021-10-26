@@ -1,0 +1,28 @@
+RCheck :={[i,n,s]:
+forall(RECi,RECn,RECs: not(
+(RECi >= 1 + i && RECn = n && RECs = s)
+) ||
+((not(RECi < RECn)) || (RECi>=0 && RECi<RECs))
+)};
+RCheck;
+
+ICheck := {[i,n,s]:
+not(i<n) || (0<=i && i<s) 
+};
+ICheck;
+
+Inv := {[i,n,s]: 0=0};
+
+Pre:=(RCheck intersection ICheck) intersection Inv;
+#Pre;
+PairWiseCheck Pre;
+# {[i,n,s]: n <= i} union {[i,n,s]: 0 <= i < s && n <= s}
+
+
+P:={[i,n,s]:
+  (n<=i) || (0<=i && n<=s)
+};
+
+Pre subset P;
+
+P subset Pre;

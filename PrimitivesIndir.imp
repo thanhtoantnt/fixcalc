@@ -1,0 +1,30 @@
+---Array Int with indirection--
+Void printArr(Int<n>[Int<n1>] A)
+  where (n.min'=n.min && n.max'=n.max),{},{}
+
+Int<r> len(Int<n>[Int<n1>] A,Int<i> i)
+  where (i=1 && r=n1 && i'=i && n.min'=n.min && n.max'=n.max),{D:(i=1)},{}
+
+--Int<s> sub(Int<n>[Int<n1>] A,Int<s1> i)
+--  where (n.min<=s<=n.max && s1'=s1 && n.min'=n.min && n.max'=n.max),
+--    {L1: (0<=s1),H1:(s1<n1)},
+--    {L1: 0<=i,H1: l_:lt(i,(l_:len(A,1)))}
+
+--Void assign(Int<n>[Int<n1>] A,Int<s1> i,Int<s> v)
+--  where(exists (c: n.min'=c && (c=n.min && n.min<=s || c=s && n.min>s)) -- min(n.min,s)
+--        &&
+--        exists (c: n.max'=c && (c=n.max && n.max>=s || c=s && n.max<s)) -- max(n.max,s)
+--        && s1'=s1 && s'=s),
+--    {L1: (0<=s1),H1:(s1<n1)},
+--    {L1: 0<=i,H1: i<(l_:len(A,1))}
+
+Int<s> sub(Int<n>[Int<n1>] A,Int<s1> i)
+  where (n.min=s && s1'=s1 && n.min'=n.min && n.max'=n.max),
+    {L1: (0<=s1),H1:(s1<n1)},
+    {L1: 0<=i,H1: l_:lt(i,(l_:len(A,1)))}
+
+Void assign(Int<n>[Int<n1>] A,Int<s1> i,Int<s> v)
+  where ((n.min'=s || n.min'=n.min) && n.max'=n.max && s1'=s1 && s'=s),
+    {L1: (0<=s1),H1:(s1<n1)},
+    {L1: 0<=i,H1: i<(l_:len(A,1))}
+-------Array Int with indirection

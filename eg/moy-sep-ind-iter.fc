@@ -1,0 +1,37 @@
+loop:={[i,n,s]->[Pi,Pn,Ps]->[]: 
+  exists(i1,n1,s1: 
+     (i1=i+1 && n1=n && s1=s && loop(i1,n1,s1,Pi,Pn,Ps))
+	)};
+
+W0 := {!(i<n) || (i <s)}; W0;
+
+# L0 := W0;
+
+W1 := loop(W0); W1;
+# (i + 1 >= n || s >= 2 + i)
+
+# L0 subset W1;
+W0 subset W1;
+
+# forall i. W0 => W1
+W01 := {forall(i: !(!(i<n) || (i <s)) 
+  || (i + 1 >= n || (s >= 2 + i)))}; 
+W01;
+# s >= n
+
+W2 := loop(W1); W2;
+# (i + 2 >= n || s >= 3 + i)
+
+W01 subset W2;
+
+L1 := W0 intersection W1;
+L1;
+# (i >= n || (i + 1 >= n && s >= 1 + i) || s >= 2 + i)
+
+L1 subset W2;
+
+# forall i. L1 => W2
+W12 := {forall(i: !(i >= n || (i + 1 >= n && s >= 1 + i) || s >= 2 + i) 
+        || (i + 2 >= n || s >= 3 + i))}; 
+W12;
+# s >= n

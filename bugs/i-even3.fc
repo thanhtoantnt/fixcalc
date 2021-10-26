@@ -1,0 +1,28 @@
+R1:={[x,k] -> [res] -> []: ((x=0 && res=0 &&k=0) || 
+(x=1 && res=0 && k=1) ||  (exists (res1: (exists (x1,k1:((res=res1+2 && (x=x1+2 && 1<x && k=k1+1)) && R1(x1,k1,res1)))) )) )
+};
+
+# seems to require exists k:
+# can we get a better result?
+
+Fix:=bottomup(R1, 2, SimHeur);
+
+Fix;
+
+#(res + 2k = 2x && ((x + 1 >= 2k && x >= 0) && 2k >= x))
+
+Res2:={[x,k,res]:x >= 0 && k>=0 && res>=0
+   && ((x=2k && res=x) || (x+1=2k && res+1=x) )};
+
+Res2 subset Fix;
+
+Fix subset Res2;
+
+#PairWiseCheck Res2; not supported?
+
+fixtestPost(R1,Fix);
+
+fixtestPost(R1,Res2);
+
+
+

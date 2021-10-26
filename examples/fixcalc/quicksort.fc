@@ -1,0 +1,34 @@
+# Postcondition for the changeN method from the Quicksort program.
+# Most precise for 3-disjunctive analysis.
+
+# int changeN(float [int] a,int n,int i,int h,float v) 
+# -- n is the last element smaller-or-equal than the pivot
+# -- i is the start of the sequence remaining to be compared with the pivot
+# -- h is the end of the sequence remaining to be compared with the pivot
+# -- v is the value of the pivot
+# {
+#   if (i <= h) then {
+#     if (ltFF(subF(a,i),v)) then {
+#       swap(a,n+1,i);
+#       changeN(a,n+1,i+1,h,v)
+#     } else { changeN(a,n,i+1,h,v) }
+#   } else { n }
+# }
+
+changeN:={[s,n,i,h] -> [res] -> [n,i,h]: (exists (PRMn,PRMi,PRMh : exists (g_176,g_177,g_178,g_179,g_180,g_182,g_183,g_184,g_185,g_186 : (((PRMi >= 0 && g_182 >= 1 + PRMi && g_185 >= PRMi) && g_182 = s && g_185 = h && g_183 = n && PRMi = i && g_183 = PRMn && g_185 = PRMh && g_186 = res && changeN(g_182,g_183,g_184,g_185,g_186) && PRMi + 1 = g_184) || (((PRMi >= 0 && g_176 >= 1 + PRMi && g_179 >= PRMi) && (PRMn + 1 >= 0 && g_176 >= 2 + PRMn)) && g_176 = s && g_179 = h && PRMn = n && PRMi = i && g_179 = PRMh && changeN(g_176,g_177,g_178,g_179,g_180) && PRMn + 1 = g_177 && PRMi + 1 = g_178 && g_180 = res) || ((PRMi >= 1 + PRMh && s >= 1) && PRMh = h && res =n && PRMi = i && res = PRMn)))))};
+
+
+#F0:={[]: 0=1};
+#F1:=changeN(F0);F1;
+#F2:=changeN(F1);F2;
+#F3:=changeN(F2);F3;F3H:=selhull(F3,3,SimHeur);F3H;
+#F4:=changeN(F3H);F4;F4H:=selhull(F4,3,SimHeur);F4H;
+#F3W:=widen(F3H,F4H,SimHeur);F3W;fixtestPost(changeN,F3W);
+
+Fix1:=bottomup(changeN,1,SimHeur);
+Fix2:=bottomup(changeN,2,SimHeur);
+Fix3:=bottomup(changeN,3,SimHeur);
+Fix1;Fix2;Fix3;
+
+#F3W subset Fix3;
+#Fix3 subset F3W;

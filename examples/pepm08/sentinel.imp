@@ -1,0 +1,25 @@
+#include "Primitives.imp"
+
+Void main()
+{
+  Int dim:=10;
+  Float [Int][dim] A := 2.0;
+  assignF(A,4,3.0);
+  {
+    Int res := initsearch(A,3.0);
+    printArrF(A);
+    print(res)  
+  };
+  printStats()
+}
+
+Int initsearch(Float[Int] a,Float k) {
+   assignF(a,0,k);
+   sent(a,lenF(a,1)-1,k)
+}
+
+Int sent(Float[Int] a, Int i, Float k) {
+  Float v := subF(a,i);
+  if (eqFF(v,k)) then { i }
+  else { sent(a,i-1,k) }
+}

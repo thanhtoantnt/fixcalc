@@ -1,0 +1,14 @@
+P:={[x,y] -> [] -> []: (y>x || x>0-(1)) && x>=y &&  (forall (PRIx:(!(x=PRIx+y && 0<=PRIx && 0<=PRIx+y) || P(PRIx,y)))) 
+};
+
+F0:={[]: 1=1};
+
+F1:=P(F0); F1;
+
+F2:=P(F1); F2;
+
+F3:=P(F2); F3; 
+
+F4:=P(F3); F4; 
+
+gfp([P], [2], SimHeur);

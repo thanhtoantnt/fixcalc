@@ -1,0 +1,42 @@
+# Constraint-abstraction from figure 1a from Moy's paper in VMCAI'08
+
+loop:={[i,n,s]->[Pi,Pn,Ps]->[]: 
+  exists(i1,n1,s1: 
+     (i1=i+1 && n1=n && s1=s && loop(i1,n1,s1,Pi,Pn,Ps))
+	)};
+
+F2:=topdown(loop,2,SimHeur); F2;
+#(RECi >= 1 + i && RECn = n && RECs = s)
+
+RCheck :={#[i,n,s]:
+forall(RECi,RECn,RECs: !(
+(RECi >= 1 + i && RECn = n && RECs = s)
+) ||
+((!(RECi < RECn)) || (RECi>=0 && RECi<RECs))
+)};
+RCheck;
+
+ICheck := {#[i,n,s]:
+!(i<n) || (0<=i && i<s) 
+};
+ICheck;
+
+Inv := {#[i,n,s]: 
+  0=0};
+
+RICheck:=RCheck intersection ICheck;
+Pre:=RICheck intersection Inv;
+#Pre;
+PairwiseCheck Pre;
+# {[i,n,s]: n <= i} union {[i,n,s]: 0 <= i < s && n <= s}
+
+
+P:={#[i,n,s]:
+  (n<=i) || (0<=i && n<=s)
+};
+
+Pre subset P;
+
+P subset Pre;
+
+

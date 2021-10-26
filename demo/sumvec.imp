@@ -1,0 +1,28 @@
+#include "Primitives.imp"
+
+void main()
+{
+  int dim:=4;
+  int [int][dim] A := 0;
+  int res := 0;
+  init_arr(A,0,dim-1);
+  printArr(A);
+  res := sum(A,0,dim-1);
+  print(res)
+}
+
+void init_arr(int[int] a, int i, int j)
+{
+  if (i>j) then { void }
+  else {
+    a[i]:=myrandom(10);
+    init_arr(a,i+1,j)
+  }
+}
+
+int sum(int[int<a>] a, int<i> i,int<j> j)
+-- where (Bogus),{},{},(a=a^ && j=j^ && 0<=i<i^<=a,j+1 && a>j),
+{
+  if (i>j) then { 0 }
+  else { a[i]+sum(a,i+1,j) }
+}

@@ -1,0 +1,48 @@
+-- Program can't be proved safe: ERR for queens method is too imprecise. 
+
+#include "Primitives.imp"
+
+
+void main() {
+  int dim:=8;
+  int[int][dim] row:=0;
+  queens(row,0,1)
+}
+
+void queens(int[int] row, int x, int y) {
+  if (x<8) then {
+    row[y-1] := x;
+    { --if (safe(row,x,y-1)=1) then {
+        if (y<8) then { queens(row,0,y+1) }
+        else { putboard() }
+      --} else {void}
+    };
+    queens(row,x+1,y)
+  } else { void }
+}
+
+--int safe(int[int] row,int x, int y) {
+--  int i:=1;
+--  int res:=1;
+--  safe_while(row,i,x,y,res);
+--  res
+--}
+--
+--void safe_while(int[int] row, int i, int x, int y, ref int res) {
+--  if (i<=y) then {
+--    { if (or (row[y-i] = x, or(row[y-i] = x-i, row[y-i]=x+i))) then { res:=0 }
+--      else { void }
+--    };
+--    safe_while(row,i+1,x,y,res)
+--  } else { void }
+--}
+
+void putboard()
+{
+  void
+--        printf("\nSolution #%d:\n---------------------------------\n", ++s);
+--        int y,x;
+--        for (y = 0; y < 8; printf("|\n---------------------------------\n"), y++)
+--                for (x = 0; x < 8; printf(x++ == row[y] ? "| Q " : "|   "));
+}
+

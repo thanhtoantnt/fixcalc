@@ -1,0 +1,19 @@
+#include "Primitives.imp"
+
+Void main()
+{
+  Int dim:=10;
+  Int [Int][dim] A := 0;
+  initArr(A,0,dim-1,0);
+  printArr(A);
+  printStats()
+}
+
+Void initArr (Int [Int] A, Int i, Int j, Int n)
+{ 
+  if (i>j) then { Void }
+ 	else { 
+ 	  assign(A,i,n);
+    initArr(A,i+1,j,n+1)
+	}
+}

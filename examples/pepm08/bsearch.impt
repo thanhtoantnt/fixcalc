@@ -1,0 +1,33 @@
+#include "Primitives.imp"
+
+Int<r> Bsearch(Float [Int<s>] a,Float k) 
+	where (-1<=r<s),{},{},(True),
+{ 
+  Int l:= lenF(a,1);
+  lookup(a,k,0,l-1)
+}
+
+Int<r> lookup(Float[Int<s>] a,Float k,Int<i> i,Int<j> j)
+  where (((r=-1) || (i,0<=r<s)) && i=i' && j=j'),
+  {l1.L:(j < i && 0 <= i || 0 <= i <= j || j+1 <= i <= -1 || (0 <= i+j && i <= -1 && 2s <= i+j)),
+      l1.H:(j <= i-1, s-1 || i <= j < s || s <= j < i)},{},
+  (s=s^ && i<=i^<=j^+1 && j^<=j && i+j<2s && j^<j+i^ && 2+2i+2j^<=j+3i^ && i+2j^ < j+2i^), 
+{	
+  if i>j then { minus(0,1) }
+  else {
+  	Int m:=getmid(i,j);
+    Float v:=subF(a,m);
+    if (eqFF(v,k)) then { m }
+    else {
+      if gtFF(v,k)
+        then { lookup (a,k,i,m-1) }
+        else { lookup (a,k,m+1,j) }
+    }
+  }
+}
+
+Int<m> getmid(Int<i>i,Int<j>j) 
+  where (2m<=i+j<=2m+1 && i=i' && j=j'),{},{},(True),
+{
+  div2(i+j)
+}

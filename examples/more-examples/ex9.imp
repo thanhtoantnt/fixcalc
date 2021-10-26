@@ -1,0 +1,28 @@
+#include "Primitives.imp"
+
+-- example Fig1a from the TACAS'06 paper of Gulavani et al
+-- Result for conjunctive domain: can be proven safe without any counter
+-- Result for disjunctive domain: sel-hull loses precision due to affinity problem. Only with a counter k, the program can be proven safe.
+void foo() {
+  int x:=randInt();
+  int y:=randInt();
+  int k:=randInt();
+  if (and(0<=x,x<=2)) then {
+  if (and(0<=y,y<=2)) then {
+    while1(x,y,k);
+    if (and(x=4,y=0)) then {
+      verror()
+    } else { void }
+  } else { void }
+  } else { void }
+}
+
+void while1(ref int x, ref int y, ref int k) {
+  if (randBool()) then {
+    x:=x+2;
+    y:=y+2;
+    -- k:=k-1;
+    while1(x,y,k)
+  } else { void }
+}
+

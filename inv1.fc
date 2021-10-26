@@ -1,0 +1,16 @@
+# ll<n> = root=null & n=0 \/ root::node(_,q)*q::ll<n-1>
+
+ll  :={[r,n] -> [] -> []: (r=0 && n=0) || exists (q,n1: r>0 && n=1+n1 
+&& ll(q,n1))};
+
+OK1:=bottomup(ll,1,SimHeur);
+OK1;
+
+# sortl<n,s,b> = root::node(s,null) & n=1 & b=s
+#    \/ root::node(s,q)*sortl<n-1,s2,b> & s<=s2
+
+sortl :={[r,n,s,b] -> [] -> []: (r>0 && n=1 && s=b) || 
+ exists(q,n1,s1: r>0 && n=1+n1 && s<=s1 && sortl(q,n1,s1,b))};
+
+OK1:=bottomup(sortl,1,SimHeur);
+OK1;

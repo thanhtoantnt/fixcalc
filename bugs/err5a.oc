@@ -1,0 +1,16 @@
+K1 := {[x,res]: 1 + 3res = 2x && x >= 2 && 5 >= x };
+K3 := {[x,res]: 1 = x && 1 = res };
+
+K:= K1 Union K3;
+CH := ConvexHull K;
+CH;
+#{[x,res]: 1 <= x <= 5} 
+# lost res>=0
+
+H := hull K;
+H; 
+# Crashed
+
+P := PairWiseCheck K;
+P; 
+# Crashed

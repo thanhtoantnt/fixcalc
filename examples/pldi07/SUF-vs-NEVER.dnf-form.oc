@@ -1,0 +1,24 @@
+NEVER:={[a,i,j]: (j<i) || (0<=i<=j<a)};
+SUF:=  {[a,i,j]: (a<=j<i && i+j>=0) || (j<i && i+j<0) || (0<=i && j<a && i+j>=0)};
+NEVER;SUF;
+NEVER subset SUF;
+SUF subset NEVER;
+
+#selHull(SUF,2)
+selHull_SUF:={[a,i,j]: (i+j>=0 && i>=0) || (j<i && i+j<0)};
+selHull_SUF;
+NEVER subset selHull_SUF;
+selHull_SUF subset NEVER;
+
+# NEVER = d1 \/ d2
+# SUF   = e1 \/ e2 \/ e3
+
+d1 := {[a,i,j]: j<i};
+d2 := {[a,i,j]: (0<=i<=j<a)};
+e1 := {[a,i,j]: (a<=j<i && i+j>=0)};
+e2 := {[a,i,j]: (j<i && i+j<0)};
+e3 := {[a,i,j]: (0<=i && j<a && i+j>=0)};
+D := (d1 union d2);
+E := (e1 union e2 union e3);
+D subset E;
+E subset D;

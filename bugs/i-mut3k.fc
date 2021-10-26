@@ -1,0 +1,19 @@
+R2:={[x,k] -> [res] -> []: ((x=0 && res=0 && k=0) ||  (exists (res1: (exists (x1,k1:((res=res1+2 && (x=x1+1 && 0<x && k=k1+1)) && R1(x1,k1,res1)))) )) )
+};
+R1:={[x,k] -> [res] -> []: ((x=0 && res=1 && k=0) ||  (exists (x1: (exists (res1,k1:((res=res1+2 && (x=x1+1 && 0<x && k=k1)) && R2(x1,k1,res1)))) )) )
+};
+[T1,T2]:=bottomupgen([R2,R1], [2,2], SimHeur);
+T1; T2; bottomupgen([R2,R1], [1,1], SimHeur);
+
+#((res >= 1 && x >= 0) || ((x >= 0 && 2 >= x) && 1 + res >= 3x))
+#((res >= 2 + x && res >= 3) || (x >= 0 && res >= 0))
+#0 = 0
+#0 = 0
+
+
+# Problem : why is 2 disjunct less precise!
+
+# exists(k:x=2k & res=2x or x=2k+1 & res=2x+1)
+# exists(k:x=2k & res=2x+1 or x=2k+1 & res=2x)
+
+

@@ -1,0 +1,22 @@
+F1:={[a,b]:((0 = 0 && 0 = a && 0 = b) || (a >= 1 && b >= 1))};
+F1C:=complement F1;
+Pairwisecheck F1C;
+
+F2:={[a,b]:((a >= 2 && b >= 2) || ((b >= 0 && 1 >= b) && b = a))};
+F2C:=complement F2;
+Pairwisecheck F2C;
+
+F3:={[a,b]:((a >= 3 && b >= 3) || ((b >= 0 && 2 >= b) && b = a))};
+F3C:=complement F3;
+Pairwisecheck F3C;
+#{[a,b]: a <= -1} union {[a,b]: 0 <= a <= b-1, 2} union {[a,b]: b <= 2, a-1 && 0 <= a}
+
+
+F4:={[a,b]:((a >= 4 && b >= 4) || ((b >= 0 && 3 >= b) && b = a))};
+F4C:=complement F4;
+Pairwisecheck F4C;
+#{[a,b]: a <= -1} union {[a,b]: 0 <= a <= b-1, 3} union {[a,b]: b <= 3, a-1 && 0 <= a}
+
+W:={[a,b]:a <= -1 || 0 <= a <= b-1 || b <= a-1 && 0 <= a};
+N:=complement W;
+Pairwisecheck N;

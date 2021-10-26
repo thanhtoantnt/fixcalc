@@ -1,0 +1,21 @@
+#include "Primitives.imp"
+
+-- Example from Figure 4a of Gulwani-PLDI'08
+-- In our system the precondition that ensures non-termination is inferred (i<=0) but not the one that ensures safety (i>=j).
+void WP1(int i, int j) {
+  int x:=0;
+  int y:=0;
+  while (x<=100) do {
+    x:=x+i;
+    y:=y+j
+  };
+  assert(x>=y)
+}
+
+{- The most precise/interesting result for our system:
+./imp examples/gulwani-pldi08/fig4a.imp DualIStrong +check -m:3 -v:1 +simplifyCAbst
+SAFETY: All checks in the program were proven for condition NEVER_BUG = (f_5 >= f_6 && f_5 >= 101)
+BUG FOUND for condition MUST_BUG_l_9whilef_0_LOOP = 0 >= f_5
+BUG FOUND for condition MUST_BUG_l_11L = (f_5 >= 101 && f_6 >= 1 + f_5)
+Possible bug(s) for condition MAY_BUG_l_11L = (f_5 >= 1 && 100 >= f_5)
+-}

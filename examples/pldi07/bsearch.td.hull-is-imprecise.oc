@@ -1,0 +1,76 @@
+#function lookup from bsearch
+TransInvEmail:={[a,i,j] -> [a',i',j'] : -j <= i <= i' <= j'+1, a && -1 <= j' <= j && i <= j && i+j < 2a && a=a'};
+#TransInv from analysis
+TransInv:={[a,i,j] -> [a',i',j']:((i' + (-i) >= 0 && i' + j >= 0 && j' + 1 + (-i') >= 0 && a + (-i') >= 0 && j' + 1 >= 0 && j + (-j') >= 0 && (-a') + a >= 0 && a' + (-a) >= 0 && j + 1 + (-i') >= 0 && 1 + j' + 0 >= 0 && a' + (-i') >= 0 && j + 1 + (-i) >= 0 && j' + 1 + (-i) >= 0 && a + (-i) >= 0 && a' + (-i) >= 0 && j + 0 >= 0 && j + a + 0 >= 0 && j + a' + 0 >= 0))};
+
+TransInv; TransInvEmail;
+TransInv subset TransInvEmail;
+TransInvEmail subset TransInv;
+gist TransInvEmail given TransInv;
+
+#what's missing from my TransInv
+CHK:={[a,i,j] -> [a',i',j']: i<=j && 0<=i+j<2a};
+
+#during  the derivation of the TransInv, there is a hull operation which looses precision!
+# the hull argument (SelhullIN) subsumes CHK
+# the result of the hull operation (SelhullOUT) does not subsume CHK 
+SelhullIN:={[f_1,f_2,f_3]->[a',RECf_2,RECf_3]:((((((RECf_3 + 1 >= 0 && 
+RECf_3 + (-RECf_2) + 1 >= 0) && a' + -2 + (-RECf_3) >= 0) && 3 + 2RECf_3 + 
+(-RECf_2) + (-f_3) >= 0) && RECf_2 + f_3 + -2 + -2RECf_3 >= 0) && (-f_1) + 
+a' = 0 && (-f_2) + RECf_2 = 0) || (((((RECf_2 + -1 >= 0 && RECf_2 + (-f_2) + 
+-1 >= 0) && a' + (-RECf_2) >= 0) && -1 + 2RECf_2 + (-f_2) + (-RECf_3) >= 0) 
+&& 2 + f_2 + RECf_3 + -2RECf_2 >= 0) && (-f_1) + a' = 0 && (-f_3) + RECf_3 = 
+0) || exists (f_167,f_168,f_169 : (((((((f_169 + 1 >= 0 && f_169 + (-f_168) + 1 
+>= 0) && f_167 + -2 + (-f_169) >= 0) && 3 + 2f_169 + (-f_168) + (-f_3) >= 0) && 
+f_168 + f_3 + -2 + -2f_169 >= 0) && (-f_1) + f_167 = 0 && (-f_2) + f_168 = 0) || 
+(((((f_168 + -1 >= 0 && f_168 + (-f_2) + -1 >= 0) && f_167 + (-f_168) >= 0) && -
+1 + 2f_168 + (-f_2) + (-f_169) >= 0) && 2 + f_2 + f_169 + -2f_168 >= 0) && (-
+f_1) + f_167 = 0 && (-f_3) + f_169 = 0)) && ((((((RECf_3 + 1 >= 0 && RECf_3 + (-
+RECf_2) + 1 >= 0) && a' + -2 + (-RECf_3) >= 0) && 3 + 2RECf_3 + (-RECf_2) + 
+(-f_169) >= 0) && RECf_2 + f_169 + -2 + -2RECf_3 >= 0) && (-f_167) + a' = 0 
+&& (-f_168) + RECf_2 = 0) || (((((RECf_2 + -1 >= 0 && RECf_2 + (-f_168) + -1 >= 
+0) && a' + (-RECf_2) >= 0) && -1 + 2RECf_2 + (-f_168) + (-RECf_3) >= 0) && 2 
++ f_168 + RECf_3 + -2RECf_2 >= 0) && (-f_167) + a' = 0 && (-f_169) + RECf_3 
+= 0)))))};
+SelhullIN;
+
+SelhullOUT:={[f_1,f_2,f_3]->[a',RECf_2,RECf_3]:(((((((RECf_2 + (-f_2) >= 0 && RECf_2 + f_3 >= 0) && RECf_3 + 1 + (-RECf_2) >= 0 && f_1 + (-RECf_2) >= 0) && (RECf_3 + 1 >= 0 && f_3 + (-RECf_3) >= 0)) && 9 + 4RECf_3 + -3RECf_2 + (-f_3) >= 0) && 6 + 3RECf_3 + f_2 + -4RECf_2 >= 0) && (-a') + f_1 = 0))};
+SelhullIN subset CHK;
+SelhullOUT subset CHK;
+
+#It matters how complicated is the formula to hull:
+# hull(d1 union d2 union d3) may be less precise than hull(d1 union (hull (d2 union d3))
+# the 6 disjuncts from SelhullIN are d1,d2,d3,d4,d5,d6
+d1:={[f_1,f_2,f_3] -> [f_1,f_2,RECf_3] : f_2 <= RECf_3+1 && f_2+f_3 < 2f_1 && 3f_2+f_3 <= 9+4RECf_3 && 6+4RECf_3 <= 3f_2+f_3 && 0 <= 1+RECf_3};
+d2:={[f_1,f_2,f_3] -> [f_1,RECf_2,RECf_3] : RECf_2-1 <= RECf_3 <= f_1-2 && 1 <= RECf_2 && f_3+RECf_2 <= 3+2RECf_3 && f_2+f_3 < 2RECf_2 && 2RECf_2 <= 2+f_2+f_3 && 2+2RECf_3 <= f_3+RECf_2} ;
+d3:= {[f_1,f_2,f_3] -> [f_1,RECf_2,RECf_3] : f_2 < RECf_2 && RECf_3 <= f_1-2 && f_2+RECf_3 < 2RECf_2 && 2RECf_2 <= 2+f_2+RECf_3 && f_2+f_3 <= 3+2RECf_3 && 2+2RECf_3 <= f_2+f_3 && 1 <= RECf_2};
+d4:= {[f_1,f_2,f_3] -> [f_1,RECf_2,f_3] : RECf_2 <= f_1 && 4RECf_2 <= 6+f_2+3f_3 && 3+f_2+3f_3 <= 4RECf_2 && 3+f_2+f_3 <= 2RECf_2 && 0 <= f_2+f_3};
+d5:= {[f_1,f_2,f_3] -> [f_1,f_2,RECf_3] : -1, f_2-1 <= RECf_3 <= f_1-2 && f_2+f_3 <= 3+2RECf_3 && 2+2RECf_3 <= f_2+f_3};
+d6:= {[f_1,f_2,f_3] -> [f_1,RECf_2,f_3] : 1, f_2+1 <= RECf_2 <= f_1 && f_2+f_3 < 2RECf_2 && 2RECf_2 <= 2+f_2+f_3};
+
+d1 subset CHK;
+d2 subset CHK;
+d3 subset CHK;
+d4 subset CHK;
+d5 subset CHK;
+d6 subset CHK;
+
+PreciseHull:=hull (hull(d1 union d4 union d5 union d6)) union (hull(d2 union d3));
+ImpreciseHull:=hull (d1 union d2 union d3 union d3 union d4 union d5 union d6);
+PreciseHull subset CHK;
+ImpreciseHull subset CHK;
+
+#checks from email
+fstL:={[a,i,j]: i <= j <= -i-1};
+fstH:={[a,i,j]: i <= j && 2a <= i+j};
+recL:={[a,i,j]: -j <= i <= -1 && i+j < 2a};
+recH:={[a,i,j]: a <= j && 0 <= i+j && i+j < 2a};
+
+#checks from analysis
+fstERRL:={[f_1,f_2,f_3]:(f_3 + (-f_2) >= 0 && (-f_2) + -1 + (-f_3) >= 0)};
+fstERRH:={[f_1,f_2,f_3]:(f_3 + (-f_2) >= 0 && f_2 + f_3 + -2f_1 >= 0)};
+recERRL:={[f_1,f_2,f_3]:(-1 + (-f_2) >= 0 && f_3 + -1 >= 0)};
+recERRH:={[f_1,f_2,f_3]:(f_1 + (-f_2) >= 0 && f_3 + (-f_1) >= 0)};
+
+(fstL union recL);(fstH union recH);
+(fstERRL union recERRL);(fstERRH union recERRH);

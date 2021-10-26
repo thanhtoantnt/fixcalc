@@ -1,0 +1,345 @@
+#include "Primitives.imp"
+
+void main()
+{
+  int N := 64;
+  int dim := 128;
+  float[int][dim] A := 0.0;
+  init_arrF(A,0,dim-1);
+  printArrF(A);
+  FFT_transform(N,A);
+  FFT_inverse(N,A);
+  printArrF(A);
+  printStats()
+}
+
+  
+Void init_arrF(Float[Int] a, Int i, Int j)
+{
+  if (i>j) then {void}
+  else {
+    assignF(a,i,myrandomF(10.0));
+    init_arrF(a,i+1,j)
+  }
+}
+
+
+Int power(Int m, Int n) -- m^n
+{ if (n<=0) then {1}
+	else {m*power(m,n-1)}
+}
+
+Int lftlft(Int a, Int b)
+{
+  a*power(2,b)
+}
+
+Int loop_log2 (Int k, Int log, Int n) {
+  if (k<n) 
+--    then  {loop_log2(mul(k,2),log+1,n)}
+    then  {loop_log2(mul2(k),log+1,n)}
+    else {log}
+}
+
+Int log2 (Int n)
+{
+    Int log := loop_log2(1,0,n);
+    if (n = lftlft(1,log)) then { log }
+    else {(0-1)}
+}
+
+
+Float FFT_num_flops(Int N)
+{
+
+     Float Nd := plusIF(N,0.0);
+     Float logN := plusIF(log2(N),0.0);
+
+     plusFF(mulFF(minusFI(mulFF(5.0,Nd),2),logN), mulIF(2,plusFI(Nd,1)))
+}
+
+
+Void loopb (Int b, Int a, Int n, Int dual, Float [Int] data, 
+		Float w_real, Float w_imag)
+{
+  if (and(b<n,dual>0)) then 
+  -- if (b<n) then 
+	 {
+      	  Int i := mul2(b + a);	
+          Int j := mul2(b + a + dual);
+
+          Float z1_real := subF(data,j);	--<low>,high
+          Float z1_imag := subF(data,j+1);	--<high>
+              
+          Float wd_real := minusFF(mulFF(w_real,z1_real), mulFF(w_imag,z1_imag));
+          Float wd_imag := plusFF(mulFF(w_real,z1_imag), mulFF(w_imag, z1_real));
+
+          assignF(data,j,minusFF(subF(data,i), wd_real));
+          assignF(data,j+1, minusFF(subF(data,i+1), wd_imag));
+          assignF(data,i, plusFF(subF(data,i), wd_real));
+          assignF(data,i+1, plusFF(subF(data,i+1), wd_imag));
+	  loopb(b+mul2(dual), a,n, dual, data,w_real,w_imag) --unrelated Post2,Post3 in BU fixpoint
+--	  loopb(b+mul(2,dual), a,n, dual, data,w_real,w_imag)
+         }
+	 else {void}
+}
+
+
+Void loop_a1(Int a, Int dual, Int n, Float [Int] data, 
+		Float s, Float s2, Float w_real, Float w_imag)
+{
+ if (a<dual) then
+  {       
+    Float tmp_w_real := minusFF(minusFF(w_real,mulFF(s,w_imag)),mulFF(s2,w_real)); 
+    Float tmp_w_imag := minusFF(plusFF(w_imag,mulFF(s,w_real)),mulFF(s2,w_imag));
+    loopb(0,a,n,dual,data, tmp_w_real, tmp_w_imag);
+    loop_a1(a+1,dual,n,data,s,s2,w_real,w_imag)
+   }
+  else {void}
+}
+
+
+Void loop_a0 (Int b, Int n, Int dual, Float [Int] data)		
+{
+  if (and(b<n,dual>0)) then
+ -- if (b<n) then
+  {
+	      Int i := mul2(b) ;
+        Int j := mul2(b + dual);
+
+        Float wd_real := subF(data,j) ;  	--<low>,high
+        Float wd_imag := subF(data,j+1) ; 	--<high>
+                 
+      	assignF(data,j,minusFF(subF(data,i), wd_real));		
+        assignF(data,j+1, minusFF(subF(data,i+1), wd_imag));
+        assignF(data,i, plusFF(subF(data,i), wd_real));
+        assignF(data,i+1, plusFF(subF(data,i+1), wd_imag));
+        loop_a0(b+mul2(dual),n,dual,data)--Post3 => Post4 in BU fixpoint
+--        loop_a0(b+mul(2,dual),n,dual,data)
+  }
+ else {void}
+
+}
+
+
+Void bitloop (Int bit, Int logn, Int dual, Float [Int] data, Int direction, Int n)
+{
+ -- if (and(bit<logn,dual>0)) then
+ if (bit<logn) then
+ {
+      Float theta := divFF(mulFF(mulFI(2.0,direction),pi()),mulFI(2.0,dual));
+      Float s := sin(theta);
+      Float t := sin(divFF(theta,2.0));
+      Float s2 := mulFF(mulFF(2.0,t),t);    
+
+      loop_a0(0,n,dual,data);	
+      -- loop_a1(1,dual,n,data,s,s2,1.0,0.0);      
+      loop_a1(1,1,n,data,s,s2,1.0,0.0);      -- dual = 1
+      -- bitloop(bit+1,logn,mul2(dual),data,direction,n)
+      bitloop2(bit+1,logn,2,data,direction,n)
+ }
+ else {void}
+
+}
+
+Void bitloop2 (Int bit, Int logn, Int dual, Float [Int] data, Int direction, Int n)
+{
+ -- if (and(bit<logn,dual>0)) then
+ if (bit<logn) then
+ {
+      Float theta := divFF(mulFF(mulFI(2.0,direction),pi()),mulFI(2.0,dual));
+      Float s := sin(theta);
+      Float t := sin(divFF(theta,2.0));
+      Float s2 := mulFF(mulFF(2.0,t),t);    
+
+      loop_a0(0,n,dual,data);	
+      -- loop_a1(1,dual,n,data,s,s2,1.0,0.0);      
+      loop_a1(1,2,n,data,s,s2,1.0,0.0);      -- dual = 2
+      -- bitloop(bit+1,logn,mul2(dual),data,direction,n)
+      bitloop4(bit+1,logn,4,data,direction,n)
+ }
+ else {void}
+
+}
+
+Void bitloop4 (Int bit, Int logn, Int dual, Float [Int] data, Int direction, Int n)
+{
+ -- if (and(bit<logn,dual>0)) then
+ if (bit<logn) then
+ {
+      Float theta := divFF(mulFF(mulFI(2.0,direction),pi()),mulFI(2.0,dual));
+      Float s := sin(theta);
+      Float t := sin(divFF(theta,2.0));
+      Float s2 := mulFF(mulFF(2.0,t),t);    
+
+      loop_a0(0,n,dual,data);	
+      -- loop_a1(1,dual,n,data,s,s2,1.0,0.0);      
+      loop_a1(1,4,n,data,s,s2,1.0,0.0);      -- dual=4
+      -- bitloop(bit+1,logn,mul2(dual),data,direction,n)
+      bitloop8(bit+1,logn,8,data,direction,n)
+ }
+ else {void}
+
+}
+
+Void bitloop8 (Int bit, Int logn, Int dual, Float [Int] data, Int direction, Int n)
+{
+ -- if (and(bit<logn,dual>0)) then
+ if (bit<logn) then
+ {
+      Float theta := divFF(mulFF(mulFI(2.0,direction),pi()),mulFI(2.0,dual));
+      Float s := sin(theta);
+      Float t := sin(divFF(theta,2.0));
+      Float s2 := mulFF(mulFF(2.0,t),t);    
+
+      loop_a0(0,n,dual,data);	
+      -- loop_a1(1,dual,n,data,s,s2,1.0,0.0);      
+      loop_a1(1,8,n,data,s,s2,1.0,0.0);      -- dual = 8
+      -- bitloop(bit+1,logn,mul2(dual),data,direction,n)
+      bitloop16(bit+1,logn,16,data,direction,n)
+ }
+ else {void}
+
+}
+
+Void bitloop16 (Int bit, Int logn, Int dual, Float [Int] data, Int direction, Int n)
+{
+ -- if (and(bit<logn,dual>0)) then
+ if (bit<logn) then
+ {
+      Float theta := divFF(mulFF(mulFI(2.0,direction),pi()),mulFI(2.0,dual));
+      Float s := sin(theta);
+      Float t := sin(divFF(theta,2.0));
+      Float s2 := mulFF(mulFF(2.0,t),t);    
+
+      loop_a0(0,n,dual,data);
+      -- loop_a1(1,dual,n,data,s,s2,1.0,0.0)      
+      loop_a1(1,dual,n,data,s,s2,1.0,0.0)      -- dual = 16
+      -- bitloop(bit+1,logn,mul2(dual),data,direction,n)
+      
+ }
+ else {void}
+
+}
+
+
+Void FFT_transform_Internal (Int N, Float [Int] data, Int direction) {
+    Int n := div2Even(N);
+    Int bit := 0;
+    Int logn := 0;
+    Int dual := 1;
+
+    if (n <= 1) then {void}         -- Identity operation! 
+    else { logn := log2(n);
+
+	   if (N <= 0) then {void}
+	    else
+    -- bit reverse the input data for decimation in time algorithm 
+	   {   
+		 FFT_bitreverse(N, data); 
+
+	        -- apply fft recursion 
+        	-- this loop executed log2(N) times 
+	         bitloop(bit,logn,dual,data,direction,n)
+	    }
+	}
+  }
+
+
+
+Void bitrevloop (Int i, Int j, Int nm1, Float [Int] data)
+{
+   
+   if (and(i<nm1,j<nm1)) then {
+
+      Int ii := mul2(i);
+      Int jj := mul2(j);
+
+      -- Int k = n / 2 ;  
+      -- Int k := div2(nm1+1);
+      Int k := div2Even(nm1+1);  --Post4,Post5 are unrelated during BU fixpoint
+--      Int k := divide(nm1+1,2);  
+     {
+	if (i<j) then
+	{
+        	Float tmp_real    := subF(data,ii);
+	        Float tmp_imag    := subF(data,ii+1);
+        	assignF(data,ii, subF(data,jj));	-- high
+	        assignF(data,ii+1, subF(data,jj+1));
+        	assignF(data,jj, tmp_real);
+	        assignF(data,jj+1, tmp_imag) 
+	}
+	else {void}
+       };
+
+     j := wloopj(j,k);
+     bitrevloop(i+1,j,nm1,data)
+    }
+   else {void}
+}
+
+void FFT_bitreverse(Int N, Float [Int] data) 
+{
+    -- This is the Goldrader bit-reversal algorithm 
+    Int n:=div2Even(N);
+    Int nm1 := n-1;
+    Int i:=0; 
+    Int j:=0;
+    bitrevloop(i,j,nm1,data)
+  }
+
+
+void FFT_transform(Int N, Float [Int] data)
+{
+    FFT_transform_Internal(N, data, (0-1))
+}
+
+
+Void loopi1 (Int i, Int N, Float [Int] data, Float norm)
+{
+ if (i<N) then 
+		{
+		 assignF(data,i,mulFF(subF(data,i),norm));
+		 loopi1 (i+1,N, data, norm)
+		}
+	else {void}
+}
+
+void FFT_inverse(Int N, Float [Int] data)
+{
+    Int n := div2Even(N);
+    Float norm := 0.0;
+ 
+    FFT_transform_Internal(N, data, 1);
+
+    -- Normalize 
+    norm:=divFI(1.0,n);
+    loopi1(0,N,data,norm)
+}
+
+
+
+
+--For the following implementation of wloopj, we generate unusual large formulae during fixpoint:
+----ERROR:
+----An attempt was made to set the number of available inequality constraints to 2001.
+----The maximum number of inequality constraints in a conjunction is 2000.
+----This limit can be changed by redefining maxmaxGEQs in oc.h and recompiling.
+--Int wloopj (Int j, Int k)
+--{ 
+--  if (k<=j) then {
+--		  Int t1 := j-k;
+--		  Int t2 := div2 (k);
+--	   	  -- Int t2 := div2Even (k); 
+--		  wloopj(t1,t2)
+--		}
+--	else {j+k}
+--}
+
+Int wloopj (Int j, Int k) {
+  while (k<=j) do {
+    j:=j-k;
+    k:=divide(k,2)
+  };
+  j+k
+}

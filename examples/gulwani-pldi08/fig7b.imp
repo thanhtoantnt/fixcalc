@@ -1,0 +1,17 @@
+#include "Primitives.imp"
+
+-- Example from Figure 7b of Gulwani-PLDI'08
+-- In our system, the postcondition is very imprecise, compared to Gulwani's (s+d+t>=0 && d<=s+5t)
+void SP2(int d, int t, int s){
+  if (and(d=0,and(t=0,s=0))) then {
+    while (t<100) do {
+      if (randBool()) then {
+        t:=t+1; s:=0
+      } else {
+        if (randBool()) then {
+          if (s<5) then { d:=d+1;s:=s+1 } else { void }
+        } else { void }
+      }
+    }
+  } else { void }
+}

@@ -1,0 +1,39 @@
+#include "Primitives.imp"
+
+-- example Fig2 from the interpolate-widen paper of Gulavani et al
+-- Result: ?
+void foo() {
+  int x:=0;
+  int y:=0;
+  int z:=0;
+  int w:=0;
+  while1(x,y,z,w);
+  if (mul3(x)<y) then {
+    verror()
+  } else { void }
+}
+
+void while1(ref int x, ref int y, ref int z, ref int w) {
+  if (randBool()) then {
+    if (randBool()) then {
+      x:=x+1;
+      y:=y+2
+    } else {
+      if (randBool()) then {
+        if (x>=4) then {
+          x:=x+1;
+          y:=y+3;
+          z:=z+10;
+          w:=w+10
+        } else { 
+            if (and(x>=z,y<w)) then {
+              x:=0-x;
+              y:=0-y
+            } else { void }
+          }
+      } else { void }
+    };
+    while1(x,y,z,w)
+  } else { void }
+}
+

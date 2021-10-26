@@ -1,0 +1,27 @@
+meven_new:={[n_62,i_63] -> [] -> []: (n_62=0 && i_63=0) ||  exists (flted_17_20,flted_17_21,Anon_12: (self>0 && modd_new(flted_17_21,flted_17_20)) && (flted_17_21+1=n_62 && flted_17_20+1=i_63))
+};
+
+modd_new:={[n_64,i_65] -> [] -> []:  exists (i_17,flted_23_16,Anon_13: ( meven_new(flted_23_16,i_17)) && (flted_23_16+1=n_64 && i_17=i_65))
+};
+
+e1:={[n,i] :  n=i+i && i>=0};
+o1:={[n,i] :  n=i+i+1 && i>=0};
+
+e2:={1=0};
+o2:={1=0};
+
+[EV1,OD1] :=bottomupgen([meven_new,modd_new], [1,1], SimHeur);
+#bottomupgen([meven_new,modd_new], [2,2], SimHeur);
+
+[EV1,OD1] := apply([meven_new,modd_new],[e2,o2]);
+[EV2,OD2] := apply([meven_new,modd_new],[EV1,OD1]);
+[EV3,OD3] := apply([meven_new,modd_new],[EV2,OD2]);
+[EV3H,OD3H] := selhull([EV3,OD3],[1,1],[SimHeur,SimHeur]);
+[EV4,OD4] := apply([meven_new,modd_new],[EV3H,OD3H]);
+[EV4H,OD4H] := selhull([EV4,OD4],[1,1],[SimHeur,SimHeur]);
+[EV4W,OD4W] := widen([EV3H,OD3H],[EV4H,OD4H],[SimHeur,SimHeur]);
+
+
+#OD1;
+#EV1 := meven_new(F0); EV1;
+

@@ -1,0 +1,34 @@
+zipE:={[x,y] -> [] -> []: 
+  (x > 0 || x < 0 || y < 0) && 
+  (forall (x1: (forall (y1:
+    (!(y=y1+1 && x=x1+1) || zipE(x1, y1)))) )) 
+};
+
+E0:={[]: 1=1};
+
+E1:=zipE(E0); E1;
+
+E2:=zipE(E1); E2;
+
+E3:=zipE(E2); E3; 
+
+E4:=zipE(E3); E4; 
+
+E4N:=narrow(E3,E4,SimHeur);
+PreE:=PairwiseCheck E4N;
+PreE;
+
+PreEN:=zipE(PreE); PreEN;
+
+PreE subset PreEN;
+PreEN subset PreE;
+
+PreSS:=complement PreE;
+PreSS;
+
+PreCC:={[]: !(x=0) || y>=0};
+
+PreCC subset PreSS;
+PreSS subset PreCC;
+
+gfp([zipE], [2], SimHeur);

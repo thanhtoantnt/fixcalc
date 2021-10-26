@@ -1,0 +1,13 @@
+R2:={[x] -> [res] -> []: ((x=0 && res=0) ||  (exists (res1: (exists (x1:((res=res1+2 && (x=x1+1 && 0<x)) && R1(x1,res1)))) )) )
+};
+R1:={[x] -> [res] -> []: ((x=0 && res=1) ||  (exists (x1: (exists (res1:((res=res1+2 && (x=x1+1 && 0<x)) && R2(x1,res1)))) )) )
+};
+[T2,T1]:=bottomupgen([R2,R1], [2,2], SimHeur);
+T2; T1;
+#bottomupgen([R2,R1], [1,1], SimHeur);
+
+# T2:=(x >= 0 && res >= x)
+# T1:=(x >= 0 && res >= 1 + x)
+
+
+

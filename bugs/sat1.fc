@@ -1,0 +1,28 @@
+R1:={[x,res]: 0=x && res=1};
+
+R2:=PickEQfromEQ(R1);  
+#R2:= {[x,res]:x+1=res};
+R2;R1;
+R3:=PickGEQfromEQ(R1);  
+R3;
+#R3:= {[x,res]:x+1>=res & res>=x+1 & res>=x};
+
+R4:=SatGEQfromEQ(R1);  
+# same as above
+R4;
+
+
+#T1:={[x,res,k]: x=0 && res=1 && k=0};
+#T2:=PickEQfromEQ(T1);
+#T2;
+
+# below does not print!
+#PickEQfromEQ(T1); 
+#T2;
+# above should be easy to support as operations
+# already implemented.
+
+
+
+
+

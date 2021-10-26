@@ -1,0 +1,21 @@
+R2:={[x] -> [res] -> []: ((x=0 && res=0) || (x=1 && res=1) ||  (exists (res1: (exists (x1:((res=res1+1 && (x=x1+2 && 1<x)) && R2(x1,res1)))) )) )
+};
+
+[T2]:=bottomupgen([R2], [2], SimHeur);
+T2;
+[T1]:=bottomupgen([R2], [1], SimHeur);
+T1;
+
+R4:={[x,res]:x>=0 && exists(k:x=2k && res=k || x=2k+1 && res=k+1)};
+R4 subset T1;
+T1 subset R4;
+
+R4;
+# PairWiseCheck(R4);
+# How come PairWiseCheck not implemented?
+# How about Simplify?
+
+# Very precise fixpoint!
+
+
+

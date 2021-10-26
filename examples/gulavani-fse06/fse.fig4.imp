@@ -1,0 +1,14 @@
+#include "Primitives.imp"
+
+-- In our system, two individual MUST_BUGs are identified (for m=1).
+void foo(int[int] a) {
+  int i := 0;
+  int j := 1;
+  a[j] := 0;
+  while (i<1000) do {
+    a[j] := a[j]+1;
+    i := i+1
+  };
+  ifnd (a[0]<=0) then { verror() } else { void }
+  -- assume(a[0] <= 0); verror() -- if a[0]>0 then execution is blocked, otherwise execution encounters an error
+}

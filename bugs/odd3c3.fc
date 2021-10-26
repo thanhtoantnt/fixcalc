@@ -1,0 +1,19 @@
+R1:={[x,k,z] -> [res] -> []: ((x=0 && res=k && k=0 && z=k) ||  (exists (res1: (exists (x1,k1,z1:((res=res1+1 && (x=x1+1 && 0<x)) && (k=1 && k1=0 || k=0 && k1=1) && z=z1+k && R1(x1,k1,z1,res1)))) )) )
+};
+[T1]:=bottomupgen([R1], [1], SimHeur);
+[T2]:=bottomupgen([R1], [2], SimHeur);
+T1 subset T2;
+T2 subset T1;
+T1;T2;
+
+fixtestPost(R1,T1);
+fixtestPost(R1,T2);
+
+
+# same precision as for Disj1 & Disj2
+# (res >= k && k + 2x >= res)
+
+
+
+
+

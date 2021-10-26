@@ -1,0 +1,26 @@
+R1:={[x] -> [res] -> []: ((x=0 && res=0) || 
+(x=1 && res=0) ||  (exists (res1: (exists (x1:((res=res1+1 && (x=x1+2 && 1<x)) && R1(x1,res1)))) )) )
+};
+
+bottomupgen([R1], [2], InterHeur);
+
+Fix;
+
+Res:={[x,res]:x >= 0 && x + 1 >= 2res && 2res >= x};
+
+Res2:={[x,res]:x >= 0 && exists(k:x=2k && res=k || x=2k+1 && res=k+1)};
+
+Res2 subset Fix;
+
+Fix subset Res2;
+
+#PairWiseCheck Res2; not supported?
+
+fixtestPost(R1,Fix);
+
+fixtestPost(R1,Res2);
+
+# exists(k:x=2k & res=2x or x=2k+1 & res=2x+1)
+# exists(k:x=2k & res=2x+1 or x=2k+1 & res=2x)
+
+

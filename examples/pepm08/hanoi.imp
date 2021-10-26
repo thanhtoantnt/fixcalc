@@ -1,0 +1,31 @@
+#include "Primitives.imp"
+
+
+void hanoi(Int n,Float[Int,Int] poles) {
+ move(poles,n,0,n,1,0,2,0)
+}
+
+
+void move(Float[Int<s1>,Int<s2>]pole,Int<n> n,Int<sa> sa,Int<a> a
+	,Int<sb> sb,Int<b> b,Int<sc> sc,Int<c> c)
+where (Bogus),{},{},
+     (n>0 && n>n^>=0 && a+b+c=s2 && a^+b^+c^=s2 
+     && n^<a^ && 0<=b^ && 0<=c^ && b^+n^<=s2 && c^+n^<=s2
+     && 0<=sa^<s1 && 0<=sb^<s1 && 0<=sc^<s1 && s1=s1^ && s2=s2^),
+{
+ if (n<=1) then
+    -- moveone sa,sb
+    { assignF2(pole,sb,b,subF2(pole,sa,a-1)) }
+    -- a=a-1;b=b+1
+ else {
+    Int a1 :=a-n+1; 
+    Int c1 :=c+n-1;
+    Int a2 := a1-1; 
+    Int b1 :=b+1;
+    move(pole,n-1,sa,a,sc,c,sb,b);
+    -- moveone sa,sb
+    assignF2(pole,sb,b,subF2(pole,sa,a1-1));
+    move(pole,n-1,sc,c1,sb,b1,sa,a2)
+    -- c=c-n+1;b=b+n-1;
+ }
+}

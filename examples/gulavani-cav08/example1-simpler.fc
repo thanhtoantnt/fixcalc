@@ -1,0 +1,23 @@
+# Simplified constraint-abstraction from example p1 from Gulavani's paper in CAV'08 (without conditional on variable z).
+
+loop:={[x,i]->[Px,Pi] -> []: exists( i1,x1:
+(x<40 && (x1=x+1 || x1=x+2) && i1=i+1 && loop(x1,i1,Px,Pi))
+ || (x>=40 && Px=x && Pi=i)
+)};
+
+Fix1:=bottomup(loop,1,SimHeur);Fix1;
+Fix2:=bottomup(loop,2,SimHeur);Fix2; # Fix2 is more precise than Fix1
+
+ChinFix:={[Px,x,i,Pi]: (x=Px && i=Pi && 40 <= Px) || ( Pi-i<=Px-x && 2Pi-2i>=Px-x && Px>x && Pi>i && x <= 39)};
+ChinFix subset Fix2;
+Fix2 subset ChinFix; # Fix2 is more precise than ChinFix
+
+Initial:={[Px,x,i,Pi]: x=0 && i=0};
+All:=ChinFix intersection Initial;
+Assert:={[Px,x,i,Pi]:Pi<41};
+All subset Assert; # ChinFix cannot prove the assertion (i<41)
+
+Initial:={[Px,x,i,Pi]: x=0 && i=0};
+All:=Fix2 intersection Initial;
+Assert:={[Px,x,i,Pi]:Pi<41};
+All subset Assert; # Fix2 can prove the assertion (i<41)

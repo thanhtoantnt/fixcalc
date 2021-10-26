@@ -1,0 +1,33 @@
+#include "Primitives.imp"
+
+void main() {
+  int count:=0;
+  int n := 1+myrandom(29); -- n is in between 1,31
+  int n1 := n+1;
+  int [int][n1] a := 0; -- bounds(a)=[0..31]
+  int i:=0;
+  loop(a,i,n,count);
+  n:=n-1;
+  while(notEq(n,1)) do {
+    i:=0;
+    loop(a,i,n,count);
+    n:=n-1
+  }
+  ;if (count<=435) then { verror() } else { void }
+}
+
+void loop(int [int] a, ref int i, ref int n, ref int count) {
+  while (i<n) do {
+    if (a[i]>a[i+1]) then { 
+      swap(a,i,i+1);
+      count:=count+1
+    } else { void };
+    i:=i+1
+  }
+}
+
+void swap(int[int] a, int i, int j) {
+  int tmp := a[i];
+  assign(a,i,a[j]);
+  assign(a,j,tmp)
+}

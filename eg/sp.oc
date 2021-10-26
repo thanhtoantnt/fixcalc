@@ -1,0 +1,75 @@
+P:={[y,z]:forall(x:not(x<y) or z>x)};
+P;
+G:={[RECx,RECy,RECz,RECi,i,x,y,z]:RECx >= x + 1 && RECy >= RECx && RECz >= RECx 
+  && RECy = y && RECz = z && RECx + i = RECi + x};
+G;
+G subset {[RECx,RECy,RECz,RECi,i,x,y,z]:RECz>RECx};
+H:={[RECx,RECy,x,y]:
+    (RECy >= 0 && y >= 1 + RECy && RECx >= 1 + x && RECx >= 52)
+   };
+H subset {[RECx,RECy,x,y]: RECx>50};
+
+
+
+G1:={[RECx,RECy]:RECx >= 51 && RECy >= 1};
+G2:={[RECx,RECy]:exists(x,y:
+(((RECy >= 0 && y >= 1 + RECy) && RECx >= 1 + x) && RECx >= 52)
+)};
+hull(G1 union G2);
+#{[RECx,RECy]: 51 <= RECx && 0 <= RECy && 52 <= RECx+RECy}
+
+
+G3:={[RECx,RECy]:exists(x,y:
+ (((RECx >= x + 1 && 51 >= RECx) && RECy >= 1 + y) && RECy >= 0)
+)};
+G3 subset {[RECx,RECy]:RECx<=50};
+
+
+
+F1:={[x,y,y1,x1]: x<=50 & y1=y+1 & not(y1<0) & x1=x+1};
+F1test:={[x,y,y1,x1]:x1<=50};
+F1 subset F1test;
+F1:={[x,y,y1,x1]: x>50 & y1=y+1 & not(y1<0) & x1=x+1};
+F1test:={[x,y,y1,x1]:x1>50};
+F1 subset F1test;
+complement(complement(F1) union F1test);
+
+add:={[x,z,i,y,x1,z1,i1]: y<=z};
+G1:={[x,z,i,y,x1,z1,i1]: x<y & i1=i+1 & z>x & x1=x+1 & z1=z};
+G1test:={[x,z,i,y,x1,z1,i1]: y<=z1};
+G1 subset G1test;
+(G1 intersection add) subset G1test;
+G2:={[x,z,i,y,x1,z1,i1]: x<y & i1=i+1 };
+G2test:={[x,z,i,y,x1,z1,i1]: z>x};
+G2 subset G2test;
+(G2 intersection add) subset G2test;
+pre:={[x,z,i,y,x1,z1,i1]: forall(x,i,x1,z1,i1:not(x<y & i1=i+1)
+	or (z>x))};
+pre;
+P1:={[x,z,i,y,x1,z1,i1]: y <= x1};
+P2:={[x,z,i,y,x1,z1,i1]: x1 <= y-1, z1-1};
+(G1 intersection add) subset P1;
+(G1 intersection add) subset P2;
+
+G1:={[x,z,i,y,x1,z1,i1]: x<y & i1=i+1 & not(z>x) & x1=x & z1=z+1};
+G1test:={[x,z,i,y,x1,z1,i1]: y<=z1};
+G1 subset G1test;
+(G1 intersection add) subset G1test;
+G2:={[x,z,i,y,x1,z1,i1]: x<y & i1=i+1 };
+G2test:={[x,z,i,y,x1,z1,i1]: not(z>x)};
+G2 subset G2test;
+(G2 intersection add) subset G2test;
+
+pre:={[x,z,i,y,x1,z1,i1]: forall(x1,z1,i1:not(x<y & i1=i+1)
+	or (z>x))};
+pre;
+ctx:={[x,z,i,y,x1,z1,i1]: exists(x1,z1,i1:x<y & i1=i+1) 
+	};
+gist pre given ctx;
+P1:={[x,z,i,y,x1,z1,i1]: y <= x};
+P2:={[x,z,i,y,x1,z1,i1]: x <= y-1, z-1};
+P1 intersection ctx;
+P2 intersection ctx;
+
+
+

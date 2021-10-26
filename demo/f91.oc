@@ -1,0 +1,8 @@
+Fix2:={[n,res]:((100 >= n && 91 = res) || (n >= 101 && n = res + 10))
+};
+Fix3:={[n,res]:
+((99 >= n && 91 = res) || ((n >= 0 && 100 >= n) && 91 = res) || (n >= 101 && n = res + 10))
+};
+Fix2 subset Fix3;
+Fix3 subset Fix2;
+PairWiseCheck Fix3; Fix2;

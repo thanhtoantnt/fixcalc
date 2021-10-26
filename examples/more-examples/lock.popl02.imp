@@ -1,0 +1,51 @@
+#include "Primitives.imp"
+
+void main() {
+  bool l:=False;
+  foo(l);
+  goo(l)
+}
+
+void foo(ref Bool l) {
+  if (randBool()) then {
+    bool got_lock := False;
+    if (randBool()) then {
+      lock(l);
+      got_lock := True
+    } else { void };
+    if (got_lock) then { unlock(l) }
+    else { void };
+    while (randBool()) do {
+      bool got_lock := False;
+      if (randBool()) then {
+        lock(l);
+        got_lock := True
+      } else { void };
+      if (got_lock) then { unlock(l) }
+      else { void }
+    }
+  } else { void }
+}
+
+void goo(ref Bool l) {
+  int old := randInt();
+  int new := randInt();
+  lock(l);
+  old := new;
+  if (randBool()) then {
+    unlock(l);
+    new := new+1
+  } else { void };
+  while (notEq(new,old)) do {
+    lock(l);
+    old := new;
+    if (randBool()) then {
+      unlock(l);
+      new := new + 1
+      -- Our disjunctive analysis detects a possible error if we change to new:=new+2
+      -- However the changed program is provable safe
+      --new := new + 2
+    } else { void }
+  };
+  unlock(l)
+}

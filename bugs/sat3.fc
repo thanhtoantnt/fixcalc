@@ -1,0 +1,21 @@
+R1:={[x,y,z]: x>=y && y>=z};
+R1;
+
+R2:=PickGEQfromGEQ(R1);  
+#R2:= {[x,z]:x>=z};
+
+R3:=SatGEQfromGEQ(R1);  
+#R3:= {[x,y,z]:x>=y && y>=z && x>=z};
+
+
+R4:=SatGEQfromGEQ({[x,res]:x>=res+2);  
+#R4:= {[x,res]:x>=res+2 && x>=res};
+
+# these commands require new codes
+# do remember than simplification by Omega will remove
+# implied formula
+
+
+
+
+

@@ -1,0 +1,22 @@
+#include "Primitives.imp"
+
+Void swap(Int<a>[Int<dim>] a, Int<i> i,Int<j> j)
+  where (True),{},{},(True),
+--  where (0<=i<dim && 0<=j<dim && a.min'=a.min && a.max'=a.max),
+--        {ls1.L:(i>=0), ls2.L:(j>=0), ls1.H:(i<dim),  ls2.H:(j<dim)},{},(True),
+{
+  Int<tmp1> tmp1 := (ls1:a[i]);  -- a.min<=tmp1<=a.max
+  Int<tmp2> tmp2 := (ls2:a[j]);  -- a.min<=tmp2<=a.max
+  ls3:assign(a,i,tmp2);    -- a.min'=a.min
+  ls4:assign(a,j,tmp1)     -- a.max'=a.max
+}
+Void main()
+  where (True),{},{},(True),
+{
+  Int<dim> dim:=5;
+  l_:Int<n>[Int<a1>][dim] A := 2;
+  l_:assign(A,4,4);
+  l_:swap(A,4,2);
+--  l_:swap(A,5,2); will give type check error: code will be specialized
+  l_:printArr(A)
+}

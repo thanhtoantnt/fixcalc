@@ -1,0 +1,61 @@
+#include "Primitives.imp"
+
+{-- Example from fig4 of Beyer-PLDI07. 
+-- In our system, the assertion cannot be proven.
+void disj() {
+  int x:=0;
+  int y:=50;
+  while (x<100) do {
+    if (x<50) then {
+      x:=x+1
+    } else {
+      x:=x+1;
+      y:=y+1
+    }
+  };
+  assert(y=100)
+}
+-}
+
+{-- Disjunctive program, ideally specialized. In our system, assertion can be proven.
+-- Loop via 'then' branch of conditional executed 50 times, followed by loop via 'else' branch executed 50 times.
+void disjIdeal() {
+  int x:=0;
+  int y:=50;
+  while (and(x<100,x<50)) do { -- 50 iterations through the 'then' branch
+    x:=x+1
+  };
+  while (and(x<100,x>=50)) do { -- 50 more iterations through the 'else' branch
+    x:=x+1;
+    y:=y+1
+  };
+  assert(y=100)
+}
+-}
+
+-- Disjunctive path program, derived as in Beyer's paper.
+-- In our system the assertion cannot be proven (since we don't have the loop initial state).
+-- However, I speculate that a global analysis would have no problem to prove the assertion (y<=100).
+void disjDPP() {
+  int x:=0;
+  int y:=50;
+  assume (and(x<100,x<50)); -- 1 iteration through the 'then' branch
+  x:=x+1;
+  while (or(and(x<100,x<50),randBool())) do { -- arbitrary number of iterations through the 'then' branch
+    x:=x+1
+  };
+  assume (and(x<100,x>=50)); -- 1 iteration through the 'else' branch
+  x:=x+1;
+  y:=y+1;
+  while (x<100) do { -- arbitrary number of iterations
+    if (x<50) then {
+      x:=x+1
+    } else {
+      x:=x+1;
+      y:=y+1
+    }
+  };
+--  assert(y>=100);
+    assert(y<=100)
+}
+

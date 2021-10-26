@@ -1,0 +1,15 @@
+#include "Primitives.imp"
+
+int f(int i, int z) {
+ if (i>=10) then { 1 }
+ else {
+  int t:=f(i+1,z)+1;
+  if (i=z) then { ierror() }
+  else { t }
+ }
+}
+
+{-
+OK := {[i,z,res]:(9 >= i && z>=10 && res=11-i) || (i>z && 9>=i && res=11-i) || (i>=10 && res=1)};
+ERR:= {[i,z]:    (i<=z<=9)};
+-}

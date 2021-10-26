@@ -1,0 +1,106 @@
+#include "Primitives.imp"
+
+{-
+OK:={[]:0 = 0};
+ERRs:={ERR:(1 = 0)}
+NEVER_BUG:={[]:0 = 0};
+MUST_BUGs:={MUST_BUG:(1 = 0)}
+MAY_BUG:=MAY_BUG:(1 = 0)
+-}
+Void main()
+  where
+  (0 = 0),
+  {NEVER_BUG:(0 = 0)}
+{{
+ Int<f_0f> dim := 4;
+ {
+  l_3:Int<f_2f>[Int<f_1f>][dim] A := 0;
+  {
+   Int<f_4f> res := 0;
+   {
+    Int<f_30f> v_31 := 0;
+    {
+     Int<f_34f> v_35 := 1;
+     {
+      Int<f_32f> v_33 := l_5:minus(dim,v_35);
+      l_6:init_arr(A,v_31,v_33)
+      }
+     }
+    };
+    l_7:printArr(A);
+    {
+    Int<f_36f> v_37 := 0;
+    {
+     Int<f_40f> v_41 := 1;
+     {
+      Int<f_38f> v_39 := l_8:minus(dim,v_41);
+      res:=l_9:sum(A,v_37,v_39)
+      }
+     }
+    };
+    l_10:print(res)
+   }
+  }
+ }}
+
+{-
+OK:={[f_13,f_14,f_11]:(((f_13 >= 0 && f_14 >= f_13) && f_11 >= 1 + f_14) || f_13 >= 1 + f_14)};
+ERRs:={ERR:((((0 >= 1 + f_13f && f_14f >= f_13f) || (f_13f >= f_11f && f_14f >= f_13f)) || ((f_13f >= 0 && f_11f >= 1 + f_13f) && f_14f >= f_11f)))}
+NEVER_BUG:={[f_13,f_14,f_11]:(((f_13 >= 0 && f_14 >= f_13) && f_11 >= 1 + f_14) || f_13 >= 1 + f_14)};
+MUST_BUGs:={MUST_BUG:((((f_13f >= 0 && f_11f >= 1 + f_13f) && f_14f >= f_11f) || (f_13f >= f_11f && f_14f >= f_13f) || (f_14f >= f_13f && 0 >= 1 + f_13f)))}
+MAY_BUG:=MAY_BUG:(1 = 0)
+-}
+Void init_arr(Int<f_12f>[Int<f_11f>] a,Int<f_13f> i,Int<f_14f> j)
+  where
+  ((((f_13f >= 0 && f_14f >= f_13f) && f_11f >= 1 + f_14f) || f_13f >= 1 + f_14f)),
+  {NEVER_BUG:((((f_13f >= 0 && f_14f >= f_13f) && f_11f >= 1 + f_14f) || f_13f >= 1 + f_14f))}
+{{
+ Bool<f_50f> v_51 := l_15:gt(i,j);
+ if v_51
+  then { Void
+  } else { {
+   Int<f_44f> v_45 := 10;
+   {
+    Int<f_42f> v_43 := l_16:myrandom(v_45);
+    l_17:assign(a,i,v_43)
+    }
+   };
+   {
+   Int<f_48f> v_49 := 1;
+   {
+    Int<f_46f> v_47 := l_18:plus(i,v_49);
+    l_19:init_arr(a,v_47,j)
+    }
+   } }
+ }}
+
+{-
+OK:={[f_23,f_24,f_21,f_20]:(((f_23 >= 0 && f_24 >= f_23) && f_21 >= 1 + f_24) || (f_23 >= 1 + f_24 && 0 = f_20))};
+ERRs:={ERR:((((f_24f >= f_23f && 0 >= 1 + f_23f) || (f_23f >= f_21f && f_24f >= f_23f)) || ((f_23f >= 0 && f_21f >= 1 + f_23f) && f_24f >= f_21f)))}
+NEVER_BUG:={[f_23,f_24,f_21]:(((f_23 >= 0 && f_24 >= f_23) && f_21 >= 1 + f_24) || f_23 >= 1 + f_24)};
+MUST_BUGs:={MUST_BUG:((((f_23f >= 0 && f_21f >= 1 + f_23f) && f_24f >= f_21f) || (f_23f >= f_21f && f_24f >= f_23f) || (0 >= 1 + f_23f && f_24f >= f_23f)))}
+MAY_BUG:=MAY_BUG:(1 = 0)
+-}
+Int<f_20f> sum(Int<f_22f>[Int<f_21f>] a,Int<f_23f> i,Int<f_24f> j)
+  where
+  ((((f_23f >= 0 && f_24f >= f_23f) && f_21f >= 1 + f_24f) || (f_23f >= 1 + f_24f && 0 = f_20f))),
+  {NEVER_BUG:((((f_23f >= 0 && f_24f >= f_23f) && f_21f >= 1 + f_24f) || f_23f >= 1 + f_24f))}
+{{
+ Bool<f_60f> v_61 := l_25:gt(i,j);
+ if v_61
+  then { 0
+  } else { {
+   Int<f_52f> v_53 := l_26:sub(a,i);
+   {
+    Int<f_58f> v_59 := 1;
+    {
+     Int<f_56f> v_57 := l_27:plus(i,v_59);
+     {
+      Int<f_54f> v_55 := l_28:sum(a,v_57,j);
+      l_29:plus(v_53,v_55)
+      }
+     }
+    }
+   } }
+ }}
+

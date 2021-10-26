@@ -1,0 +1,19 @@
+#include "Primitives.imp"
+
+void f1(ref int x,ref int z,ref int i,ref int y) { -- st z>=y
+   if (x<y) then {
+       i:=i+1;
+       x:=x+1;
+       f1(x,z,i,y)
+   } else { void }
+}
+
+void f(ref int x,ref int z,ref int i,ref int y) {
+    if (x<y) then {
+      i:=i+1;
+      if (z>=y) then { f1(x,z,i,y) }
+      else { if (z>x) then { x:=x+1 } -- skip z test
+             else { z:=z+1 } }; -- skip if test
+      f(x,z,i,y)
+    } else { void }
+} 

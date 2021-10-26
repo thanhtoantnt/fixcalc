@@ -1,0 +1,554 @@
+#include "Primitives.imp"
+
+void main ()
+{ 
+  int lda := 201;
+  int ldaa := 200;
+  int n := 100;
+  int dim_a := 40200;
+  int dim_b := 40000;
+
+  int [int] [ldaa] ipvt := 0;
+  float [int] [dim_a] a := 0.0;
+  float [int] [dim_b] b := 0.0;
+  float [int] [ldaa] x := 0.0;
+  int r := 0;
+
+  matgen(a,n,b);
+--  printArrF(a);  printArrF(b);
+  r := dgefa(a,0,n,ipvt);
+  dgesl(a,n,ipvt,b,0);
+
+  -- verify --
+
+  loop_main1_i(0,n,x,b);
+  loop_main2_i(0,n,b);
+  dmxpy(n,b,n,x,a);
+--  printArrF(a);  printArrF(b);
+  printStats()
+
+}
+
+void loop_main1_i (int i, int n, float [int] x, float [int] b)
+{
+  if (i<n) 
+	then { assignF(x,i,subF(b,i))}
+	else {void}
+}
+
+void loop_main2_i (int i, int n, float [int] b)
+{ if (i<n) 
+	then { 
+		float t1 := subF(b,i);
+		assignF(b,i,minusFF(0.0,t1))
+	     }
+	else {void}
+}
+
+float matgen(Float[Int] a,Int n,Float[Int] b)
+{
+  int init := 1325;
+  float norma := 0.0;
+  norma := loop_j_0(0,n,a,init,norma);  
+  init_arrFF(b,0,n-1,0.0);
+  loop_j_1(0,n,a,b);
+  norma
+}
+
+Float loop_j_0(Int j, Int n, Float[Int] a, Int init, Float norma)
+{
+  if (j<n) 
+    then {
+	    norma := loop_i_0(j,0,n,a,init,norma);
+	    loop_j_0(j+1,n,a,init,norma)
+  	} 
+    else { norma }
+}
+
+Float loop_i_0(Int j, Int i, Int n, Float[Int] a, Int init, Float norma)
+{
+  if (i<n) then {
+    int init1 := mod(mul(3125,init),65536);
+    float e1 := divFF(minusIF(init1,32768.0),16384.0);    
+    assignF(a,mul201(j)+i,e1); 
+    if (gtFF(e1,norma)) then { 
+      norma := subF(a,mul201(j)+i) 
+    } else { void } ;
+    loop_i_0(j,i+1,n,a,init1,norma)
+  } else { norma }
+}
+
+Void loop_j_1(Int j, Int n, Float[Int] a, Float[Int] b)
+{
+  if (j<n) 
+	then {
+		    loop_i_1(j,0,n,a,b);
+		    loop_j_1(j+1,n,a,b)
+	     } 
+	else { Void }
+}
+
+Void loop_i_1(Int j, Int i, Int n, Float[Int] a, Float[Int] b)
+{
+  if (i<n) 
+	then {
+--		    float t1 := subF(a,mul(201,j)+i); --better for PostPD: BUfixpoint will be able to infer upper bound for i
+		    float t1 := subF(a,mul201(j)+i); 
+		    float temp := plusFF(subF(b,i),t1);
+		    assignF(b,i,temp);
+		    loop_i_1(j,i+1,n,a,b)
+	      } 
+	else {Void}
+}
+
+Void init_arrFF(Float[Int] a, Int i, Int j, Float val)
+{
+  if (i>j) 
+	then { Void }
+	else {
+		    assignF(a,i,val);
+		    init_arrFF(a,i+1,j,val)
+	     }
+}
+
+int dgefa(float [int] a, int i1, int n, int [int] ipvt)
+{
+  int nm1 := n - 1;
+  int info := 0;
+  int t1 := 0;
+  {if (nm1 >= 0) 
+		then {t1:=loop_dgefa1_k(0,n,a,i1,ipvt)}
+		else {t1:=info}};
+  assign(ipvt,n-1,n-1);
+  if (eqFF(subF(a,mul201(n-1)+(n-1)),0.0))
+		then {n-1}
+		else {t1}
+}
+
+int loop_dgefa1_k(int k, int n, float [int] a, int i1, int [int] ipvt)
+{
+  int nm1 := n-1;
+  if (k<nm1) 
+  then {
+	  int kp1 := k+1;
+	  int t1 := mul201(k)+k+i1;--unrelated Post1,Post2 in BU fixpoint
+--	  int t1 := mul(201,k)+k+i1;
+	  int l := idamax(n-k,a,t1,1) + k;
+	  int t2 := mul201(k)+l+i1;
+    float e2 := loop_dgefa_k(k,n,l,a,i1);
+	  float t := 0.0;
+	  assign(ipvt,k,l);
+	  {if (eqFF(e2,0.0))
+		then {k}
+		else {
+  			{if (l=k) 
+			 then {void}
+			 else { t := e2;
+				assignF(a,t2,subF(a,t1));
+				assignF(a,t1,t)}
+			 };
+			 t := divFF(minusFF(0.0,1.0),subF(a,t1));
+			 dscal(n-(k+1),t,a,t1,1);
+			 loop_dgefa2_j(kp1,k,n,l,a,i1);
+			 0
+		      }
+   	   };
+	   loop_dgefa1_k(k+1,n,a,i1,ipvt)
+   	}
+   else {0}  
+}
+
+float loop_dgefa_k(int k, int n, int l, float [int] a, int i1)
+{
+  int t2 := mul201(k)+l+i1;
+  subF(a,t2)
+}
+
+void loop_dgefa2_j(int j, int k, int n, int l, float [int] a, int i1)
+{   
+  if (j<n) 
+	then {  int t1 := mul201(j)+k+i1; 
+		int t2 := mul201(j)+l+i1;
+	 	int t3 := mul201(k)+k+1+i1;
+		float t:= subF(a,t2);
+		{if (l=k) then {void}
+		 else {
+			assignF(a,t2,subF(a,t1));
+			assignF(a,t1,t)
+		       }
+		};
+		daxpy(n-(k+1),t,a,t3,1,a,t1+1,1);
+		loop_dgefa2_j(j+1,k,n,l,a,i1)	
+	}
+	else {void}
+  
+}
+
+void daxpy (int n, float da, float [int] dx, int i1, int incx, float [int] dy, int i2, int incy)
+{ if (n<=0) 
+  then {void} 
+  else {if (eqFF(da,0.0)) then {void}
+	else {
+		  if (and((incx=1), (incy=1)))
+		  then {loop_daxpy2_i (0,n,da,dx,i1,dy,i2)}
+		  else {void} 
+		}
+	}
+}
+
+void loop_daxpy2_i (int i, int n, float da, float [int] dx , int i1, float [int] dy, int i2)
+{
+  if (i<n) 
+  then { 
+ 	float t1 := subF(dx,i+i1);
+	float t2 := subF(dy,i+i2);
+	assignF(dy,i+i2,plusFF(t2, mulFF(da,t1)));
+	loop_daxpy2_i(i+1,n,da,dx,i1,dy,i2)
+       }
+  else {void}
+}
+
+void dscal(int n, float da, float [int] dx, int i1, int incx)
+{
+  if (n<=0) 
+  then {void}
+  else {if (incx=1) 
+	then { loop_dscal2_i(0,n,da,dx,i1)}
+	else {
+		-- int nincx := n*incx;  
+		int nincx := mul100(incx);
+		loop_dscal1_i(0,nincx,da,dx,i1,incx)
+	     }
+	}
+}
+
+void loop_dscal1_i(int i, int nincx, float da, float [int] dx, int i1,int incx)
+{
+  if (i<nincx) 
+	then {  int t1 := i+i1;
+		assignF(dx,t1, mulFF(da,subF(dx,t1)));
+		loop_dscal1_i(i+1, nincx,da,dx,i1,incx) -- specialized incx to 1
+	     }
+	else {void}
+}
+
+void loop_dscal2_i(int i, int n, float da, float [int] dx, int i1)
+{
+  if (i<n)
+	then { 
+		float t1 := subF(dx,i+i1);
+		assignF(dx,i+i1, mulFF(da,t1));
+		loop_dscal2_i(i+1,n ,da,dx,i1)
+	     }
+	else {void}
+}
+
+int idamax(int n, float [int] dx, int i1, int incx)
+{ 
+  int itemp :=0;
+  if (n < 1) then { 0 }
+	else {if (incx=1) 
+		then {
+			float dmax :=fabs(subF(dx,0+i1));
+		 	loop_idamax1_i(1,n,dx,i1,dmax,itemp)
+		     }
+		else { 0  -- specialized
+		     }
+	}
+}
+
+
+int<r> loop_idamax1_i(int<i> i, int<n> n, float [int<dx>] dx, int<i1> i1, float dmax, int<itemp> itemp)
+  where ((i <= r < n) || (r=itemp)),{},{},(Bogus),
+{
+ if (i<n) 
+	then {
+		   if (gteFF(fabs(subF(dx,i+i1)), dmax)) 
+			then {
+				-- itemp := i;
+				dmax := fabs(subF(dx,i+i1));
+	  			loop_idamax1_i(i+1,n,dx,i1,dmax,i)
+			     }
+			else {
+				loop_idamax1_i(i+1,n,dx,i1,dmax,itemp)
+	     		     }
+     		}	     
+	else {itemp}
+}
+
+int loop_idamax2_i(int i, int n, float [int] dx, int i1, float dmax, int ix, int incx, int itemp)
+{
+  if (i<n)
+	then {
+		{if (gteFF(fabs(subF(dx,ix+i1)), dmax))
+		 then {
+			itemp := i;
+			dmax := fabs(subF(dx,ix+i1))
+		      }
+		 else {void}
+	        };
+		-- ix := ix + incx;
+		ix := ix + 1;	-- specialize incx to 1
+		loop_idamax2_i(i+1,n,dx,i1,dmax,ix,incx,itemp)
+	     }
+	else {itemp}
+}
+
+void dgesl(float [int] a, int n, int [int] ipvt, float [int] b, int job)
+{
+  Int nm1 := n - 1;
+  if (job = 0) 
+  then {
+	{if (nm1 >= 1)
+	 then {loop_dgesl1_k (0, n, ipvt, a, b)}
+	 else {void}};
+	loop_dgesl1_kb (0,n,a,b)
+       }
+  else {
+	loop_dgesl2_k (0,n,a,b);
+	if (nm1 >= 1)
+	then {loop_dgesl2_kb (1, n, ipvt, a, b)}
+	else {void}
+      }
+}
+
+void loop_dgesl1_k (int k, int n, int [int] ipvt, float [int] a, float [int] b)
+{ 
+  int nm1 := n - 1;
+  if (k<nm1)
+ 	then {	int l := sub(ipvt,k);
+		float t := subF(b,l); --indirection check...cannot be eliminated: type-check cannot be done on the specialized program
+		int i1 := mul201(k)+(k+1);
+		int i2 := k+1;
+		{if (l = k)
+			then {void}
+			else {
+				assignF(b,l,subF(b,k));--indirection check...cannot be eliminated: type-check cannot be done on the specialized program
+				assignF(b,k,t)
+			     }	
+	        };
+		daxpy(n-(k+1),t,a,i1,1,b,i2,1);
+		loop_dgesl1_k(k+1, n, ipvt, a, b)
+		}
+        else {void}
+}
+
+void loop_dgesl1_kb (int kb, int n, float [int] a, float [int] b)
+{
+  if (kb<n)
+	then {
+	       int k := n - (kb + 1);
+	       float t := 0.0;
+	       int i1 := mul201(k)+0;
+	       int i2 := 0;
+	       float t1 := subF(a,mul201(k)+k);
+	       float t2 := subF(b,k);
+	       assignF(b,k, divFF(t2,t1));
+	       t := minusIF(0,subF(b,k));
+	       daxpy(k,t,a,i1,1,b,i2,1);
+	       loop_dgesl1_kb(kb+1,n,a,b)
+	     }
+	else {void}
+}
+
+void loop_dgesl2_k (int k, int n, float [int] a, float [int] b)
+{
+  if (k<n)
+	then { 	int i1 := mul201(k)+0;
+ 	 	int i2 := 0;
+		float t := ddot(k,a,i1,1,b,i2,1);		
+		float t1 := subF(a,mul201(k)+k);
+		float t2 := subF(b,k);
+		assignF(b,k, divFF(minusFF(t2, t),t1));
+		loop_dgesl2_k(k+1,n,a,b)
+	     }
+	else {void}
+}
+
+
+void loop_dgesl2_kb (int kb, int n, int [int] ipvt, float [int] a, float [int] b)
+{
+  int nm1 := n - 1;
+  if (kb<nm1)
+	then {  
+		int k := n - (kb+1);
+		int l := sub(ipvt,k);
+		int i1 := mul201(k)+(k+1);
+		int i2 := k+1;
+		float dt := ddot(n-(k+1),a,i1,1,b,i2,1);
+		float t2 := subF(b,k);
+		assignF(b,k,plusFF(t2,dt));
+		{if (l = k) 
+		 then {void}
+		 else {	
+		  float t := subF(b,l);--indirection check...cannot be eliminated: type-check cannot be done on the specialized program
+			assignF(b,l,subF(b,k));
+			assignF(b,k,t)
+			}
+		};
+		loop_dgesl2_kb(kb+1,nm1,ipvt,a,b)
+	     }
+	else {void}
+}
+
+
+float ddot(int n,float [int] dx, int i1, int incx,  float [int] dy, int i2, int incy)
+{
+ float dtemp := 0.0;
+ if (n<=0) then {0.0} 
+ else {
+       if (and((incx=1), (incy=1)))
+       then { loop_ddot2_i (0,n,dtemp,dx,i1,dy,i2)}
+       else {0.0}
+      }	
+}
+
+float loop_ddot2_i (int i, int n, float dtemp, float [int] dx, int i1, float [int] dy, int i2)
+{ if (i<n) 
+	then { 
+		float t1 := subF(dx,i+i1);
+		float t2 := subF(dy,i+i2);
+		dtemp := plusFF(dtemp, mulFF(t1,t2));
+		loop_ddot2_i(i+1,n,dtemp,dx,i1,dy,i2)
+	     }
+	else {dtemp}
+}
+
+void dmxpy(int n1, float [int] y, int n2, float [int] x,float [int] m)
+{
+  Int j := 0;
+  Int jmin := mod(n2,16) + 16;
+  {j := mod(n2,2);
+   if (j>=1)
+     then { j := j-1;
+ 	    loop_dmxpy1_i (0,n1,j,y,x,m)
+	  }
+     else {void}
+  };
+  {j := mod(n2,4);
+   if (j>=2)
+     then { j := j-1;
+	    loop_dmxpy2_i (0,n1,j,y,x,m)
+	  }
+     else {void}
+   };
+  {j := mod(n2,8);
+   if (j >=4)
+	then { j := j-1;
+	       loop_dmxpy3_i (0,n1,j,y,x,m)
+	     }
+	else {void}
+   };
+  {j := mod(n2,16);
+   if (j >=8)
+	then { j := j-1;
+	       loop_dmxpy4_i (0,n1,j,y,x,m)
+	     }
+	else {void}
+   };
+  dmxpy_mainloop1 (jmin-1,n1,n2,y,x,m)   
+}
+
+void loop_dmxpy1_i (int i, int n1, int j, 
+		float [int] y, float [int] x, float [int] m)
+{
+  if (i<n1)
+	then {
+	      float t1 := subF(m,mul201(j)+i);
+	      assignF(y,i, plusFF(subF(y,i), 
+			    mulFF(subF(x,j),t1)));
+	      loop_dmxpy1_i(i+1,n1,j,y,x,m)
+	     }
+	else {void}
+}
+
+void loop_dmxpy2_i (int i, int n1, int j, 
+		float [int] y, float [int] x, float [int] m)
+{
+  if (i<n1)
+  then {
+	float t0 := subF(m,mul201(j)+i);
+	float t1 := subF(m,mul201(j-1)+i);
+	assignF(y,i,plusFF(plusFF(subF(y,i),
+              	        mulFF(subF(x,j-1),t1)),
+			  mulFF(subF(x,j),t0)));
+	loop_dmxpy2_i(i+1,n1,j,y,x,m)
+       }
+  else {void}
+}
+
+void loop_dmxpy3_i (int i, int n1, int j, 
+		float [int] y, float [int] x, float [int] m)
+{
+  if (i<n1)
+  then {
+	float t0 := subF(m,mul201(j)+i);
+	float t1 := subF(m,mul201(j-1)+i);
+	float t2 := subF(m,mul201(j-2)+i);
+	float t3 := subF(m,mul201(j-3)+i);
+	assignF(y,i,plusFF(plusFF(plusFF(plusFF(subF(y,i),
+		     mulFF(subF(x,j-3),t3)), 
+		     mulFF(subF(x,j-2),t2)),
+		     mulFF(subF(x,j-1),t1)),
+		     mulFF(subF(x,j),t0)));
+	loop_dmxpy3_i(i+1,n1,j,y,x,m)
+       }
+  else {void}
+}
+
+void loop_dmxpy4_i (int i, int n1, int j,  
+		float [int] y, float [int] x, float [int] m)
+{
+  if (i<n1)
+  then {
+	float p7 := loop7(0,i,j,x,m,0.0);
+	float t1 := subF(y,i);
+	assignF(y,i,plusFF(t1,p7));
+	loop_dmxpy4_i(i+1,n1,j,y,x,m)
+       }
+  else {void}
+}
+
+-- this loop is not executed at runtime ??
+float loop7 (int n, int i, int j, float [int] x, float [int] m, float s)
+{ if (n<=7)   
+        then { 
+	       float tn := subF(m,mul201(j-n)+i);
+	       float t1 := mulFF(subF(x,j-n),tn);
+               loop7(n+1,i,j,x,m,plusFF(s,t1))
+        }
+        else {s}
+}
+
+void dmxpy_mainloop1 (int j, int n1, int n2, float [int] y, float [int] x, float [int] m)   
+{
+  if (j<n2)
+    then {
+	  dmxpy_mainloop2 (0,j,n1,y,x,m);
+	  dmxpy_mainloop1(j+16,n1,n2,y,x,m)
+	 }
+    else {void}
+}
+
+void dmxpy_mainloop2(int i, int j, int n1, float [int] y, float [int] x, float [int] m)
+{
+  if (i<n1)
+    then {
+  		float t1 := loop15(0,i,j,x,m,0.0);
+		float t2 := subF(y,i);
+	  	assignF(y,i, plusFF(t1,t2));
+		dmxpy_mainloop2(i+1,j,n1,y,x,m)
+	}
+    else {void}
+}
+
+float loop15 (int n, int i, int j, float [int] x, float [int] m, float s)
+{ if (n<=15)
+	then { 
+--		float tn := subF(m,mul(201,j-n)+i);
+		float tn := subF(m,mul201(j-n)+i);
+		float t1 := mulFF(subF(x,j-n),tn); 
+	        loop15(n+1,i,j,x,m,plusFF(s,t1))
+	}
+	else {s}
+}

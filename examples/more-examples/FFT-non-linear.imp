@@ -1,0 +1,32 @@
+#include "Primitives.imp"
+
+-- simplification of a loop from FFT that originally requires non-linear invariants
+
+void main() {
+  int dim := 2048;
+  float[int][dim] data := 0.0;
+--  int n := 1024;
+--  int dual := 2;
+  inner_loop(0,data)
+}
+
+void inner_loop (int b, float[int] data) {
+-- the array access should be proven if we know the precondition: exists k(b=4k)
+  int l := randInt();
+  if (and(b<1024,b=mul2(mul2(l)))) then {
+    int j := mul2(b+2);
+    subF(data,j+1); -- assert (0 <= j+1 < len(data))
+    inner_loop(b+4,data)
+  } else { void }
+}
+
+{-
+void inner_loop (int b, float[int] data) {
+-- the array access cannot be proven safe if we don't know: exists k(b=4k)
+  if (b<1024) then {
+    int j := mul2(b+2);
+    subF(data,j+1); -- assert (0 <= j+1 < len(data))
+    inner_loop(b+4,data)
+  } else { void }
+}
+-}

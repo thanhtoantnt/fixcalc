@@ -1,0 +1,34 @@
+#include "Primitives.imp"
+
+-- examples from "Proving Conditional Termination" by Cook et al
+
+void foo(int x, int y) {
+  while (y>=0) do {
+    y:=y+x
+  };
+  verror()
+} 
+
+--void goo(int x, int y, int z){
+--  while(x>0) do {
+--    x:=x+y;
+--    y:=y+z
+--  }
+--}
+
+--void hoo(int x, int y, int N) {
+--  while(x<=N) do {
+--    if (randBool()) then {
+--      x:=mul2(x)+y;
+--      y:=y+1
+--    } else {
+--      x:=x+1
+--    }
+--  }
+--}
+
+--void ioo(int x){
+--  while(x>=0) do {
+--    x:=10-mul2(x)
+--  }
+--}

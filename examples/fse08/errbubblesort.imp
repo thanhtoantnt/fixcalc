@@ -1,0 +1,61 @@
+#include "Primitives.imp"
+
+Void main()
+{
+  Int dim := 10;
+  Float [Int][dim] A := 0.0;
+  init_arrF(A,0,dim-1);
+  printArrF(A);
+  bubble_sort(A,dim); -- correct
+--  bubble_sort(A,dim+10); -- bug: detected as MUST-BUG
+  printArrF(A);
+  printStats()
+}
+
+Void init_arrF(Float[Int] a, Int i, Int j)
+{
+  if (i>j) then { Void }
+  else {
+    assignF(a,i,myrandomF(10.0));
+    init_arrF(a,i+1,j)
+  }
+}
+
+Void bubble_sort (Float [Int] a, Int n)
+{ 
+  doi (a,0,n)
+}
+
+
+Void doi(Float [Int] a, Int i, Int n)
+{ 
+  if (i>=n-1) then { Void }
+	else {
+	  doj (a, i, 0, n);
+	  doi (a, i+1, n)
+	}
+}
+
+Void doj(Float[Int] a, Int i, Int j, Int n)
+{ 
+  if (j>=n-1-i) then { Void }
+	else 
+	{
+	  {
+--	    Bool temp := ltFF(subF(a,j+1),subF(a,j)); -- correct
+	    Bool temp := ltFF(subF(a,j+7),subF(a,j)); -- bug
+	    if (temp) then
+		    { swap (a,j,j+1) }
+	    else { Void }
+	  };
+	  doj(a,i,j+1,n)
+	}
+}
+
+Void swap(Float[Int] a, Int i, Int j)
+{ 
+  Float tmp1 := subF(a,i);  
+  Float tmp2 := subF(a,j);  
+  assignF(a,i,tmp2);      
+  assignF(a,j,tmp1)       
+}

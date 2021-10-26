@@ -1,0 +1,11 @@
+#Int fcnt2(Int x,Int cnt) {
+#  if (x<=0) then { x }
+#  else { fcnt2(x-2,cnt-1) }
+#} 
+
+#fcnt2:={[f_6,f_7] -> [f_5] -> [f_6,f_7]: (exists (PRMf_6,PRMf_7 : exists (f_58,f_59,f_60 : ((f_6 >= 1 && f_6 = PRMf_6 && PRMf_7 = f_7 && f_60 = f_5 && fcnt2(f_58,f_59,f_60) && f_6 = f_58 + 2 && PRMf_7 = f_59 + 1) || (0 >= f_5 && f_5 = PRMf_6 && f_5 = f_6 && PRMf_7 = f_7)))))};
+
+fcnt2:={[x,cnt] -> [res] -> [x,cnt]: exists(PRMx,PRMcnt: x<=0 && res=x && cnt=0 || x>0 && exists(x1,cnt1: x1=x-2 && cnt1=cnt-1 && fcnt2(x1,cnt1,res)))};
+
+Fix1:=bottomup(fcnt2,1,SimHeur); Fix1;
+Fix2:=bottomup(fcnt2,2,SimHeur); Fix2;

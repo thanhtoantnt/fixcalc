@@ -1,0 +1,27 @@
+R1:={[m,n] -> [h] -> []: ((((h=0 && n=m+3) && 0<=m) 
+  || ((n=m+3 && 1<=h) && h+h+h<=m)) 
+  ||  (exists (n_691: (exists (m_690: (exists (h_708:(((m_690=m && (n=m+3 && (n_691=h-(1) && ((h+h+h<=m && m<h_708) && 1<=h)))) || (h_708=m && (n=m_690+3 && (n_691=h-(1) && (((0<=m && m<=m_690) && h+h+h<=m_690) && 1<=h))))) && R1(h_708,m_690,n_691)))) )) )) )
+};
+
+
+# Step-by-step procedure fox fixpoint analysis
+F0:={[]: 0=1}; F0;
+F1:=R1(F0); F1;
+F2:=R1(F1); F2;
+F3:=R1(F2); F3;
+F3H:=selhull(F3,2,SimHeur); F3H;
+F4:=R1(F3H); F4;
+F4H:=selhull(F4,2,SimHeur); F4H;
+# problem with widen if use QFormula
+# if not using QFormula, how to represent it?
+# if using QFormula, how to do widen?
+F3W:=widen(F3H,F4H,SimHeur); F3W;
+
+fixtestPost([R1],[F3H]);
+
+fixtestPost([R1],[F3W]);
+
+T1:=bottomup(R1,1, SimHeur);T1;
+T2:=bottomup(R1,2, SimHeur);T2;
+F3W;
+

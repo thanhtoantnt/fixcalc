@@ -1,0 +1,11 @@
+R2:={[x,k] -> [res] -> []: ((x=0 && res=0) ||  (exists (res1: (exists (x1,k1:((res=res1+1 && (x=x1+1 && 1<x) && (k=1 && k1=0 || k=0 && k1=1)) && R2(x1,k1,res1)))) )) )
+};
+
+[T2]:=bottomupgen([R2], [2], SimHeur);
+T2;
+[T1]:=bottomupgen([R2], [1], SimHeur);
+T1;
+
+
+
+

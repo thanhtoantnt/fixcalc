@@ -1,0 +1,57 @@
+#include "Primitives.imp"
+
+{-- termination example from [Colon-TACAS'01]
+void tacas(int i,int j,int k) {
+  if (and (i<=100, j<=k)) then { 
+    tacas(j,i+1,k-1)
+  } else { void }
+}
+
+-- simple InitArr with index increasing up to j
+void ixInc (float[int] A, int i, int j)
+{ 
+  if (i>j) then { void }
+  else { 
+    assignF(A,i,0.0);
+    ixInc(A,i+1,j)
+  }
+}
+
+-- simple InitArr with index decreasing to 0
+void ixDec (float[int] A, int i)
+{ 
+  if (i<=0) then { void }
+  else { 
+    assignF(A,i,0.0);
+    ixDec(A,i-1)
+  }
+}
+
+-- index decreasing to 0 and non-termination
+void ixDec (float[int] A, int i)
+{ 
+  if (i=0) then { void }
+  else { 
+    ixDec(A,i-1)
+  }
+}
+-}
+
+void f(ref int x)
+-- true *--> x>10 & x'=10 or x<=10 & x'=x-1
+  { x:=x-1;
+    if x>10 then { f(x) }
+    else { void }
+  }
+
+
+void g(ref int x, ref int y, int a, int b)
+--   true *--> not(x>a & y>b) & x'=x & y'=y
+--            \/ (x>a & y>b) & (y'=b \/ x'<=a)
+ { if (and (x>a, y>b)) then {
+--     if (randBool()) then { f(x) }
+--     else { y:=y-1 };
+     f(x);
+     g(x,y,a,b)
+   } else { void }
+ }

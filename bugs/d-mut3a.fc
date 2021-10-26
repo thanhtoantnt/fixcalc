@@ -1,0 +1,26 @@
+R2:={[x,k] -> [res] -> []: ((x=0 && res=0 && k=1) ||  (exists (res1: (exists (x1,k1:((res=res1+2 && k=k1 && (x=x1+1 && 0<x)) && R1(x1,res1,k1)))) )) )
+};
+R1:={[x,k] -> [res] -> []: ((x=0 && res=1 && k=0) ||  (exists (x1: (exists (res1,k1:((res=res1+2 && k=k1+1 && (x=x1+1 && 0<x)) && R2(x1,res1,k1)))) )) )
+};
+[T2,T1]:=bottomupgen([R2,R1], [2,2], SimHeur);
+#T2; T1;
+#bottomupgen([R2,R1], [1,1], SimHeur);
+
+# T2:=(x >= 0 && res >= x)
+# T1:=(x >= 0 && res >= 1 + x)
+T2; T1;
+fixtestPost([R2,R1],[T2,T1]);
+fixtestPost([R2,R1],[T1,T1]);
+#fixtestPost(R2,T1);
+# above is a mutual rec fix-point test that would
+# I expect it to return [True,True]
+
+# It could make use of  
+#  fixTestBU_gen :: DictOK -> [(Id,Formula)] -> FS [(Id,Bool)]
+# Probably you would want to implement a specialized version
+# below that works with the above:
+#  fixTestBU_Lgen :: [RecPost] -> [Formula] -> FS [Bool]
+
+
+
+

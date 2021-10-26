@@ -1,0 +1,68 @@
+# Constraint-abstraction from figure 1a from Gulavani's paper in CAV'08
+
+
+loop:={[x,y]->[Px,Py]->[]: exists(x1,y1:
+     ((x<=50 && y1=y+1) || (x>50 && y1=y-1)) 
+     && ((y1<0 && Px=x && Py=y1)  || (y1>=0 && x1=x+1 && loop(x1,y1,Px,Py)))
+	)};
+
+Fix2:=bottomup(loop,2,SimHeur);Fix2; 
+Fix3:=bottomup(loop,3,SimHeur);Fix3; 
+Fix2 subset Fix3;
+Fix3 subset Fix2;
+
+fixtestPost(loop,Fix2);
+fixtestPost(loop,Fix3); # same precision as Fix2
+
+
+fs:={[x,y]->[Px,Py] -> []: exists(x1,y1:
+   (x>50) && y1=y-1 && (y1<0 && Px=x && Py=y1   || y1>=0 && x1=x+1 && fs(x1,y1,Px,Py))
+  )};
+
+Fix2s:=bottomup(fs,2,SimHeur);Fix2s; 
+Fix3s:=bottomup(fs,3,SimHeur);Fix3s; 
+Fix2s subset Fix3s;
+Fix3s subset Fix2s;
+# ((0 >= 1 + y && Px >= 51) && Px = x)
+#(x >= 51 && Px >= 1 + x && 0 >= 1 + Py && y >= 1) || (x >= 51 && x + 2 >= Px && Px >= x && y >= 1 + Py && 2 >= y && 0 >= 1 + Py)
+
+idealfs:={[x,y,Px,Py]:x>50 && (y-1<0 && Px=x && Py=y-1
+	|| y-1>=0 && Px-x+1=y-Py &&  Py<0 && y-Py>1)};
+Fix2s;
+idealfs;
+fixtestPost(fs,idealfs);
+fixtestPost(fs,Fix2s);
+idealfs subset Fix2s;
+Fix2s subset idealfs;
+
+fm:={[x,y]->[Px,Py] -> []: exists(x1,y1:
+    (x>50 && #Fix2s(x,y,Px,Py) 
+(((y >= 1 && x >= 51) && y + x = Px && 0 = Py + 1) || ((0 >= y && Px >= 51) && Px = x && y = Py + 1))
+  )
+  || (x<=50 && y1=y+1 &&
+       (y1<0 && Px=x && Py=y1  || y1>=0 && x1=x+1 && fm(x1,y1,Px,Py)))
+  )};
+
+Fix2m:=bottomup(fm,2,SimHeur);Fix2m; 
+Fix3m:=bottomup(fm,3,SimHeur);Fix3m; 
+Fix4m:=bottomup(fm,4,SimHeur);Fix4m; 
+Fix2m subset Fix3m;
+Fix3m subset Fix2m; # Fix3m is more precise
+Fix4m subset Fix3m; # Fix3m is more precise
+Fix3m subset Fix4m;
+
+Fix4m subset Fix2;
+Fix2 subset Fix4m;
+
+fixtestPost(loop,Fix4m);
+
+# (Px >= 1 + x && 0 >= 1 + Py && Px >= 0) || (x >= y + 49 && Px >= x && 0 >= 1 + Py && 2 >= y && Px >= 51) || (50 >= x && 0 >= 2 + y && x = Px && y = Py)
+
+init := {[x,y,Px,Px]:x=0 && y=0};
+#C := Fix2 intersection init;
+C := Fix4m intersection init;
+final:={[x,y,Px,Py]:Py=-1 && Px=102};
+final;
+C;
+C subset final;
+

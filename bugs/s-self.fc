@@ -1,0 +1,24 @@
+R3:={[x] -> [res] -> []: ((res=0 && x=1) ||  (exists (v_int_16_541: (exists (v_int_16_546:((x=v_int_16_546+2 && (res=v_int_16_541+1 && 0<=v_int_16_541)) && R3(v_int_16_546,v_int_16_541)))) )) )
+};
+bottomupgen([R3], [1], SimHeur); 
+bottomupgen([R3], [2], SimHeur); 
+bottomupgen([R3], [3], SimHeur);
+F1:=bottomup(R3,1,SimHeur); F1;
+F2:=bottomup(R3,2,SimHeur); F2;
+F3:=bottomup(R3,3,SimHeur); F3;
+#(res >= 0 && 2*res + 1 = x)
+#(x >= 1 && res >= 0)
+#(x >= 1 && res >= 0)
+#(res >= 0 && 2*res + 1 = x)
+#(res >= 0 && 2*res + 1 = x)
+#(res >= 0 && 2*res + 1 = x)
+
+F0:={[]: 0=1};
+F1:=R3(F0); F1;
+F2:=R3(F1); F2;
+F3:=R3(F2); F3;
+F3H:=selhull(F3,2,SimHeur); F3H;
+F4:=R3(F3H); F4;
+F4H:=selhull(F4,2,SimHeur); F4H;
+F3W:=widen(F3H,F4H,SimHeur); F3W;
+fixtestPost(R3,F3W);

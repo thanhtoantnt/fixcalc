@@ -1,0 +1,29 @@
+R1:={[x,k] -> [res] -> []: ((x=0 && res=0 && 0<=k<=1) ||  (exists (res1: (exists (x1,k1:((res=res1+1 && (x=x1+1 && 0<x)) && (k=1 && k1=0 || k=0 && k1=1) && R1(x1,k1,res1)))) )) )
+};
+
+[T1]:=bottomupgen([R1], [1], SimHeur);
+
+#T3:={[x,res,k]:(((1 >= k && 2x >= res) && k + x >= res) && x >= 0 && 1>=k>=0 && res>=0)};
+#fixtestPost(R1,T1);
+#fixtestPost(R1,T3);
+
+T1;
+
+# Why dind't we get T3 outcome?
+
+
+G1:={[x,res,k]:((1 >= k && res >= x && 2x >= res && x >= 0 && res >= 0 && res >= x))};
+G1;
+G2:=R1(G1);
+# output seems wromg
+# (((k >= 0 && 1 >= k) && 0 = x && 0 = res) || (2 >= res && 1 = k && 1 = x) || (2 >= res && 0 = k && 2 = x))
+
+G2;
+T:={[x,res,k]:res>=0};
+G2a:={[x,res,k]:(((k >= 0 && 1 >= k) && 0 = x && 0 = res) || (2 >= res && 1 = k && 1 = x) || (2 >= res && 0 = k && 2 = x))};
+G2a subset T;
+G1 subset T;
+
+
+
+

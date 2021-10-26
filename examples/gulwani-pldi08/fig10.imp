@@ -1,0 +1,18 @@
+#include "Primitives.imp"
+
+-- Example from Figure 10 of Gulwani-PLDI'08
+-- In our system, one non-termination precondition is precise, but the OK outcome is not precise.
+void Bug1(int y, int n) {
+  int x:=0;
+  if (y<9) then {
+    while (x<n) do {
+      assert (x<200);
+      x:=x+y
+    }
+  } else { 
+    while (x>=0) do {
+      x:=x+1
+    }
+  }
+}
+

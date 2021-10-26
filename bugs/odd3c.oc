@@ -1,0 +1,35 @@
+T1:={[x,res,k]:(((1 >= k && 2x >= res) && k + x >= res) && x >= 0)};
+
+T2:={[x,res,k]:((k >= 0 && x >= 0) && res >= 0)};
+T2a:={[x,res,k]:k >= 0};
+T2b:={[x,res,k]:x >= 0};
+T2c:={[x,res,k]:res >= 0};
+
+T1 subset T2a;
+T1 subset T2b;
+T1 subset T2c;
+
+F1:={[k,x,res]:(1 >= k && 2 >= x + k && 2x >= res && k + x >= res && x >= 0 && res >= 0 && x >= 0 && res >= 0)};
+F2:={[x,res,k]:((((res + x >= 0 && 4 >= x + res && 2x >= res) && (k >= 0 && 1 >= k)) && k + x >= res) && x >= 0)};
+F2 subset T2c;
+
+G1:={[x,res,k]:((1 >= k && res >= x && 2x >= res && x >= 0 && res >= 0 && res >= x))};
+G1;
+#{[x,res,k]: x <= res <= 2x && k <= 1}
+
+G1 subset T2a;
+G1 subset T2b;
+G1 subset T2c;
+
+RG1:={[x,res,k]: ((x=0 && res=0 && 0<=k<=1) ||  (exists (res1: (exists (x1,k1:((res=res1+1 && (x=x1+1 && 0<x)) && (k=1 && k1=0 || k=0 && k1=1) && 
+x1 <= res1 <= 2x1 && k1 <= 1
+))) )) )
+};
+
+RG1;
+#{[0,0,k]: 0 <= k <= 1} union {[x,res,1]: x <= res <= 2x-1} union {[x,res,0]: x <= res <= 2x-1}
+RG1 subset T2a;
+RG1 subset T2b;
+RG1 subset T2c;
+
+

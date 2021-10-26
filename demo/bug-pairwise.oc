@@ -1,0 +1,10 @@
+# OC bug in PairWiseCheck (did not simplify A)
+A := {[n,res]:((99 >= n && 91 = res) || ((n >= 0 && 100 >= n) && 91 = res) || (n >= 101 && n = res + 10))};
+PairWiseCheck A;
+
+B := {[n,res]:((99 >= n && 91 = res) || ((n >= 0 && 100 >= n) && 91 = res))};
+PairWiseCheck B;
+
+C := {[n,res]:((100 >= n && 91 = res))};
+B subset C;
+C subset B;

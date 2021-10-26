@@ -1,0 +1,18 @@
+#include "Primitives.imp"
+
+-- example from Sagiv.TCS'96 on linear-constant propagation. Example from fig.1
+-- Result: after the call to P, we can prove that x has the constant value -9.
+void main() {
+  int x:=0;
+  P(7,x);
+  assert(x=0-9)
+}
+
+void P(int a, ref int x) {
+  if (a>0) then {
+    a:=a-2;
+    P(a,x);
+    a:=a+2
+  } else { void };
+  x:=5-mul2(a)
+}

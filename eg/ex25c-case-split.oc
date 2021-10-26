@@ -1,0 +1,42 @@
+F1:= {[x,y]:((0 = 0 && 0 = x + y) || (0 >= 1 + y && 0 = x) || (y >= 1 && 0 = x))};
+C1:={[x,y]:x<=0};
+C2:={[x,y]:x>0};
+F1a:=hull(C1 intersection F1);
+F1a;
+
+F1b:=hull(C2 intersection F1);
+F1b;
+F2:=complement(F1a union F1b);
+F2;
+
+F3:={[x,y]:(0 >= x + y || (0 >= 2 + y && 0 = x + 2*y + 1) || (y >= 1 && 0 = x))};
+F3a:=hull(C1 intersection F3);
+F3b:=hull(C2 intersection F3);
+F4:=F3a union F3b;
+F4;
+complement F4;
+
+G1:={[x,y]:(0 >= x || (0 >= 1 + y && x >= 1))};
+G2:={[x,y]: x <= 0} union {[x,y]: 1 <= x <= -2y-1};
+G1 subset G2;
+G2 subset G1;
+
+
+F5:={[x,y]:(0 >= x + y || (x + y >= 1 && 0 >= 3*y + 3 + x) || (y >= 1 && 0 = x))};
+F5a:=hull(C1 intersection F5);
+F5b:=hull(C2 intersection F5);
+F6:=F5a union F5b;
+F6;
+# {[x,y]: x <= 0} union {[x,y]: 1 <= x <= -3y-2}
+
+G1 subset F6;
+F6 subset G1;
+
+
+{[y]:1 <= -2y-1};
+{[y]:1 <= -3y-2};
+
+Ans:={[x,y]: x <= 0} union {[x,y]: 1 <= x && y<=-1};
+Ans;
+complement Ans;
+

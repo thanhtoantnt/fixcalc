@@ -1,0 +1,23 @@
+sumvec:={[s,i,j] -> [] -> [i,j]: exists (PRMi,PRMj: exists (i_1: (i>j || (i<=j && 0<=i<s && i_1=i+1 && sumvec(s,i_1,j)))))};
+# Automatic procedure fox fixpoint analysis
+sumvec;
+Fix:=bottomup(sumvec,2,SimHeur);
+Fix;
+
+# Step-by-step procedure fox fixpoint analysis
+F0:={[]: 0=1};
+F1:=sumvec(F0); F1;
+F2:=sumvec(F1); F2;
+F3:=sumvec(F2); F3;
+F3H:=selhull(F3,2,SimHeur); F3H;
+F4:=sumvec(F3H); F4;
+F4H:=selhull(F4,2,SimHeur); F4H;
+F3W:=widen(F3H,F4H,SimHeur); F3W;
+fixtestPost(sumvec,F3W);
+
+Fix1:=bottomup(sumvec,1,SimHeur);
+Fix2:=bottomup(sumvec,2,SimHeur);
+Fix3:=bottomup(sumvec,3,SimHeur);
+Fix2 subset F3W;
+F3W subset Fix2;
+Fix1;Fix2;Fix3;F3W;

@@ -1,0 +1,5 @@
+
+
+F1:={[x,res,k1,k2]:((0 = 0 && 0 = res && 0 = x && 1 = k1 && 0 = k2) || ((k >= 0 && 1 >= k) && 0 = res && 0 = x) || (((x >= 1 && res >= x) && 2 >= res) && 2 = k + x))};
+PairWiseCheck F1;
+hull F1;

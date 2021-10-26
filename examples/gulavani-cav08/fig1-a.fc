@@ -1,0 +1,74 @@
+# Constraint-abstraction from figure 1a from Gulavani's paper in CAV'08
+
+loop:={[x,i,z,y]->[Px,Pi,Pz] -> []: exists( i1,x1,z1:
+i1=i+1 &&
+(x<y && ((z>x && x1=x+1 && z1=z) || (z<=x && x1=x && z1=z+1)) 
+   && loop(x1,i1,z1,y,Px,Pi,Pz))
+ || (x>=y && Px=x && Pi=i && Pz=z)
+)};
+
+Fix2:=bottomup(loop,2,SimHeur);Fix2; 
+Fix3:=bottomup(loop,3,SimHeur);Fix3; #Fix3 is more precise than Fix2
+Fix2 subset Fix3;
+Fix3 subset Fix2;
+
+fixtestPost([loop],[Fix2]);
+fixtestPost([loop],[Fix3]);
+
+
+loop2:={[x,i,z,y]->[Px,Pi,Pz] -> []: exists( i1,x1,z1:
+i1=i+1 &&
+(x<y && ((x1=x+1 && z1=z) || (x1=x && z1=z+1)) 
+   && loop2(x1,i1,z1,y,Px,Pi,Pz))
+ || (x>=y && Px=x && Pi=i && Pz=z)
+)}; # replace x>z by a "*" 
+
+FixB2:=bottomup(loop2,2,SimHeur);FixB2; 
+FixB3:=bottomup(loop2,3,SimHeur);FixB3; 
+
+Fix3 subset FixB3;
+FixB3 subset Fix3; #Both Fix2 and Fix3 are incomparable with Fix
+
+fixtestPost([loop2],[FixB3]);
+FixB3 subset FixB2;
+FixB2 subset FixB3;
+
+
+loop:={[x,i,z,y]->[Px,Pi,Pz] -> []: exists( i1,x1,z1:
+i1=i+1 &&
+(x<y && ((z>x && x1=x+1 && z1=z) || (z<=x && x1=x && z1=z+1))
+   && loop(x1,i1,z1,y,Px,Pi,Pz))
+ || (x>=y && Px=x && Pi=i && Pz=z)
+)};
+
+Ide:={[x,i,z,y,Px,Pi,Pz] :
+  ( x>=y && Px=x && Pi=i && Pz=z)
+ || (x<y && ((z>y && Pi=i+(y-x))
+      || (z<=y && Pi=i+(y-x)+(y-z)))
+    )
+};
+
+Ide;
+fixtestPost(loop,Ide);
+Ide subset Fix2;
+Ide subset FixB2;
+
+aux1:={[x,i,z,y]->[Px,Pi,Pz] -> []: z>=y && exists( i1,x1,z1:
+i1=i+1 &&
+(x<y && (z>x && x1=x+1 && z1=z)
+   && aux1(x1,i1,z1,y,Px,Pi,Pz))
+ || (x>=y && Px=x && Pi=i && Pz=z)
+)};
+
+auxB2:=bottomup(aux1,2,SimHeur);auxB2; 
+
+loop3:={[x,i,z,y]->[Px,Pi,Pz] -> []: exists( i1,x1,z1:
+i1=i+1 &&
+(x<y && ((z>=y && y >= x + 1 && z >= y && y = Px && z = Pz && x + Pi = i + y) 
+  || (z<y &&
+  ((z>x && x1=x+1 && z1=z) || (z<=x && x1=x && z1=z+1))
+   && loop3(x1,i1,z1,y,Px,Pi,Pz)) )
+ || (x>=y && Px=x && Pi=i && Pz=z)
+)};
+
+new:=bottomup(loop3,3,SimHeur);new; 

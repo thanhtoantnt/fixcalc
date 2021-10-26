@@ -1,0 +1,10 @@
+R1:={[m,n] -> [h] -> []:
+ ((m>=n+n+n+3 && h=m-3 && n=0)
+|| (n>0 &&  m>=n+n+n+3 && h=m-3) 
+|| exists(m1,h1: m1=m-3 && n1=n-1 &&n>0 &&  m>=n+n+n+3 && R1(h1,m1,n1)
+   && (h1<=m-3 && h=h1 || h=m-3 && h1>=m-3)))
+};
+T1:=bottomup(R1,1, SimHeur);T1;
+T2:=bottomup(R1,2, SimHeur);T2;
+bottomupgen([R1], [1], SimHeur);
+bottomupgen([R1], [2], SimHeur);

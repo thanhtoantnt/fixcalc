@@ -1,0 +1,22 @@
+#include "Primitives.imp"
+
+-- In our system, program safety can be proven (for m=1).
+void foo(int y) {
+  int x:=randInt();
+  int lock := 0; --0 means U
+  goo(lock, x, y);
+  if (notEq(lock,1)) then { verror() }
+  else { void }
+}
+
+void goo(ref int lock, ref int x, ref int y) {
+  lock := 1; -- 1 means L
+  x := y;
+  if (randBool()) then {
+    lock := 0;
+    y := y+1
+  } else { void };
+  if (notEq(x,y)) then {
+    goo(lock,x,y)
+  } else { void }
+}

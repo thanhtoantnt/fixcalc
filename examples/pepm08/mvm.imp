@@ -1,0 +1,44 @@
+#include "Primitives.imp"
+
+Void main()
+{
+  Int size:=10;
+  Int [Int][size] indx := 6;
+  Int [Int][size] jndx := 3;
+  Float [Int][size] val := 5.0;
+  Float [Int][size] y := 0.0;
+  Float [Int][size] x := 2.1;
+  Int k := 0;
+  mvm(indx,jndx,val,y,x,k);
+  printArrF(x);
+  printArrF(val);
+  printArrF(y);
+  printStats()
+}
+
+Void mvm(Int<a>[Int<s1>] indx,Int<b>[Int<s2>] jndx, Float[Int<s3>] val, Float[Int<s4>] y, Float[Int<s5>] x, Int<k> k)
+--  where (Bogus),{},{},
+--    (a.min=a.min^ && a.max=a.max^ && b.min=b.min^ && b.max=b.max^ && s1=s1^ && s2=s2^ && s3=s3^ && s4=s4^ && s5=s5^ && 
+--    0<=k<k^<=s1,s2,s3),
+
+--  where 
+--    (a.min=a.min' && a.max=a.max' && b.min=b.min' && b.max=b.max' && 
+--    (k>=s3 || 0<=k<s1,s2,s3)),
+--  {},{},
+--    (a.min=a.min^ && a.max=a.max^ && b.min=b.min^ && b.max=b.max^ && s1=s1^ && s2=s2^ && s3=s3^ && s4=s4^ && s5=s5^ && 
+--    0<=k<k^<=s1,s2,s3)
+--  ,
+{
+  if (lt(k,lenF(val,1))) then {
+    Int i := indx[k];
+    Int j := jndx[k];
+    Float v1 := subF(y,i);
+    Float v2 := subF(val,k);
+    Float v3 := subF(x,j);
+    Float v4 := mulFF(v2,v3);
+    Float v5 := plusFF(v1,v4);
+    assignF(y,i,v5);
+    mvm(indx,jndx,val,y,x,k+1)
+  }
+  else { Void }
+}

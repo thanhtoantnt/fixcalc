@@ -1,0 +1,27 @@
+zip:={[x,y] -> [] -> []: 
+  (x > 0 || x < 0 || y >= 0) && 
+  (x > 0 || x < 0) &&
+  (forall (x1: (forall (y1:
+    (!(y=y1+1 && x=x1+1) || zip(x1, y1)))) )) 
+};
+
+F0:={[]: 1=1};
+
+F1:=zip(F0); F1;
+
+F2:=zip(F1); F2;
+
+F3:=zip(F2); F3; 
+
+F4:=zip(F3); F4; 
+
+F4N:=narrow(F3,F4,SimHeur);
+Pre:=PairwiseCheck F4N;
+Pre;
+
+PreN:=zip(Pre); PreN;
+
+Pre subset PreN;
+PreN subset Pre;
+
+gfp([zip], [2], SimHeur);

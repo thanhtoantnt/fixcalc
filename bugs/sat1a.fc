@@ -1,0 +1,13 @@
+T1:={[x,res,k]: x=0 && res=1 && k=0};
+T2:=PickEQfromEQ(T1);
+T2;
+
+# below does not print!
+PickEQfromEQ(T1); 
+T2;
+
+
+
+
+
+

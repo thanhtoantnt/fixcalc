@@ -1,0 +1,20 @@
+#include "Primitives.imp"
+
+--needs a counter? (see email)
+--CONJ: (res<=x && res<=0)
+--DISJ: (x>=0 && res<=x) || (res<=x<=2+res && res<=0) (with SelHulling, m=2)
+--DISJ-More-Precise: (x<=0 && res=x) || (-1<=res<=0 && x>=res+2) (with Interactive hulling, m=2)
+--INV: (-1<=x^<x-1)
+Int fcnt(Int x) {
+  if (x<=0) then { x }
+  else { fcnt(x-2) }
+}
+
+--with counter
+--PRECISE-Postcondition: (x<=0 & res=x \/ x>=1 & -1<=res<=0 & ex k. k>=0 & res+2k=x)
+--DISJ: (x<=0 && res=x || -1<=res<=0 && x>=res+2)
+--CONJ: (res<=x && res<=0)
+Int fcnt2(Int x,ref Int cnt) {
+  if (x<=0) then { cnt:=0;x }
+  else { fcnt2(x-2,cnt-1) }
+} 

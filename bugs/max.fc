@@ -1,0 +1,25 @@
+R1:={[x,y,r]: x<=y && r=y || x>=y && r=x };
+R1;
+
+# NormMiMax R1;
+# {[x,y,r]: r=max(x,y) };
+
+R2:={[x,y,r]: x<=y && r=x || x>=y && r=y };
+R2;
+# NormMiMax R2;
+# {[x,y,r]: r=min(x,y) };
+
+
+R3:={[x,y,r]: x<=y && r<=y || x>=y && r<=x };
+#{[x,y,t]: exists(r: (x<=y && r=y || x>=y && r=x) && t<=r) };
+R3;
+# NormMiMax R3;
+# {[x,y,r]: r<=max(x,y) };
+
+R4:={[x,y,r]: x<=y && r>=y || x>=y && r>=x };
+# NormMiMax R4;
+# {[x,y,r]: r>=max(x,y) };
+
+R5:={[x,y,r]: x<=y && r>=x || x>=y && r>=y };
+# NormMiMax R5;
+# {[x,y,r]: r>=min(x,y) };

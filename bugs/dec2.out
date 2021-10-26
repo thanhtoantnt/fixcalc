@@ -1,0 +1,392 @@
+# R1:={ ... };
+# T1:=bottomup(R1,1,SimHeur);
+Deciding a value for m: limit from command line (m=1), from heuristic (m=3) => m=1
+F1:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 9 >= n) && 3 + 3*h + m >= n)};
+F2:={[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 12 >= n) && 3 + 3*h + m >= n)};
+cf1:=4 cf2:=4 cmset:=3
+Foper:={[n,m,h]:((n >= 3 + m && n >= 3 + 3*h) && 3 + 3*h + m >= n)};
+mSet::={[n,h]:n >= 3*h + 3};{[n,m]:n >= m + 3};{[h,m,n]:3 + 3*h + m >= n};
+affin:=3/5  60
+####Widening 2 arguments, each with 1 disjuncts:
+{[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 9 >= n) && 3 + 3*h + m >= n)};
+{[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 12 >= n) && 3 + 3*h + m >= n)};
+WidenMatrix - noRows: 1, noCols: 1
+60 
+Chosen elem is: (1,1)
+
+# T1;
+
+((n >= 3 + m && 3 + m + 3*h >= n) && n >= 3 + 3*h)
+
+# T2:=bottomup(R1,2,SimHeur);
+Deciding a value for m: limit from command line (m=2), from heuristic (m=3) => m=2
+####SelHull with 6 disjuncts:
+{[n,h,m]:((n >= 3 + 3*h && h >= 3) && n = m + 9)};
+{[n,h,m]:(n >= 9 && 2 = h && n = m + 9)};
+{[n,h,m]:((n >= 3 + 3*h && h >= 2) && n = m + 6)};
+{[n,h,m]:(n >= 6 && 1 = h && n = m + 6)};
+{[n,h,m]:((n >= 3 + 3*h && h >= 1) && n = m + 3)};
+{[n,h,m]:(n >= 3 && 0 = h && n = m + 3)};
+Full Match 100!
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 3) && n = m + 9)};
+F2:={[n,h,m]:(n >= 9 && 2 = h && n = m + 9)};
+foper:={[h,n,m]:((h >= 2 && n >= 3 + 3*h) && n = m + 9)};
+f_or:={[n,h,m]:(((n >= 3 + 3*h && h >= 3) && n = m + 9) || (n >= 9 && 2 = h && n = m + 9))};
+fDif:={[]:1 = 0};
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 3) && n = m + 9)};
+F2:={[n,h,m]:((n >= 3 + 3*h && h >= 2) && n = m + 6)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 6) && m + 9 >= n) && 3*h + m >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 2};
+affin:=2/5  41
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 3) && n = m + 9)};
+F2:={[n,h,m]:(n >= 6 && 1 = h && n = m + 6)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 6) && m + 9 >= n) && 9 + 3*h + 2*m >= 2*n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[n]:n >= 6};
+affin:=2/6  34
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 3) && n = m + 9)};
+F2:={[n,h,m]:((n >= 3 + 3*h && h >= 1) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 9 >= n) && 3*h + m >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 1};
+affin:=2/5  41
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 3) && n = m + 9)};
+F2:={[n,h,m]:(n >= 3 && 0 = h && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 9 >= n) && 3 + 2*h + m >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[n]:n >= 3};
+affin:=2/6  34
+F1:={[n,h,m]:(n >= 9 && 2 = h && n = m + 9)};
+F2:={[n,h,m]:((n >= 3 + 3*h && h >= 2) && n = m + 6)};
+cf1:=3 cf2:=3 cmset:=3
+Foper:={[n,m,h]:(((n >= m + 6 && n >= 3*h + 3) && m + 9 >= n) && h >= 2)};
+mSet::={[n]:n >= 9};{[n,h]:n >= 3 + 3*h};{[h]:h >= 2};
+affin:=3/6  50
+Full Match 100!
+F1:={[n,h,m]:(n >= 9 && 2 = h && n = m + 9)};
+F2:={[n,h,m]:(n >= 6 && 1 = h && n = m + 6)};
+foper:={[h,n,m]:(((h >= 1 && 2 >= h) && n >= 3 + 3*h) && n = m + 3*h + 3)};
+f_or:={[n,h,m]:((n >= 9 && 2 = h && n = m + 9) || (n >= 6 && 1 = h && n = m + 6))};
+fDif:={[]:1 = 0};
+F1:={[n,h,m]:(n >= 9 && 2 = h && n = m + 9)};
+F2:={[n,h,m]:((n >= 3 + 3*h && h >= 1) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 9 >= n) && m + 6*h >= 3 + n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 1};
+affin:=2/6  34
+F1:={[n,h,m]:(n >= 9 && 2 = h && n = m + 9)};
+F2:={[n,h,m]:(n >= 3 && 0 = h && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=1
+Foper:={[h,n,m]:(((h >= 0 && 2 >= h) && n >= 3 + 3*h) && n = m + 3*h + 3)};
+mSet::={[n]:n >= 3};
+affin:=1/6  18
+Full Match 100!
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 2) && n = m + 6)};
+F2:={[n,h,m]:(n >= 6 && 1 = h && n = m + 6)};
+foper:={[h,n,m]:((h >= 1 && n >= 3 + 3*h) && n = m + 6)};
+f_or:={[n,h,m]:(((n >= 3 + 3*h && h >= 2) && n = m + 6) || (n >= 6 && 1 = h && n = m + 6))};
+fDif:={[]:1 = 0};
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 2) && n = m + 6)};
+F2:={[n,h,m]:((n >= 3 + 3*h && h >= 1) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 6 >= n) && 3*h + m >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 1};
+affin:=2/5  41
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 2) && n = m + 6)};
+F2:={[n,h,m]:(n >= 3 && 0 = h && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 6 >= n) && 6 + 3*h + 2*m >= 2*n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[n]:n >= 3};
+affin:=2/6  34
+F1:={[n,h,m]:(n >= 6 && 1 = h && n = m + 6)};
+F2:={[n,h,m]:((n >= 3 + 3*h && h >= 1) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=3
+Foper:={[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 6 >= n) && h >= 1)};
+mSet::={[n]:n >= 6};{[n,h]:n >= 3 + 3*h};{[h]:h >= 1};
+affin:=3/6  50
+Full Match 100!
+F1:={[n,h,m]:(n >= 6 && 1 = h && n = m + 6)};
+F2:={[n,h,m]:(n >= 3 && 0 = h && n = m + 3)};
+foper:={[h,n,m]:(((h >= 0 && 1 >= h) && n >= 3 + 3*h) && n = m + 3*h + 3)};
+f_or:={[n,h,m]:((n >= 6 && 1 = h && n = m + 6) || (n >= 3 && 0 = h && n = m + 3))};
+fDif:={[]:1 = 0};
+Full Match 100!
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 1) && n = m + 3)};
+F2:={[n,h,m]:(n >= 3 && 0 = h && n = m + 3)};
+foper:={[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+eChecker.o -L/usr/local/lib -lcode_gen -lomega -lm ../omega_stub/lib/omega_stub.o ../omega_stub/lib/Exit.o ../omega_stub/lib.hs/Omega_stub.o ../omega_stub/lib.hs/Omega_util.o ../omega_stub/lib.hs/Omega.o ../omega_stub/lib.hs/PFOmega.o ../omega_stub/lib.hs/Omega_types.o ../omega_stub/lib.hs/Omega_tokens.o ../omega_stub/lib.hs/Omega_lexer.o ../omega_stub/lib.hs/Omega_parser.o
+rm -f fixcalc
+ghc -o fixcalc -fglasgow-exts -XOverlappingInstances -package containers -i../omega_stub/lib.hs -lstdc++ FixCalcMain.hs FixCalcLexer.o FixCalcParser.o ImpAST.o MyPrelude.o Fresh.o ImpConfig.o ImpFixpoint2k.o ImpFormula.o InSolver.o ImpHullWiden.o -L/usr/local/lib -lcode_gen -lomega -lm ../omega_stub/lib/omeeChecker.o -L/usr/local/lib -lcode_gen -lomega -lm ../omega_stub/lib/omega_stub.o ../omega_stub/lib/Exit.o ../omega_stub/lib.hs/Omega_stub.o ../omega_stub/lib.hs/Omega_util.o ../omega_stub/lib.hs/Omega.o ../omega_stub/lib.hs/PFOmega.o ../omega_stub/lib.hs/Omega_types.o ../omega_stub/lib.hs/Omega_tokens.o ../omega_stub/lib.hs/Omega_lexer.o ../omega_stub/lib.hs/Omega_parser.o
+rm -f fixcalc
+ghc -o fixcalc -fglasgow-exts -XOverlappingInstances -package containers -i../omega_stub/lib.hs -lstdc++ FixCalcMain.hs FixCalcLexer.o FixCalcParser.o ImpAST.o MyPrelude.o Fresh.o ImpConfig.o ImpFixpoint2k.o ImpFormula.o InSolver.o ImpHullWiden.o -L/usr/local/lib -lcode_gen -lomega -lm ../omega_stub/lib/omef_or:={[n,h,m]:(((n >= 3 + 3*h && h >= 1) && n = m + 3) || (n >= 3 && 0 = h && n = m + 3))};
+fDif:={[]:1 = 0};
+SelHullMatrix - noRows: 6, noCols: 6
+-1 100 41 34 41 34 
+-1 -1 50 100 34 18 
+-1 -1 -1 100 41 34 
+-1 -1 -1 -1 50 100 
+-1 -1 -1 -1 -1 100 
+-1 -1 -1 -1 -1 -1 
+Chosen elem is: (5,6)
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>> WN >>>>>>>>>>>>>>>>>>>>>>>>>>
+100 ==> (1,2),(2,4),(3,4),(4,6),(5,6)
+    ==> (1,2),(3,4),(5,6)  
+Why not perform hulling   simutaneous? 
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+####SelHull with 5 disjuncts:
+{[n,h,m]:((n >= 3 + 3*h && h >= 3) && n = m + 9)};
+{[n,h,m]:(n >= 9 && 2 = h && n = m + 9)};
+{[n,h,m]:((n >= 3 + 3*h && h >= 2) && n = m + 6)};
+{[n,h,m]:(n >= 6 && 1 = h && n = m + 6)};
+{[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+Nothing
+F1:={[n,h,m]:(n >= 6 && 1 = h && n = m + 6)};
+F2:={[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 6 >= n) && 3 + m + 3*h >= n)};
+mSet::={[h]:h >= 0};{[n,h]:n >= 3 + 3*h};
+affin:=2/6  34
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 2) && n = m + 6)};
+F2:={[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 6 >= n) && 6 + 3*h + 2*m >= 2*n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 0};
+affin:=2/5  41
+F1:={[n,h,m]:(n >= 9 && 2 = h && n = m + 9)};
+F2:={[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 9 >= n) && 3 + m + 3*h >= n)};
+mSet::={[h]:h >= 0};{[n,h]:n >= 3 + 3*h};
+affin:=2/6  34
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 3) && n = m + 9)};
+F2:={[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 9 >= n) && 3 + 2*h + m >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 0};
+affin:=2/5  41
+SelHullMatrix - noRows: 6, noCols: 6
+-1 100 41 34 41 -1 
+-1 -1 50 100 34 -1 
+-1 -1 -1 100 41 -1 
+-1 -1 -1 -1 34 -1 
+-1 -1 -1 -1 -1 -1 
+-1 -1 -1 -1 -1 -1 
+Chosen elem is: (3,4)
+####SelHull with 4 disjuncts:
+{[n,h,m]:((n >= 3 + 3*h && h >= 3) && n = m + 9)};
+{[n,h,m]:(n >= 9 && 2 = h && n = m + 9)};
+{[h,n,m]:((h >= 1 && n >= 3 + 3*h) && n = m + 6)};
+Nothing
+{[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+Nothing
+F1:={[h,n,m]:((h >= 1 && n >= 3 + 3*h) && n = m + 6)};
+F2:={[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 6 >= n) && 3 + 3*h + m >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 0};
+affin:=2/5  41
+F1:={[n,h,m]:(n >= 9 && 2 = h && n = m + 9)};
+F2:={[h,n,m]:((h >= 1 && n >= 3 + 3*h) && n = m + 6)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,m,h]:(((n >= m + 6 && n >= 3*h + 3) && m + 9 >= n) && 3 + m + 3*h >= n)};
+mSet::={[h]:h >= 1};{[n,h]:n >= 3 + 3*h};
+affin:=2/6  34
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 3) && n = m + 9)};
+F2:={[h,n,m]:((h >= 1 && n >= 3 + 3*h) && n = m + 6)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 6) && m + 9 >= n) && 9 + 3*h + 2*m >= 2*n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 1};
+affin:=2/5  41
+SelHullMatrix - noRows: 6, noCols: 6
+-1 100 41 -1 41 -1 
+-1 -1 34 -1 34 -1 
+-1 -1 -1 -1 41 -1 
+-1 -1 -1 -1 -1 -1 
+-1 -1 -1 -1 -1 -1 
+-1 -1 -1 -1 -1 -1 
+Chosen elem is: (1,2)
+####SelHull with 3 disjuncts:
+{[h,n,m]:((h >= 2 && n >= 3 + 3*h) && n = m + 9)};
+Nothing
+{[h,n,m]:((h >= 1 && n >= 3 + 3*h) && n = m + 6)};
+Nothing
+{[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+Nothing
+F1:={[h,n,m]:((h >= 2 && n >= 3 + 3*h) && n = m + 9)};
+F2:={[h,n,m]:((h >= 1 && n >= 3 + 3*h) && n = m + 6)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 6) && m + 9 >= n) && 3 + 3*h + m >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 1};
+affin:=2/5  41
+F1:={[h,n,m]:((h >= 2 && n >= 3 + 3*h) && n = m + 9)};
+F2:={[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 9 >= n) && 3 + 3*h + m >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 0};
+affin:=2/5  41
+SelHullMatrix - noRows: 6, noCols: 6
+-1 -1 41 -1 41 -1 
+-1 -1 -1 -1 -1 -1 
+-1 -1 -1 -1 41 -1 
+-1 -1 -1 -1 -1 -1 
+-1 -1 -1 -1 -1 -1 
+-1 -1 -1 -1 -1 -1 
+Chosen elem is: (3,5)
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>> WN >>>>>>>>>>>>>>>>>>>>>>>>>>
+ 34 ==> (1,3),(1,5),(3,5)  // pick all
+Why not perform hulling simultaneously
+since they all have the same affinity of 41.
+This is a special case where a set of
+disjuncts all have the same affinity with
+each other. It indicates that they
+are likely very similar formula, so there
+is not point keeping them apart.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+SelHull chose disjuncts with less than 100% affinity: 34
+####SelHull with 2 disjuncts:
+{[h,n,m]:((h >= 2 && n >= 3 + 3*h) && n = m + 9)};
+Nothing
+{[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 6 >= n) && 3 + 3*h + m >= n)};
+Nothing
+Nothing
+Nothing
+####SelHull with 4 disjuncts:
+{[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+{[n,h,m]:(((n >= 3*h + 3 && n >= m + 6) && m + 9 >= n) && 3 + 3*h + m >= n)};
+{[n,h,m]:((n >= 3 + 3*h && h >= 1) && n = m + 3)};
+{[n,h,m]:(n >= 3 && 0 = h && n = m + 3)};
+F1:={[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+F2:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 6) && m + 9 >= n) && 3 + 3*h + m >= n)};
+cf1:=3 cf2:=4 cmset:=4
+Foper:={[n,m,h]:(((n >= m + 6 && n >= 3*h + 3) && m + 12 >= n) && 3 + m + 3*h >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[n,h]:n >= 3*h + 3};{[n,m]:n >= m + 6};{[h,m,n]:3 + 3*h + m >= n};
+affin:=4/7  57
+F1:={[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+F2:={[n,h,m]:((n >= 3 + 3*h && h >= 1) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 12 >= n) && 9*h + 2*m >= 3 + 2*n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 1};
+affin:=2/5  41
+F1:={[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+F2:={[n,h,m]:(n >= 3 && 0 = h && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 12 >= n) && 3 + 3*h + m >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[n]:n >= 3};
+affin:=2/6  34
+F1:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 6) && m + 9 >= n) && 3 + 3*h + m >= n)};
+F2:={[n,h,m]:((n >= 3 + 3*h && h >= 1) && n = m + 3)};
+cf1:=4 cf2:=3 cmset:=5
+Foper:={[n,m,h]:((((n >= m + 3 && n >= 3*h + 3) && m + 9 >= n) && h >= 1) && 3 + m + 3*h >= n)};
+mSet::={[n,h]:n >= 3*h + 3};{[m,n]:m + 9 >= n};{[h,m,n]:3 + 3*h + m >= n};{[n,h]:n >= 3 + 3*h};{[h]:h >= 1};
+affin:=5/7  71
+F1:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 6) && m + 9 >= n) && 3 + 3*h + m >= n)};
+F2:={[n,h,m]:(n >= 3 && 0 = h && n = m + 3)};
+cf1:=4 cf2:=3 cmset:=4
+Foper:={[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 9 >= n) && 3 + m + 3*h >= n)};
+mSet::={[n,h]:n >= 3*h + 3};{[m,n]:m + 9 >= n};{[h,m,n]:3 + 3*h + m >= n};{[n]:n >= 3};
+affin:=4/7  57
+Full Match 100!
+F1:={[n,h,m]:((n >= 3 + 3*h && h >= 1) && n = m + 3)};
+F2:={[n,h,m]:(n >= 3 && 0 = h && n = m + 3)};
+foper:={[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+f_or:={[n,h,m]:(((n >= 3 + 3*h && h >= 1) && n = m + 3) || (n >= 3 && 0 = h && n = m + 3))};
+fDif:={[]:1 = 0};
+SelHullMatrix - noRows: 4, noCols: 4
+-1 57 41 34 
+-1 -1 71 57 
+-1 -1 -1 100 
+-1 -1 -1 -1 
+Chosen elem is: (3,4)
+####SelHull with 3 disjuncts:
+{[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+{[n,h,m]:(((n >= 3*h + 3 && n >= m + 6) && m + 9 >= n) && 3 + 3*h + m >= n)};
+{[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+Nothing
+F1:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 6) && m + 9 >= n) && 3 + 3*h + m >= n)};
+F2:={[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+cf1:=4 cf2:=3 cmset:=5
+Foper:={[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 9 >= n) && 3 + m + 3*h >= n)};
+mSet::={[n,h]:n >= 3*h + 3};{[m,n]:m + 9 >= n};{[h,m,n]:3 + 3*h + m >= n};{[h]:h >= 0};{[n,h]:n >= 3 + 3*h};
+affin:=5/7  71
+F1:={[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+F2:={[h,n,m]:((h >= 0 && n >= 3 + 3*h) && n = m + 3)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 12 >= n) && 3 + 3*h + m >= n)};
+mSet::={[n,h]:n >= 3 + 3*h};{[h]:h >= 0};
+affin:=2/5  41
+SelHullMatrix - noRows: 4, noCols: 4
+-1 57 41 -1 
+-1 -1 71 -1 
+-1 -1 -1 -1 
+-1 -1 -1 -1 
+Chosen elem is: (2,3)
+SelHull chose disjuncts with less than 100% affinity: 71
+####SelHull with 2 disjuncts:
+{[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+{[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 9 >= n) && 3 + 3*h + m >= n)};
+Nothing
+Nothing
+F1:={[h,n,m]:((h >= 2 && n >= 3 + 3*h) && n = m + 9)};
+F2:={[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+cf1:=3 cf2:=3 cmset:=2
+Foper:={[n,m,h]:((n >= 9 + m && h >= 2) && n >= 3 + 3*h)};
+mSet::={[h]:h >= 2};{[n,h]:n >= 3 + 3*h};
+affin:=2/5  41
+F1:={[h,n,m]:((h >= 2 && n >= 3 + 3*h) && n = m + 9)};
+F2:={[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 9 >= n) && 3 + 3*h + m >= n)};
+cf1:=3 cf2:=4 cmset:=3
+Foper:={[n,h,m]:(((n >= 3*h + 3 && n >= m) && m + 9 >= n) && h >= 0)};
+mSet::={[n,h]:n >= 3 + 3*h};{[n,h]:n >= 3*h + 3};{[m,n]:m + 9 >= n};
+affin:=3/7  43
+F1:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 6 >= n) && 3 + 3*h + m >= n)};
+F2:={[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+cf1:=4 cf2:=3 cmset:=4
+Foper:={[n,m,h]:((n >= 3 + m && n >= 3 + 3*h) && 3 + 3*h + m >= n)};
+mSet::={[n,h]:n >= 3*h + 3};{[n,m]:n >= m + 3};{[h,m,n]:3 + 3*h + m >= n};{[n,h]:n >= 3 + 3*h};
+affin:=4/7  57
+F1:={[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 6 >= n) && 3 + 3*h + m >= n)};
+F2:={[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 9 >= n) && 3 + 3*h + m >= n)};
+cf1:=4 cf2:=4 cmset:=3
+Foper:={[n,m,h]:((n >= 3 + m && n >= 3 + 3*h) && 3 + 3*h + m >= n)};
+mSet::={[n,h]:n >= 3*h + 3};{[n,m]:n >= m + 3};{[h,m,n]:3 + 3*h + m >= n};
+affin:=3/5  60
+####Widening 2 arguments, each with 2 disjuncts:
+{[h,n,m]:((h >= 2 && n >= 3 + 3*h) && n = m + 9)};
+{[n,h,m]:(((n >= 3*h + 3 && n >= m + 3) && m + 6 >= n) && 3 + 3*h + m >= n)};
+{[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+{[n,m,h]:(((n >= m + 3 && n >= 3*h + 3) && m + 9 >= n) && 3 + 3*h + m >= n)};
+WidenMatrix - noRows: 2, noCols: 2
+41 43 
+57 60 
+Chosen elem is: (2,2)
+####Widening 2 arguments, each with 1 disjuncts:
+{[h,n,m]:((h >= 2 && n >= 3 + 3*h) && n = m + 9)};
+Nothing
+{[h,n,m]:((h >= 3 && n >= 3 + 3*h) && n = m + 12)};
+Nothing
+WidenMatrix - noRows: 2, noCols: 2
+41 -1 
+-1 -1 
+Chosen elem is: (1,1)
+
+# T2;
+
+(((n >= 9 + m && n >= 3 + 3*h) && h >= 2) || ((n >= 3 + m && 3 + m + 3*h >= n) && n >= 3 + 3*h))
+
+# T1 subset T2;
+
+# True
+
+# T2 subset T1;
+
+# False
+
+# Total CPU time: 0.900056 seconds

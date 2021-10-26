@@ -1,0 +1,29 @@
+#include "Primitives.imp"
+
+Void main()
+{
+  Int dim := 4;
+  Float[Int][dim] A := 3.0;
+  Float[Int][dim] B := 2.3;
+  Float res:= 0.0;
+  printArrF(A);
+  printArrF(B);
+  res := dotprod(A,B);
+  printF(res)
+}  
+
+Float dotprod(Float [Int] v1, Float [Int] v2) 
+{ 
+  Int t1:=lenF(v1,1);
+  loopDP(0,t1,v1,v2,0.0)
+}
+
+Float loopDP(Int i,Int n,Float [Int] v1,Float [Int] v2,Float sum)
+{ 
+  if (i >= n) then { sum }
+  else {
+    Float temp1 := mulFF(subF(v1,i),subF(v2,i));
+    Float temp2 := plusFF(sum,temp1);
+    loopDP(i+1,n,v1,v2,temp2)
+  }
+}  

@@ -1,0 +1,15 @@
+R1:={[x] -> [res] -> []: ((x=0 && res=0) || 
+(x=1 && res=0) ||  (exists (res1: (exists (x1:((res=res1+2 && (x=x1+2 && 1<x)) && R1(x1,res1)))) )) )
+};
+
+# seems to require exists k:
+# can we get a better result?
+
+#Fix:=bottomup(R1, 2, SimHeur);
+
+bottomupgen([R1],[3],InterHeur);
+#disj 2 : ((res + 1 >= x && res >= 0) && x >= res)
+#disj 1 : ((res + 1 >= x && res >= 0) && x >= res)
+
+
+

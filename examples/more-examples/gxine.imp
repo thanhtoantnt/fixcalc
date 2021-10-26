@@ -1,0 +1,66 @@
+#include "Primitives.imp"
+
+-- gxine
+void main() {
+  int SUN_PATH_SZ := 3;
+  int FILENAME_SZ  := 5;
+  int [int][SUN_PATH_SZ] serv_adr_sun_path := 0;
+  int [int][FILENAME_SZ] filename := 0;
+  filename[FILENAME_SZ-1] := 0; -- EOS
+  r_strncpy(serv_adr_sun_path,filename,SUN_PATH_SZ-1); -- OK detected as NEVER_BUG
+--  r_strcpy(serv_adr_sun_path,filename); -- BAD detected as MAY_BUG
+  void
+}
+
+int[int] r_strncpy(int[int] dest, int[int] src, int n) {
+  int i_i := 0;
+  if (n>0) then { dest[n-1] } -- Original code was dest[n]
+  else { 0 };
+  while (i_i<n) do {
+    dest[i_i] := src[i_i];
+    i_i := i_i+1
+  };
+  dest
+}
+
+int[int] r_strcpy(int[int] dest, int[int] src) {
+  int i := 0;
+  int tmp := 0;
+  while (randBool()) do {
+    tmp := src[i];
+    dest[i] := tmp;
+    i:=i+1
+  };
+  dest
+}
+
+{-
+char *r_strncpy (char *dest, const char *src, size_t n)
+{
+  int _i;
+
+  /* r_strncpy RELEVANT */
+  dest[n];
+
+  for (_i = 0; _i < n; _i++) {
+    dest[_i] = src[_i]; // DO NOT CHANGE THE POSITION OF THIS LINE
+    if (src[_i] == EOS)
+      break;
+  }
+  return dest;
+}
+
+char *r_strcpy (char *dest, const char *src)
+{
+  int i;
+  char tmp;
+  for (i = 0; ; i++) {
+    tmp = src[i];
+    /* r_strcpy RELEVANT */
+    dest[i] = tmp; // DO NOT CHANGE THE POSITION OF THIS LINE
+    if (src[i] == EOS)
+      break;
+  }
+  return dest;
+} 
+-}

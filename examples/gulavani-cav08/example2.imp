@@ -1,0 +1,17 @@
+#include "Primitives.imp"
+
+void p2(int z0) {
+  int x:=12;
+  int y:=0;
+  int z:=z0;
+  int i:=0;
+
+  while (z>0) do {
+    x:=x+1;
+    y:=y-1;
+    z:=z-1;
+    i:=i+1
+  };
+  assert(or(i<=0,i<=z0))
+}
+

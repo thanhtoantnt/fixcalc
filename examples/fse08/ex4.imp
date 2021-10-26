@@ -1,0 +1,14 @@
+#include "Primitives.imp"
+
+-- the error trace is computed as ERR.l_0.l_3 and completely omits the labes of recursive calls l_6 and l_8
+void main() {
+ foo(6)
+}
+
+void foo(int i) {
+  if (eq(i,0)) then { verror() }
+  else {
+    if (even(i)) then { foo(i-1) }
+    else { foo(i-1) }
+  }
+}

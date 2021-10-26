@@ -1,0 +1,15 @@
+#include "Primitives.imp"
+
+-- Example from Figure 11b of Gulwani-PLDI'08
+-- In our system, the precondition that ensures non-termination is (i>=1), just like Gulwani's method.
+void NT2(int i) {
+  int even:=0;
+  while (i>=0) do {
+    if (even = 0) then {
+      i:=i-1
+    } else {
+      i:=i+1
+    };
+    even := 1-even
+  }
+}

@@ -1,0 +1,66 @@
+#include "Primitives.imp"
+
+
+
+{-
+-- {OK: false, ERR: y<=0 || x<=0 && 1<=y, LOOP: y>=1 && x>=1}
+--  while (true)
+--    assert y>0
+--    y=x 
+void must(ref int x, ref int y) {
+  if (True) then {
+    if (y>0) then {
+      y:=x;
+      must(x,y)
+    } else {
+      verror()
+    }
+  } else { void }
+}  
+void may(ref int x, ref int y) {
+--  {OK: true, ERR: y<=0 || x<=0 && 1<=y}
+--  while (*)
+--    assert y>0
+--    y=x 
+  if (randBool()) then {
+    if (y>0) then {
+      y:=x;
+      may(x,y)
+    } else {
+      verror()
+    }
+  } else { void }
+}  
+-}
+
+{-
+void rival1a(int x, int y, bool b){
+  if (x>0) then { y:=x }
+  else {y:=-x };
+  b := (y>10);
+  if (and(b,and(x>=-10,x<=10))) then { verror() }
+  else { void }
+}
+-}
+
+void rival1b(ref int x, ref int y)
+{
+--  if (true) then {
+   x=-5;
+   if (y<=0) then { verror() }
+   else { void };
+   y=x;
+   rival1b(x,y)
+--  } else { void }
+}
+
+{-
+void cousot(ref int x, ref int y) 
+{
+  if (notEq(x,y)) then {
+    x:=x-1;
+    y:=y+1;
+    cousot(x,y)
+  } else { void }
+}
+-}

@@ -1,0 +1,13 @@
+#include "Primitives.imp"
+
+-- Example from Figure 1 of Gulwani-PLDI'08
+-- In our system, the assertion can be proven for m=2.
+void PV1(int y) {
+  int x := -50;
+  while (x<0) do {
+    x:=x+y;
+    y:=y+1
+  };
+  assert(y>0)
+}
+

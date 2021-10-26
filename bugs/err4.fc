@@ -1,0 +1,19 @@
+R1:={[x,k] -> [res] -> []: ((x=0 && res=0 && k=0) ||  
+(x=1 && res=1 && k=1) || (exists (res1: (exists (x1,k1:((res=res1+1 && (x=x1+2 && 1<x)) && (k=1 && k1=0 || k=0 && k1=1)  && R1(x1,k1,res1)))) )) )
+};
+[T1]:=bottomupgen([R1], [1], SimHeur);
+#[T2]:=bottomupgen([R1], [2], SimHeur);
+#T1 subset T2;
+#T2 subset T1;
+#T1;T2;
+#fixtestPost(R1,T1);
+#fixtestPost(R1,T2);
+
+#DEBUG:combHull(((1 + 3res = 2x && (x >= 2 && 5 >= x)) && 1 = k) || ((x >= 3 && 4 >= x) && 2 = res && 0 = k) || (0 = 0 && 1 = x && 1 = res && 1 = k) || (0 = 0 && 0 = x && 0 = res && 0 = k))
+
+# WHY Segmentation fault?
+
+
+
+
+

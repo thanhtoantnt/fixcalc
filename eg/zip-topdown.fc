@@ -1,0 +1,33 @@
+# Constraint-abstraction from figure 1a from Gulavani's paper in CAV'08
+
+loop:={[a,b]->[Pa,Pb]->[]: exists(a1,b1: 
+     (a=0 && b>=0) || (a1=a-1 && b1=b-1 && a1>=0 && b1>=0 
+         && loop(a1,b1,Pa,Pb))
+	)};
+
+F2:=topdown(loop,2,SimHeur); F2;
+
+#complement(F2);
+# (((RECa >= 0 && a >= 1 + RECa) && RECa + b >= a) && RECa + b = RECb + a)
+
+RCheck :={[a,b]:
+forall(RECa,RECb: !(
+(((RECa >= 0 && a >= 1 + RECa) && RECa + b >= a) && RECa + b = RECb + a)
+) ||
+(!(RECb=0)||RECa<=0)
+#(RECb<0||RECb>0||RECa<=0)
+)};
+RCheck;
+
+ICheck := {[a,b]:
+#(b<0||b>0||a<=0)
+(!(b=0)||a<=0)
+};
+ICheck;
+
+Inv := {[a,b]:
+(b>=0 && a>=0)
+};
+
+
+

@@ -1,0 +1,23 @@
+#include "Primitives.imp"
+
+Float sum(Float[Int<a>] a, Int<i> i,Int<j> j)
+  where (True),
+  {l1L:(i>=0),l2.l1H:(a>j)},
+  {},(0=0),
+-- automatically derived pres:
+--  {l_21.L1:(f_18f + 0 >= 0),l_21.H1:(-1 + f_17f + (-f_18f) >= 0),l_23.l_29.H1:(-1 + f_17f + (-f_19f) >= 0)},
+{
+  if (i>j) then { 0.0 }
+  else { plusFF((l1:subF(a,i)),(l2:sumRec(a,i+1,j))) }
+}
+
+Float sumRec(Float[Int<a>] a, Int<i> i,Int<j> j)
+  where (True), 
+  {lINV:(i-1<=j<a && 1<=i)},
+  {},(0=0),
+--  {l_29.L1:((f_26f + 0 >= 0 && 0 = 0)),l_29.H1:(-1 + f_25f + (-f_27f) >= 0)},
+-- Strong prederivation
+--  {I:(1<=f_26f<=f_25f,f_27f+1),l_5.H:(f_27f<f_25f)},
+ { if (i>j) then { 0.0 }
+   else { plusFF(subF(a,i),sumRec(a,i+1,j)) }
+ }

@@ -1,0 +1,30 @@
+#include "Primitives.imp"
+
+-- ========================================
+
+void test_BAD (float[int] a, int i, int j)
+{ 
+  if (i>j) then { void }
+  else { 
+    test_BAD (a,i+1,j);
+    assignF(a,i,0.0)
+  }
+}
+
+void test_OK (float[int] a, int i, int j)
+{ 
+  if (i>j) then { void }
+  else { 
+    assignF(a,i,0.0);
+    test_OK (a,i+1,j)
+  }
+}
+
+{-
+void assert (Bool b) 
+  { OK: b=1; ERR: b=0; DONT_CARE: b<0 || 1<b }
+
+void assume(Bool b) {
+  { OK: b=1; ERR: False; DONT_CARE: b=0 }
+-}
+-- ========================================

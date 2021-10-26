@@ -1,0 +1,42 @@
+R1:={[x,k] -> [res] -> []: ((x=0 && res=0 && 0<=k<=1) ||  (exists (res1: (exists (x1,k1:((res=res1+1 && (x=x1+1 && 0<x)) && (k=1 && k1=0 || k=0 && k1=1) && R1(x1,res1,k1)))) )) )
+};
+T2a:={[x,res,k]:k >= 0};
+T2b:={[x,res,k]:x >= 0};
+T2c:={[x,res,k]:res >= 0};
+
+G1:={[x,res,k]: x <= res <= 2x && k <= 1};
+
+G1;
+G1 subset T2a;
+G1 subset T2b;
+G1 subset T2c;
+
+RG2:={[x,res,k]: ((x=0 && res=0 && 0<=k<=1) ||  (exists (res1: (exists (x1,k1:((res=res1+1 && (x=x1+1 && 0<x)) && (k=1 && k1=0 || k=0 && k1=1) && 
+x1 <= res1 <= 2x1 && k1 <= 1
+))) )) )
+};
+
+G2:=R1(G1);
+RG2;
+#(((k >= 0 && 1 >= k) && 0 = x && 0 = res) || ((res >= x && 2x >= 1 + res) && 1 = k) || ((res >= x && 2x >= 1 + res) && 0 = k))
+
+RG2 subset T2a;
+RG2 subset T2b;
+RG2 subset T2c;
+
+G2;
+# output below seems wromg
+#(((k >= 0 && 1 >= k) && 0 = x && 0 = res) || (2 >= res && 1 = k && 1 = x) || (2 >= res && 0 = k && 2 = x))
+
+RG2 subset G2;
+G2 subset RG2;
+
+
+
+G2 subset T2a;
+G2 subset T2b;
+G2 subset T2c;
+
+
+
+

@@ -1,0 +1,78 @@
+#include "Primitives.imp"
+
+void main()
+{
+  int dim := 10;
+  float[int][dim] A := 0.0;
+  init_arrF(A,0,dim-1);
+  printArrF(A);
+  msort(A,0,dim-1);
+  printArrF(A);
+  printStats()
+}
+  
+Void init_arrF(Float[Int] a, Int i, Int j)
+{
+  if (i>j) then { Void }
+  else {
+    assignF(a,i,myrandomF(10.0));
+    init_arrF(a,i+1,j)
+  }
+}
+
+void msort (float[int] a, int i, int j)
+{ 
+  if (i>=j) then { void }
+	else { 
+	  int m := getmid (i,j);
+    msort (a,i,m);
+	  msort (a,m+1,j);
+	  merge (a,i,m,j)
+	}
+}
+
+void merge (float[int] a, int i, int iu, int ju)
+{
+  int j := iu+1;
+  int m := ju-i+1;
+  float[int][m] t := 0.0;
+  mergeF2 (a,t,i,iu,j,ju,0);
+  copyseq (t,a,0,m-1,i)
+}
+
+void mergeF2 (float[int<a>] a, float[int<t>] t, int<i> i, int<iu> iu, int<j> j, int<ju> ju, int<k> k)
+{
+  if (i>iu) then { copyseq (a,t,j,ju,k) }
+  else {
+    if (j>ju) then { copyseq (a,t,i,iu,k) }
+	 	else {
+	 	  if (lteFF(subF(a,i),subF(a,j))) then {
+        assignF(t,k+7,subF(a,i)); -- bug
+			  mergeF2 (a,t,i+1,iu,j,ju,k+1)
+			} else {
+        assignF(t,k,subF(a,j));
+			  mergeF2 (a,t,i,iu,j+1,ju,k+1)
+			}
+    }
+  }
+}
+
+void copyseq (float[int] a, float[int] t, int i, int j, int k)
+{
+  if (i>j) then { void }
+	else {
+    copy(a,t,i,k);
+--	  t[k] := a[i];
+	  copyseq (a, t, i+1,j, k+1) 
+	}
+}
+
+int getmid(int i, int j)
+{
+  div2(i+j)
+}
+
+void copy(float[int] a, float[int] t, int i, int k)
+{ 
+  assignF(t,k,subF(a,i))
+}

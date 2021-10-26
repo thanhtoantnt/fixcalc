@@ -1,0 +1,84 @@
+#include "Primitives.imp"
+
+void main()
+{
+  int dim := 10;
+  float[int,int][dim,dim] A := 0.0;
+  init_arrF2(A,0,0,dim-1,dim-1);
+  printArrF2(A);
+  SOR_execute(dim,dim,1.25,A,1);
+  printArrF2(A);
+  printStats()
+}
+
+
+Void init_arrF2aux (Float [Int,Int] a, Int i, Int j, Int m)
+{
+  if (j>m) then { Void }
+	else {
+	  assignF2(a,i,j,myrandomF(10.0));
+	  init_arrF2aux(a,i,j+1,m)
+	}
+}  
+
+Void init_arrF2(Float[Int,Int] a, Int i, Int j, Int m, Int n)
+{
+  if (i>n) then { Void }
+  else {
+    assignF2(a,i,j,myrandomF(10.0));
+    init_arrF2aux(a,i,j,m);
+    init_arrF2(a,i+1,j,m,n)
+  }
+}
+
+Void loop3 (Int i, Int j, Int Nm1, 
+	Float omega_over_four, Float one_minus_omega, Float [Int,Int] G)
+{ 
+  if (j<Nm1) then {
+	  Float temp1 := subF2(G,i-1,j);
+	  Float temp2 := subF2(G,i+1,j);
+	  Float temp3 := subF2(G,i,j-1);
+	  Float temp4 := subF2(G,i,j+1);
+	  Float temp5 := subF2(G,i,j);
+	  Float temp1234 := plusFF(temp1,plusFF(temp2,plusFF(temp3,temp4)));
+	  Float temp6 := plusFF(mulFF(omega_over_four,temp1234),mulFF(one_minus_omega,temp5));
+	  assignF2(G,i,j,temp6);
+	  loop3 (i,j+1, Nm1,omega_over_four, one_minus_omega, G)
+	}
+	else { Void }
+}
+
+Void loop2 (Int i, Int Mm1, Int N, 
+	Float omega_over_four, Float one_minus_omega, Float [Int,Int] G)
+{
+  if (i<Mm1) then {
+  	loop3 (i,1,N, omega_over_four, one_minus_omega, G);
+  	loop2 (i+1,Mm1, N,omega_over_four, one_minus_omega, G)
+  }
+	else { Void }
+}
+
+void loop1 (Int p, Int num_iterations, Int Mm1, Int Nm1, 
+  Float omega_over_four, Float one_minus_omega, Float [Int,Int] G)
+{ 
+  if (p<Mm1) then
+	{loop2 (1, Mm1, Nm1,  omega_over_four, one_minus_omega, G);
+	 loop1 (p+1, num_iterations, Mm1, Nm1, omega_over_four, one_minus_omega, G)
+	}
+	else { Void }
+}
+
+Void SOR_execute (Int M, Int N, Float omega, Float [Int,Int] G, Int num_iterations)
+{
+   Float omega_over_four := mulFF(omega,0.25);
+   Float one_minus_omega := minusFF(1.0,omega);
+   loop1(0, num_iterations, M-1, N-1, omega_over_four, one_minus_omega, G)
+}
+
+Float SOR_num_flops(Int M, Int N, Int num_iterations)
+{
+    Float temp1 := minusIF(M,1.0);
+    Float temp2 := minusIF(N,1.0);
+    Float temp3 := mulIF(num_iterations,6.0);
+    mulFF(temp1,mulFF(temp2,temp3))
+}

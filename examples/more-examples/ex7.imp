@@ -1,0 +1,30 @@
+#include "Primitives.imp"
+
+-- example Fig1a from the interpolate-widen paper of Gulavani et al
+-- Result: program is proven safe.
+void foo() {
+  int x:=0;
+  int y:=0;
+  while1(x,y);
+  while2(x,y);
+  if (notEq(y,0)) then {
+    verror()
+  } else { void }
+}
+
+void while1(ref int x, ref int y) {
+  if (randBool()) then {
+    x:=x+1;
+    y:=y+1;
+    while1(x,y)
+  } else { void }
+}
+
+void while2(ref int x, ref int y) {
+  if (notEq(x,0)) then {
+    x:=x-1;
+    y:=y-1;
+    while2(x,y)
+  } else { void }
+}
+

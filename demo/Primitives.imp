@@ -1,0 +1,323 @@
+-----Array Int without indirection
+--Int<a>[Int<n>] newArr(Int<s> s, Int <v> val)
+--  where (s>0 && s=n && s'=s && v'=v),{P:(s>0)},{P: 0<s}
+
+Void printArr(Int<n>[Int<n1>] A)
+  where (0=0),{},{}
+
+Bool<b> runtimeL(Int<i> i) --0<=i
+  where (i=i' && (b=1 && 0<=i || b=0 && i<0)),{},{}
+
+Bool<b> runtimeH(Int<i> i,Int<n>[Int<n1>] A) --l_:lt(i,(l_:len(A,1)))
+  where (i=i' && (b=1 && i<n1 || b=0 && i>=n1)),{},{}
+
+Bool<b> runtimePost() --unsafe calls to User-decl methods are specialized using "runtimePost()" as a runtime test
+  where (b=0),{},{}
+
+Int<r> len(Int<n>[Int<n1>] A,Int<i> i)
+  where (i=1 && r=n1 && i'=i),{D:(i=1)},{}
+
+Int<s> sub(Int<n>[Int<n1>] A,Int<s1> i)
+  where (s1'=s1),
+    {L1: (0<=s1),H1:(s1<n1)},
+    {L1: l_:runtimeL(i),H1: l_:runtimeH(i,A)}
+
+Void assign(Int<n>[Int<n1>] A,Int<s1> i,Int<s> v)
+  where (s1'=s1 && s'=s),
+    {L1: (0<=s1),H1:(s1<n1)},
+    {L1: l_:runtimeL(i),H1: l_:runtimeH(i,A)}
+---------Array Int without indirection
+
+-------Array Float-----------------
+--Float[Int<n>] newArrF(Int<s> s, Float val)
+--  where (s>0 && s=n && s'=s),{P:(s>0)},{P: 0<s}
+
+Void printArrF(Float[Int<n1>] A)
+  where (0=0),{},{}
+
+Bool<b> runtimeLF(Int<i> i) --0<=i
+  where (i=i' && (b=1 && 0<=i || b=0 && i<0)),{},{}
+
+Bool<b> runtimeHF(Int<i> i,Float[Int<n1>] A) --l_:lt(i,(l_:lenF(A,1)))
+  where (i=i' && (b=1 && i<n1 || b=0 && i>=n1)),{},{}
+
+Int<r> lenF(Float[Int<n>] A,Int<i> i)
+  where (i=1 && r=n && i'=i),{D:(i=1)},{}
+
+---------Array Float
+Float subF(Float[Int<n1>] A,Int<s1> i)
+  where (s1'=s1),
+    {L1: (0<=s1),H1:(s1<n1)},
+    {L1: l_:runtimeLF(i),H1: l_:runtimeHF(i,A)}
+
+Void assignF(Float[Int<n1>] A,Int<s1> i,Float v)
+  where (s1'=s1),
+    {L1: (0<=s1),H1:(s1<n1)},
+    {L1: l_:runtimeLF(i),H1: l_:runtimeHF(i,A)}
+
+---------Array Float
+
+-------Array2 Float-----------------
+Int<r> lenF2(Float[Int<n1>,Int<n2>] A,Int<i> i)
+  where ((i=1 && r=n1 || i=2 && r=n2) && i'=i),{D:(1<=i && i<=2)},{}
+
+Void printArrF2(Float[Int<n1>,Int<n2>] A)
+  where (0=0),{},{}
+
+Bool<b> runtimeL1F2(Int<i> i) --0<=i
+  where (i=i' && (b=1 && 0<=i || b=0 && i<0)),{},{}
+
+Bool<b> runtimeL2F2(Int<j> j) --0<=j
+  where (j=j' && (b=1 && 0<=j || b=0 && j<0)),{},{}
+
+Bool<b> runtimeH1F2(Int<i> i,Float[Int<n1>,Int<n2>] A) --l_:lt(i,(l_:lenF2(A,1)))
+  where (i=i' && (b=1 && i<n1 || b=0 && i>=n1)),{},{}
+
+Bool<b> runtimeH2F2(Int<j> j,Float[Int<n1>,Int<n2>] A) --l_:lt(j,(l_:lenF2(A,2)))
+  where (j=j' && (b=1 && j<n2 || b=0 && j>=n2)),{},{}
+
+---------Array2 Float
+Float subF2(Float[Int<n1>,Int<n2>] A,Int<s1> i, Int<s2> j)
+  where (s1'=s1 && s2'=s2),
+    {L1:(0<=s1), H1:(s1<n1), L2:(0<=s2), H2:(s2<n2)},
+    {L1: l_:runtimeL1F2(i),H1: l_:runtimeH1F2(i,A),L2: l_:runtimeL2F2(j), H2: l_:runtimeH2F2(j,A)}
+
+Void assignF2(Float[Int<n1>,Int<n2>] A,Int<s1> i,Int<s2> j,Float v)
+  where (s1'=s1 && s2'=s2),
+    {L1:(0<=s1), H1:(s1<n1), L2:(0<=s2), H2:(s2<n2)},
+    {L1: l_:runtimeL1F2(i),H1: l_:runtimeH1F2(i,A),L2: l_:runtimeL2F2(j), H2: l_:runtimeH2F2(j,A)}
+---------Array2 Float
+
+-------Boolean operators-----------
+Bool<c> or(Bool<a>a,Bool<b> b)
+  where (((c=1 && (a=1 || b=1)) || (c=0)) && a=a' && b=b'),{},{}
+
+Bool<c> and(Bool<a>a,Bool<b> b)
+  where (((c=1 && (a=1 && b=1)) || (c=0 && (a=0 && b=0 || a=0 && b=1 || a=1 && b=0))) && a=a' && b=b'),{},{}
+
+-------Arithmetic Int-Int----------
+Int<c> plus(Int<a>a,Int<b> b)
+  where (c=a+b && a=a' && b=b'),{},{}
+  
+Int<c> minus(Int<a>a,Int<b> b)
+  where (c=a-b && a=a' && b=b'),{},{}
+  
+Int<c> mul(Int<a>a,Int<b> b)
+	where (a=a' && b=b'),{},{}
+
+Int<c> mul2(Int<a>a)
+	where (c=2a && a=a'),{},{}
+
+Int<c> mul201(Int<a>a)
+	where (a=a' && c=201a),{},{}
+
+Int<c> div2(Int<a>a) -- returns (a divided by 2)
+	where (2c<=a<=2c+1 && a=a'),{},{}
+
+Int<c> div2Even(Int<a>a) -- returns (a divided by 2), assuming that a is a power of 2 (result will be even)
+	where (2c=a && a=a'),{},{}
+
+Int<c> divide(Int<a>a,Int<b> b)
+	where (a=a' && b=b'),{},{}
+
+Int<c> min(Int<a>a,Int<b> b)
+  where ((c=a && a<=b || c=b && a>b) && a=a' && b=b'),{},{}
+  
+Int<c> max(Int<a>a,Int<b> b)
+  where ((c=a && a>=b || c=b && a<b) && a=a' && b=b'),{},{}  
+
+Int<c> minIMP(Int<a>a,Int<b> b) -- minIMP() is the imprecise version of min()
+  where (c<=a && c<=b && a=a' && b=b'),{},{}
+  
+Int<c> maxIMP(Int<a>a,Int<b> b)
+  where (c>=a && c>=b && a=a' && b=b'),{},{}  
+
+Bool<c> gt(Int<a>a,Int<b> b)
+	where ((c=1 && a>b || c=0 && a<=b) && a=a' && b=b'),{},{}
+
+Bool<c> gte(Int<a>a,Int<b> b)
+	where ((c=1 && a>=b || c=0 && a<b) && a=a' && b=b'),{},{}
+
+Bool<c> eq(Int<a>a,Int<b> b)
+	where ((c=1 && a=b || c=0 && (a>b || a<b)) && a=a' && b=b'),{},{}
+
+Bool<c> lt(Int<a>a,Int<b> b)
+	where ((c=1 && a<b || c=0 && a>=b) && a=a' && b=b'),{},{}
+
+Bool<c> lte(Int<a>a,Int<b> b)
+	where ((c=1 && a<=b || c=0 && a>b) && a=a' && b=b'),{},{}
+
+-------Arithmetic Int-Float--------
+Float plusIF(Int<a>a,Float b)
+  where (a=a'),{},{}
+  
+Float minusIF(Int<a>a,Float b)
+  where (a=a'),{},{}
+
+Float mulIF(Int<a>a, Float b)
+  where (a=a'),{},{}
+
+Float divIF(Int<a>a,Float b)
+	where (a=a'),{},{}
+
+Bool<c> gtIF(Int<a>a,Float b)
+	where (a=a'),{},{}
+
+Bool<c> gteIF(Int<a>a,Float b)
+	where (a=a'),{},{}
+
+Bool<c> eqIF(Int<a>a,Float b)
+	where (a=a'),{},{}
+
+Bool<c> ltIF(Int<a>a,Float b)
+	where (a=a'),{},{}
+
+Bool<c> lteIF(Int<a>a,Float b)
+	where (a=a'),{},{}
+
+-------Arithmetic Float-Int--------
+Float plusFI(Float a,Int<b> b)
+  where (b=b'),{},{}
+  
+Float minusFI(Float a,Int<b> b)
+  where (b=b'),{},{}
+
+Float mulFI(Float a,Int<b>b)
+  where (b=b'),{},{}
+
+Float divFI(Float a,Int<b> b)
+	where (b=b'),{},{}
+
+Bool<c> gtFI(Float a,Int<b> b)
+	where (b=b'),{},{}
+
+Bool<c> gteFI(Float a,Int<b> b)
+	where (b=b'),{},{}
+
+Bool<c> eqFI(Float a,Int<b> b)
+	where (b=b'),{},{}
+
+Bool<c> ltFI(Float a,Int<b> b)
+	where (b=b'),{},{}
+
+Bool<c> lteFI(Float a,Int<b> b)
+	where (b=b'),{},{}
+
+-------Arithmetic Float-Float------
+Float plusFF(Float a,Float b)
+  where (0=0),{},{}
+  
+Float minusFF(Float a,Float b)
+  where (0=0),{},{}
+
+Float mulFF(Float a, Float b)
+  where (0=0),{},{}
+
+Float divFF(Float a,Float b)
+	where (0=0),{},{}
+
+Bool<c> gtFF(Float a,Float b)
+	where (0=0),{},{}
+
+Bool<c> gteFF(Float a,Float b)
+	where (0=0),{},{}
+
+Bool<c> eqFF(Float a,Float b)
+	where (0=0),{},{}
+
+Bool<c> ltFF(Float a,Float b)
+	where (0=0),{},{}
+
+Bool<c> lteFF(Float a,Float b)
+	where (0=0),{},{}
+
+-----Miscellaneous---------------
+Int<r> myrandom(Int<a> max)
+  where (r>=0 && r<=a && a'=a),{},{}
+
+Float myrandomF(Float max)
+  where (0=0),{},{}
+  
+Int<c> abs(Int<a> a)
+  where (a'=a && c>=0),{},{}
+
+Float fabs(float a)
+  where (0=0),{},{}
+
+Float sin(float a)
+  where (0=0),{},{}
+
+Float pi()
+  where (0=0),{},{}
+
+Void print(Int<a> no)
+  where (a'=a),{},{}
+
+Void printF(Float no)
+  where (0=0),{},{}
+
+Void printStats()
+  where (0=0),{},{}
+
+--below functions are not implemented in Primitives.c
+Int<r> randInt()
+  where (0=0),{},{}
+  
+Int<c> mod(Int<a> a, Int<b> b)
+  where (0<=c<b && a=a' && b=b'),{},{}
+
+Bool<c> even(Int<a> a)
+  where (exists(k: c=1 && a'=a) ||
+	 exists(k: c=0 && a'=a)),{},{}
+
+Bool<c> notEq(Int<a> a, Int<b> b) 
+  where (((c=1 && a>b) || (c=1 && a<b) || (c=0 && a=b))
+  	  && a=a' && b=b'),{},{}
+
+Bool<c> notIMP(Bool<b> b) --imprecise
+  where (b=b'),{},{}
+  
+Bool<c> andIMP(Bool<a>a,Bool<b> b)
+  where (a=a' && b=b'),{},{}
+
+Int<c> mul100(Int<a> a)
+  where (a=a' && c=100a),{},{}
+
+Bool<b> randBool()
+  where (0=0),{},{}
+  
+Void lock(Bool<l> l)
+  where (l'=1),{L: (l=0)},{L: (l=0)}
+
+Void unlock(Bool<l> l)
+  where (l'=0),{L: (l=1)},{L: (l=1)}
+  
+
+void havoc(int<a> a)
+  where (0=0),{},{}
+  
+--bsearch.loookup
+Int<res> getmidPOS(Int<i> i,Int<j> j) 
+-- assumes i,j are positive
+	where (0<=2res<=i+j && i>=0 && j>=0 && i=i' && j=j'),{L:(i>=0 && j>=0)},{}
+
+void verror( )
+  where (0=1),{L: (0=1)},{}
+
+int<r> ierror()
+  where (0=1),{L: (0=1)},{}
+
+bool<r> berror()
+  where (0=1),{L: (0=1)},{}
+
+--int<res> partition(float [int<a>] a, int<l> l, int<h> h) 
+--  where (0<=l<=res<a && l=l' && h=h'),{},{}
+
+Int<c> mul3(Int<a>a)
+	where (c=3a && a=a'),{},{}
+
+void assert(bool<flag> flag)
+  where (flag'=flag),{L: (flag=1)},{}
+  
+float sqrt(float s) 
+  where (0=0),{},{}

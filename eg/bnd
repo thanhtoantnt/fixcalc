@@ -1,0 +1,10 @@
+R:={[self,n,t,sm,lg]: (self=0 & n=0 & t=0 & sm<=lg)
+  or exists(v: not(self=0) & t=self & n=1 & sm<=v<=lg)
+  or exists(v,p:not(self=0) & n-1>=0 & sm<=v<=lg & not(p=0))
+  };
+R;
+Q:={[self,n,t,sm,lg]: (self=0 & n=0 & t=0 & sm<=lg)
+  or exists(v: self>0 & t=self & n=1 & sm<=v<=lg)
+  or exists(v,p:self>0 & n-1>=0 & sm<=v<=lg & not(p=0))
+  };
+Q;

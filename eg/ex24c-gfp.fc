@@ -1,0 +1,34 @@
+loop:={[x,y] -> [] -> []: 
+  (x<=0 || 1<=x && ((y<0) || (y>0))) && 
+  (forall (PRIv_int_11_1755: (forall (PRIv_int_11_1754:
+    (!(y=PRIv_int_11_1754+1 && x=PRIv_int_11_1755+1 && 0<=1+PRIv_int_11_1754 && 0<=PRIv_int_11_1755) || loop(PRIv_int_11_1755,PRIv_int_11_1754)))) )) 
+};
+
+gfp([loop], [2], SimHeur);
+
+F0:={[]: 1=1};
+
+F1:=loop(F0); F1;
+
+F2:=loop(F1); F2;
+
+F3:=loop(F2); F3; 
+
+F4:=loop(F3); F4; 
+
+F4N:=narrow(F3,F4,SimHeur);
+F4N;
+Pre:=PairwiseCheck F4N;
+Pre;
+
+PreN:=loop(Pre); PreN;
+
+Pre subset PreN;
+PreN subset Pre;
+#(0 >= 1 + y || (y >= x && y >= 0))
+
+Base:={[]: (x<=0 || 1<=x && ((y<0) || (y>0)))};
+Pre subset Base;
+Base subset Pre;
+
+

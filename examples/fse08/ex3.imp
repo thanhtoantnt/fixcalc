@@ -1,0 +1,10 @@
+#include "Primitives.imp"
+
+void goo(int[int] a,ref int i){
+  if (i<=0) then { Void }
+  else {
+    assign(a,i,0);
+    i:=i-1;
+    goo(a,i)
+  }
+}

@@ -1,0 +1,17 @@
+# Halwbach SAS06
+
+loop:={[u,t,s]->[Pu,Pt,Ps]->[]: exists(u1,t1,s1: 
+     (u<=9 && u1=u+1 && t1=t+1 && s1=s+1 && loop(u1,t1,s1,Pu,Pt,Ps))
+     || (u<=10 && Pu=u && Pt=t && Ps=s)
+   )};
+
+F1:=bottomup(loop,1,SimHeur); F1;
+F2:=bottomup(loop,2,SimHeur); F2;
+
+noop:={[t,u]->[Pt,Pu]->[]: exists(t1,u1:
+	( t1=t+1 && u1=u+1 && noop(t1,u1,Pt,Pu))
+	|| (u>50 && Pt=t && Pu=u)
+	)};
+F1:=bottomup(noop,1,SimHeur); F1;
+F2:=bottomup(noop,2,SimHeur); F2;
+

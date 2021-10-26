@@ -1,0 +1,69 @@
+# Constraint-abstraction from figure 1a from Gulavani's paper in CAV'08
+
+loop:={[x,i,z,y]->[Px,Pi,Pz] -> []: exists( i1,x1,z1:
+(x<y && i1=i+1 && ((z>x && x1=x+1 && z1=z) || (z<=x && x1=x && z1=z+1)) 
+   && loop(x1,i1,z1,y,Px,Pi,Pz))
+ || (x>=y && Px=x && Pi=i && Pz=z)
+)};
+
+Fix2:=bottomup(loop,2,SimHeur);Fix2; 
+Fix3:=bottomup(loop,3,SimHeur);Fix3; #Fix3 is more precise than Fix2
+Fix2 subset Fix3;
+Fix3 subset Fix2;
+
+fixtestPost(loop,Fix2);
+fixtestPost(loop,Fix3);
+
+
+loopB:={[x,i,z,y]->[Px,Pi,Pz] -> []: exists( i1,x1,z1:
+(x<y && i1=i+1 && ((x1=x+1 && z1=z) || (x1=x && z1=z+1)) 
+   && loopB(x1,i1,z1,y,Px,Pi,Pz))
+ || (x>=y && Px=x && Pi=i && Pz=z)
+)}; # replace x>z by a "*" 
+
+FixB2:=bottomup(loopB,2,SimHeur);FixB2; 
+FixB3:=bottomup(loopB,3,SimHeur);FixB3; 
+
+Fix3 subset FixB3;
+FixB3 subset Fix3; #Both Fix2 and Fix3 are incomparable with Fix
+
+fixtestPost(loopB,FixB3);
+FixB3 subset FixB2;
+FixB2 subset FixB3;
+
+
+Ideal:={[x,i,z,y,Px,Pi,Pz] :
+  ( x>=y && Px=x && Pi=i && Pz=z)
+ || (x<y && ((z>y && Pi=i+(y-x))
+      || (z<=y && Pi=i+(y-x)+(y-z)))
+    )
+};
+
+Ideal; # ideal that I was expecting
+fixtestPost(loop,Ideal);
+Ideal subset Fix2;
+Ideal subset FixB2;
+
+aux1:={[x,i,z,y]->[Px,Pi,Pz] -> []: z>=y && exists( i1,x1,z1:
+(x<y && i1=i+1 && (z>x && x1=x+1 && z1=z)
+   && aux1(x1,i1,z1,y,Px,Pi,Pz))
+ || (x>=y && Px=x && Pi=i && Pz=z)
+)};
+
+auxB2:=bottomup(aux1,2,SimHeur);auxB2; 
+
+loopC:={[x,i,z,y]->[Px,Pi,Pz] -> []: exists( i1,x1,z1:
+(x<y && i1=i+1 && 
+  ((z>=y && y >= x + 1 && z >= y && y = Px && z = Pz && x + Pi = i + y) 
+  || (z<y &&
+  ((z>x && x1=x+1 && z1=z) || (z<=x && x1=x && z1=z+1))
+   && loopC(x1,i1,z1,y,Px,Pi,Pz)) ) )
+ || (x>=y && Px=x && Pi=i && Pz=z)
+)};
+
+fixC3:=bottomup(loopC,3,SimHeur);fixC3; 
+fixC3 subset Ideal;  # more precise after transformatin
+Ideal subset fixC3;
+fixC3 subset Fix3;  
+fixC3 subset FixB3;
+

@@ -1,0 +1,14 @@
+#include "Primitives.imp"
+
+-- Example from Figure 3b of Gulwani-PLDI'08
+-- In our system, the assertion is proven for m=2.
+void IP2() {
+  int result := M(19) + M(119);
+  assert(result=200)
+}
+
+int M(int n) {
+  if (n>100) then { n-10 }
+  else { M(M(n+11)) }
+}
+

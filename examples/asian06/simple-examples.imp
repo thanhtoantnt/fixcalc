@@ -1,0 +1,160 @@
+#include "Primitives.imp"
+
+---------------------------------------------------------
+----Basic examples:
+--CONJ: (x'<=x && x'<=0)
+--DISJ:(x<=0 && x'=x) || (x>0 && x'=0)
+--INV: (0<=x^<x)
+void mnD1(ref int x) {
+  if (x>0) then {
+    x:=x-1;
+    mnD1(x) }
+  else { void }
+} 
+
+void loop_mnD1(int x){
+  {while(x>0) do{
+    x:=x-1
+  }}
+}
+
+--CONJ:(res<=0 && res<=x)
+--DISJ:(x<=0 && res=x) || (x>0 && res=0)
+int mnD2(int x) {
+  if (x>0) then {
+    mnD2(x-1) }
+  else { x }
+} 
+
+
+--CONJ:(1>=x-x'>=0)
+--DISJ:(x<=0 && x'=x) || (x>0 && x-x'=1)
+void mnD3(ref int x) {
+  if (x>0) then {
+    x:=x-1;
+    mnD3(x-1) }
+  else { void }
+} 
+---------------------------------------------------------
+
+
+---------------------------------------------------------
+---Examples from Paper:
+--DISJ: (x<=n && x'=x || x>n && x'=n)
+--CONJ: (x'<=x && x'<=n)
+--INV: (n<=x^<x && n^=n)
+void mnA(ref int x, int n) {
+  if (x>n) then {
+    x:=x-1;
+    mnA(x,n)
+  } else { void }
+}
+
+void loop_mnA(int x, int n) {
+  while(x>n) do {
+    x:=x-1
+  }
+}
+
+
+--DISJ: (x<=0 && x'=x && y'=y || x>0 && x'=0 && x-x'=y-y')
+--CONJ: (x'<=x && x'<=0 && x-x'=y-y')
+--INV: (0<=x^<x && x-x^=y-y^)
+void mnB(ref int x, ref int y) {
+  if (x>0) then {
+    x:=x-1;
+    y:=y-1;
+    mnB(x,y)
+  } else { void }
+} 
+
+void loop_mnB(int x,int y) {
+  while (x>0) do {
+    x:=x-1;
+    y:=y-1
+  }
+}
+
+
+--DISJ: (x<=0 && x'=x || x>0 && x'=0)
+--CONJ: (x'<=x && x'<=0)
+--INV: (0<=x^<x)
+void mnD(ref int x) {
+  if (x>0) then {
+    x:=x-1;
+    mnD(x)
+  } else { void }
+}
+
+void loop_mnD(int x) {
+  while (x>0) do {
+    x:=x-1
+  }
+}
+
+
+--DISJ: (x<=0 && res=1 || x>0 && res=2*x+1)
+--CONJ: (res>=2x+1 && res>=1)
+--INV: (0<=x^<x)
+int mnE(int x) {
+  if (x<=0) then { 1 }
+  else { 2+mnE(x-1) }
+}
+
+--RESULT: res=2^x
+--DISJ: (x<=0 && res=1 || x>0)
+--CONJ: ()
+--INV: (0<=x^<x)
+int mnEMul(int x) {
+  if (x<=0) then { 1 }
+  else { mul2(mnEMul(x-1)) }
+}
+
+
+--DISJ: (x<=0 && x'=x && m'=m) || (x>0 && x'=0 && m'=m) || (x>0 && x'=0 && 0<m'<=x))
+--CONJ: (x'<=x && x'<=0)
+--INV: (0<=x^<x)
+void mnF(ref int x, ref int m) {
+  if (x>0) then {
+    if (randBool()) then {
+      m:=x
+    } else { void };
+    x:=x-1;
+    mnF(x,m)
+  } else { void }      
+}
+
+void loop_mnF(int x, int m) {
+  while (x>0) do {
+    if (randBool()) then {
+      m:=x
+    } else { void };
+    x:=x-1
+  }
+}
+
+-----------------------------------------------------------
+--DISJ: (n<=0 && res=0) || (n>0 && res=2n)
+--CONJ: (res>=0 && res>=2n)
+--INV: (0<=n^<n)
+Int foo(Int n) {
+  if (n<=0) then { 0 }
+  else { 2+foo(n-1) }
+}
+
+--DISJ: (n=0 && res=0) || (n>0 && res=2n)
+--CONJ: (n>=0 && res=2n)
+--INV: (n^<n)
+Int foo2(Int n) {
+  if (n=0) then { 0 }
+  else { 2+foo2(n-1) }
+}
+
+--non terminating loop
+--DISJ: (x=0 && res=0)
+--CONJ: (x=0 && res=0)
+--INV: (x^=x)
+Int f(Int x) {
+  if (x=0) then { 0 }
+  else { 2+f(x) }
+}

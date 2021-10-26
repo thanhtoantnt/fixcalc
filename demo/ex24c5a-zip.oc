@@ -1,0 +1,19 @@
+F1:={[a,b]:((a >= 1 && b >= 1) || (b >= 0 && 0 = a))};
+F1C:=complement F1;
+Pairwisecheck F1C;
+
+F2:={[a,b]:((a >= 2 && b >= 2) || (a >= 0 && 1 >= a && b >= a))};
+F2C:=complement F2;
+Pairwisecheck F2C;
+
+F3:={[a,b]:((a >= 3 && b >= 3) || (a >= 0 && 2 >= a && b >= a))};
+F3C:=complement F3;
+Pairwisecheck F3C;
+
+F4:={[a,b]:((a >= 4 && b >= 4) || (a >= 0 && 3 >= a && b >= a))};
+F4C:=complement F4;
+Pairwisecheck F4C;
+
+W:={[a,b]:a <= b, -1 || b <= a-1};
+N:=complement W;
+Pairwisecheck N;

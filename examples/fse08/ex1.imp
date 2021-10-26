@@ -1,0 +1,15 @@
+#include "Primitives.imp"
+
+int foo(int x, int y) {
+ if (x<=y) then {
+  if (x>10) then {
+   ierror()
+  } else { 1 }
+ } else {
+  if (randBool()) then { ierror() }
+  else {
+    if (x>=y) then { 2 }
+    else { ierror() }
+  }
+ }
+} 

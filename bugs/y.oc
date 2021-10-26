@@ -1,0 +1,10 @@
+F1:={[res,x]:(0 = 0 && 0 = res && 1 = x)};
+F2:={[res,x]:(0 = 0 && 1 = res && 3 = x)};
+#foper:={[res,x]:((res >= 1 && 2 >= res) && 2*res + 1 = x)};
+foper:={[res,x]:((res >= 0 && 1 >= res) && 2*res + 1 = x)};
+F3:=F1 union F2;
+foper subset F3;
+F3 subset foper;
+foper intersection (complement (F1 union F2)); 
+
+

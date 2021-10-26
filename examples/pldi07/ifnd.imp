@@ -1,0 +1,58 @@
+#include "Primitives.imp"
+
+{- recursion pattern from queens
+Without ND, (OK union ERR) covers all input. No MUST-NONTERM is detected -}
+void loopQ (int i, int size)
+{
+  if (i<size) then {
+        if (randBool()) then {
+          loopQ (i, size)
+        } else { loopQ (i+1, size) }
+  } else { Void }
+}
+
+{- With ND, (OK union ERR) does not cover all input. MUST-NONTERM is detected -}
+void loopQnd (int i, int size)
+{
+  if (i<size) then {
+        ifnd (randBool()) then {
+          loopQnd (i, size)
+        } else { loopQnd (i+1, size) }
+  } else { Void }
+}
+
+
+
+{- This seems to work now. It used to show a bug in the simplification of CAbst.-}
+bool test(int j, int i)
+{ 
+  if (j >= i) then { True }
+  else {
+    ifnd (True) then { False }
+    else {
+        test (j+1, i)
+    }
+  }
+}
+
+{- example from the paper -}
+bool foo5(int x, int y) {
+  if (x>=y) then {
+    ifnd (randBool()) then {
+      True
+    } else { False }
+  } else { True }
+}
+
+
+int testA(int[int] a, int i)
+{ 
+  if (randBool()) then { a[i] }
+  else { 1 }
+}
+
+int testB(int[int] a, int i)
+{ 
+  ifnd (randBool()) then { a[i] }
+  else { 1 }
+}

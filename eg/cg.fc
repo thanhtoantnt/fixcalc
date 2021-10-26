@@ -1,0 +1,13 @@
+# Constraint-abstraction from figure 1a from Gulavani's paper in CAV'08
+
+
+ P:={[x,r,n,res] -> [] -> []: exists(res1,q,n1,r1:
+     (x=0 && r=0 && n=0 && res=0) ||
+     (P(q,r1,n1,res1) && x>0 && n1=n-1 && r1=r-1 && res=res1+1))};
+
+F1:=bottomup(P,1,SimHeur); F1;
+F2:=bottomup(P,2,SimHeur); F2;
+fixtestPost(P,F1);
+fixtestPost(P,F2);
+
+

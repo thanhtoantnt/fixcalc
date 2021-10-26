@@ -1,0 +1,22 @@
+#include "Primitives.imp"
+
+-- function is f is detected as non-terminating for every input
+void f(int x) {
+  if x=1 then { f(0) }
+  else { f(1) }
+}
+
+
+-- function foo is detected as non-terminating for every positive input
+-- every lasso is well-founded
+--  but code does not terminate
+void foo(int x) {
+  int y:=0;
+  while x>0 do {
+    y:=x;
+    while y>0 do {
+      y:=y-1
+    };
+    x:=x+1
+  }
+}

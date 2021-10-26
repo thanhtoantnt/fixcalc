@@ -1,0 +1,18 @@
+#induction-iteration for i < s
+loop:={[i,n,s]->[Pi,Pn,Ps]->[]: 
+  exists(i1,n1,s1: 
+     (i1=i+1 && n1=n && s1=s && loop(i1,n1,s1,Pi,Pn,Ps))
+	)};
+
+W0 :={[i,n,s]:
+!(i<n) || (i < s)
+};
+W1 := loop(W0); W1;
+#(i + 1 >= n || s >= 2 + i)
+W01:= {[n,s]: forall(i:
+!(!(i < n) || ( i < s)) ||
+(i + 1 >= n || (s >= 2 + i))
+)
+};
+W01;
+# s >= n;

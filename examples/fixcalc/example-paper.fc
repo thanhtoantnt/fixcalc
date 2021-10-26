@@ -1,0 +1,11 @@
+gOK  :={[a,i] -> [PRMi] -> []: (i<=0 && PRMi=i) || exists (i1: i>0 && 0<=i<a && i1=i-1 && gOK(a,i1,PRMi))};
+gERR :={[a,i] -> [] -> []: exists(i1: i>0 && ((i<0 || i>=a) || 0<=i<a && i1=i-1 && gERR(a,i1)))};
+
+OK1:=bottomup(gOK,1,SimHeur);
+OK2:=bottomup(gOK,2,SimHeur);
+ERR:=bottomup(gERR,1,SimHeur);
+OK1;OK2;ERR;
+
+#gOK_1(a,i,PRMi) := (i>=PRMi && 0>=PRMi)
+#gOK_2(a,i,PRMi) := (i<=0 && PRMi=i) || (1<=i<a && PRMi=0)
+#gERR(a,i) := (i>=a && i>=1)

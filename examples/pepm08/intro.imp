@@ -1,0 +1,15 @@
+#include "Primitives.imp"
+
+Float foo(Float[Int] a,Int j,Int n)
+{
+  Float v := 0.0;
+  Int i := j+1;
+  Int m := 0;
+  if (and (0<i,i<=n)) then
+    { v := subF(a,i) }
+  else  { Void };
+  m := lenF(a,1);
+  v := plusFF (v,subF(a,m));
+  v
+}
+

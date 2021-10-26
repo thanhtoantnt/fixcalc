@@ -1,0 +1,62 @@
+proc test(j:int, i:int, qi:int, len_board:int) returns (r:int)
+var qj:int, t1:int;
+begin
+  if (j >= i) then
+    r = 1;
+  else
+    /* assert(0<=j<len_board); */
+    if (brandom) then
+      r = 0;
+    else
+      if (brandom) then
+        r = 0;
+      else
+        t1 = j+1;
+        r = test(t1, i, qi, len_board);
+      endif;
+    endif;
+  endif;
+end
+
+proc loopQ(i:int, size:int, len_board:int) returns ()
+var next:int, t1:int, t2:int, t3:int, t4:int;
+begin
+  if (i<size) then
+    next = random;
+    if (next > size) then
+      /* assert(0<=i<len_board); */ /* Lower bound cannot be proven by Interproc */
+      if (i==0) then
+        skip;
+      else
+        t1 = i-1;
+        () = loopQ(t1, size, len_board);
+      endif;
+    else
+      /* assert(0<=i<len_board); */
+      t2 = 0;
+      t3 = test(t2, i, next, len_board);
+      if (t3==1) then
+        if (i+1 == size) then
+          () = loopQ(i, size, len_board);
+        else
+          t4 = i+1;
+          () = loopQ(t4, size, len_board);
+        endif;
+      else
+        () = loopQ(i, size, len_board);
+      endif;
+    endif;
+  else
+    skip;
+  endif;
+end
+
+
+var 
+i: int, dim1: int, dim2: int;
+begin
+  i = 0;
+  dim1 = 8;
+  dim2 = 8;
+  () = loopQ(i, dim1, dim2);
+end

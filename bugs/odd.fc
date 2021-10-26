@@ -1,0 +1,15 @@
+R2:={[x] -> [res] -> []: ((x=0 && res=0) || (x=1 && res=0) ||  (exists (res1: (exists (x1:((res=res1+1 && (x=x1+2 && 1<x)) && R2(x1,res1)))) )) )
+};
+
+[T2]:=bottomupgen([R2], [2], SimHeur);
+T2;
+[T1]:=bottomupgen([R2], [1], SimHeur);
+T1;
+
+
+# Problem : why is 2 disjunct less precise!
+
+# exists(k:x=2k & res=2x or x=2k+1 & res=2x+1)
+# exists(k:x=2k & res=2x+1 or x=2k+1 & res=2x)
+
+

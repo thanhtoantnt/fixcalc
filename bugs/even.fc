@@ -1,0 +1,27 @@
+meven_new:={[n_62,i_63] -> [] -> []: 
+   (n_62=0 && i_63=0) 
+   ||  exists (flted_17_20,flted_17_21: (meven_new(flted_17_21,flted_17_20)) && (flted_17_21+2=n_62 && flted_17_20+1=i_63))
+};
+
+e1:={[n,i] :  n=2i && i>=0};
+
+e2:={[n_62,i_63] :  n_62=2i_63 && i_63>=0};
+
+#bottomupgen([meven_new,modd_new], [1,1], SimHeur);
+#bottomupgen([meven_new,modd_new], [2,2], SimHeur);
+
+#fixtestPost([meven_new,modd_new],[e1,o1]);
+fixtestPost([meven_new],[e1]);
+fixtestPost([meven_new],[e2]);
+
+E0:={[]: 0=1}; 
+E1 := meven_new(E0); E1;
+E1a := meven_new(e1); E1a;
+E1b := meven_new(e2); E1b;
+E1c := meven_new(e2); E1c;
+#E2 := meven_new(E1); E2;
+#E3 := meven_new(E2); E3;
+#E3H:=selhull(E3,2,SimHeur); E3H;
+
+#A0 := {[n,i] :  n=2i && i>=0};
+#A1 := meven_new(A0); A1;

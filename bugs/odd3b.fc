@@ -1,0 +1,13 @@
+R1:={[x,k1,k2] -> [res] -> []: ((x=0 && res=0 && k1=0 && k2=1) ||
+(x=0 && res=0 && k1=1 && k2=0) ||  (exists (res1: (exists (x1:((res=res1+1 && (x=x1+1 && 0<x)) && R1(x1,res1,k2,k1)))) )) )
+};
+[T1]:=bottomupgen([R1], [2], InterHeur);
+T1;
+#bottomupgen([R2,R1], [1,1], SimHeur);
+
+
+
+# ((res + k1 >= x && 1 + x >= res + k1) && x + 1 = k2 + res + k1)
+# where is 0<=k1,k2<=0 ?
+
+

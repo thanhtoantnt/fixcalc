@@ -1,0 +1,23 @@
+#include "Primitives.imp"
+
+-- Example from Figure 4b of Gulwani-PLDI'08
+-- In our system: we get the same NEVER_BUG condition as in PLDI08 paper for m=2
+void Merge(int m1, int m2, int m3) {
+     int k := 0;
+     int i := 0;
+     assume(and(m1>=0,m2>=0));
+     while (i < m1) do {
+     	   assert(0 <= k);
+	   assert(k < m3);
+	   k := k+1;
+	   i := i+1
+     };
+     i := 0;
+     while (i < m2) do {
+     	   assert(0 <= k);
+	   assert(k < m3);
+	   k := k+1;
+	   i := i+1
+     }
+}
+

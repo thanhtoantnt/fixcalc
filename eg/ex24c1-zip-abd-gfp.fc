@@ -1,0 +1,29 @@
+loop:={[x,y] -> [] -> []: 
+  (x<=0 || 1<=x && !(y=0)) && 
+  (forall (x1: (forall (y1:
+    (!(y=y1+1 && x=x1+1 && 0<=1+y1 && 0<=x1) || loop(x1,y1)))) )) 
+};
+
+#(0 >= 1 + y || (y >= x && y >= 0))
+
+F0:={[]: 1=1};
+
+F1:=loop(F0); F1;
+
+F2:=loop(F1); F2;
+
+F2M:={[]: 
+  (x<=0 || 1<=x && !(y=0)) && 
+  (forall (x1: (forall (y1:
+    (!(y=y1+1 && x=x1+1 && 0<=1+y1 && 0<=x1) || ((x1<=0 || 1<=x1 && !(y1=0)))))) )) 
+};
+PairwiseCheck F2M;
+
+F2 subset F2M;
+F2M subset F2;
+
+F2C:=complement F2;
+F2C;
+
+F2H:=selhull(F2C,2,SimHeur);
+F2H;

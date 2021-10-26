@@ -1,0 +1,63 @@
+#include "Primitives.imp"
+
+void main()
+{
+  int dim := 1000;
+  float[int][dim] A := 0.0;
+  init_arrF(A,0,dim-1);
+  printArrF(A);
+  quick_sort(A,0,dim-1);
+  printArrF(A);
+  printStats()
+}
+
+void init_arrF(float[int] a, int i, int j)
+{
+  if (i>j) then { void }
+  else {
+    assignF(a,i,myrandomF(10.0));
+    init_arrF(a,i+1,j)
+  }
+}
+
+void quick_sort(float[int] a, int l, int h) 
+{
+  if (l < h) then {
+    int p := partition(a,l,h);
+    quick_sort(a,l,p-1);
+    quick_sort(a,p+1,h)
+  }
+  else { void }
+}
+
+int partition(float [int] a, int l, int h) 
+{
+  float v := subF(a,l);
+  int j := l+1;
+  int m := changeM(a,l,j,h,v);
+  swap(a,l,m); --interchange pivot (l) with the last elem smaller-or-equal than it (m)
+  m -- return the position of the pivot
+}  
+
+int changeM(float [int] a,int m,int i,int h,float v) 
+-- m is the last element smaller-or-equal than the pivot
+-- i is the start of the sequence remaining to be compared with the pivot
+-- h is the end of the sequence remaining to be compared with the pivot
+-- v is the value of the pivot
+{
+  if (i <= h) then {
+    if (ltFF(subF(a,i),v)) then {
+      swap(a,m+1,i);
+      changeM(a,m+1,i+1,h,v)
+    }
+    else { changeM(a,m,i+1,h,v) }
+  }
+  else { m }
+}
+
+void swap(float [int] a,int i, int j) 
+{
+  float t := subF(a,i);
+  assignF(a,i,l_:subF(a,j));
+  assignF(a,j,t)
+}

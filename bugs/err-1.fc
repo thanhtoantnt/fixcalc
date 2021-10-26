@@ -1,0 +1,13 @@
+R1:={[x,k] -> [res] -> []: ((x=0 && res=0 && 0<=k1<=1) ||  (exists (res1: (exists (x1,k1:((res=res1+1 && (x=x1+1 && 0<x)) && (k=1 && k1=0 || k=0 && k1=1) && R1(x1,res1,k1)))) )) )
+};
+[T1]:=bottomupgen([R1], [2], SimHeur);
+T1;
+#bottomupgen([R2,R1], [1,1], SimHeur);
+
+
+# PROBLEM : unbound variable error not detected
+#   k1 is unbound
+
+
+
+

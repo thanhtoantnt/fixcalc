@@ -1,0 +1,48 @@
+#include "Primitives.imp"
+
+void main(){
+  int dim := 8;
+  int[int][dim] a := 0;
+  queens(a,dim);
+  printStats()
+}
+
+void queens (int[int] board,int size) 
+{
+  loopQ (0, size, board)
+}
+
+void loopQ (int i, int size, int[int] board)
+{
+  if (i<size) then {
+    int next := 1 + board[i];
+    if (next > size) then { 
+        board [i] := 0;
+        if (i = 0) then { void }
+        else { loopQ (i-1, size, board) }
+    } else {
+        board [i] := next;
+        if (test (0, i, next, board)) then {
+            if (i+1 = size) then {
+                printArr(board);
+                loopQ (i, size, board)
+            } else { loopQ (i+1, size, board) }
+        } else { loopQ (i, size, board) }
+    }
+  } else { Void }
+}
+
+bool test(int j, int i, int qi, int[int] board)
+{ 
+  if (j >= i) then { True }
+  else {
+    int qj := board[j];
+    if (qi = qj) then { False }
+    else {
+      if ((abs (qi - qj)) = (i - j)) then { False }
+      else { 
+        test (j+1, i, qi, board) 
+      }
+    }
+  }
+}

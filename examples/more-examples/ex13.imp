@@ -1,0 +1,17 @@
+#include "Primitives.imp"
+
+-- Both assertions are grouped as MUST_BUG
+void main() {
+ Bool b := randBool();
+ if b then { assert(False) }
+ else { assert(False) }
+}
+
+{-
+-- Both assertions are grouped as MAY_BUG
+void main() {
+ Bool b := randBool();
+ if b then { assert(False) }
+ else { assert(True) }
+}
+-}

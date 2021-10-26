@@ -1,0 +1,26 @@
+#include "Primitives.imp"
+
+Float foo(Float[Int] a,Int j,Int n)
+{
+  Float v := 0.0;
+  Int i := j+1;
+  Int m := 0;
+  if (and (0<i,i<=n)) then
+    { v := subF(a,i) }
+  else  { Void };
+  m := randInt();
+  m := abs(m);
+  plusFF (v,subF(a,m))
+}
+
+Float goo()
+{
+  Int n := 10;
+  Int j1 := randInt();
+  Int j2 := randInt();
+  Float[Int][n] a := 1.0;
+  Float r1 := foo(a,j1,minus(n,1));
+  Float r2 := foo(a,j2,n);
+  Float r3 := foo(a,j2,n);
+  plusFF(r1,plusFF(r2,r3))
+}

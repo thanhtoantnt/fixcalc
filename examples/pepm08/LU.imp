@@ -1,0 +1,193 @@
+#include "Primitives.imp"
+
+void main()
+{
+  int dim := 10;
+  int jp := 1;
+  Float t := 0.0;
+  float[int,int][dim,dim] A := 0.0;
+  int[int][dim] pivot := 0;
+  init_arrF2(A,0,0,dim-1,dim-1);
+
+  printArrF2(A);
+  LU_factor(dim,dim,A,pivot);
+  LU_copy_matrix(dim,dim,A,A); -- this method is not used in the original LU.c file
+  printArrF2(A);
+  printStats()
+}
+
+
+Void init_arrF2aux (Float [Int,Int] a, Int i, Int j, Int m)
+{
+  if (j>m) then { Void }
+	else {
+	  assignF2(a,i,j,myrandomF(10.0));
+	  init_arrF2aux(a,i,j+1,m)
+	}
+}  
+
+Void init_arrF2(Float[Int,Int] a, Int i, Int j, Int m, Int n)
+{
+  if (i>n) then { Void }
+  else {
+    assignF2(a,i,j,myrandomF(10.0));
+    init_arrF2aux(a,i,j,m);
+    init_arrF2(a,i+1,j,m,n)
+  }
+}
+
+Void forloop2 (Int i, Int j, Int n, Float [Int,Int] lu, Float [Int,Int] A)
+ {
+  if (j<n) then {
+	     Float t1 := subF2(A,i,j);
+	     assignF2(lu,i,j,t1); 
+	     forloop2 (i,j+1,n,lu,A)
+  } else { Void }
+ }
+
+Void forloop1 (Int i, Int j, Int m, Int n, Float [Int,Int] lu, Float [Int,Int] A)
+ {
+  if (i<m)
+	then { forloop2 (i,0,n,lu,A);
+	       forloop1 (i+1,0,m,n,lu,A)
+		}
+	else { Void }
+ }
+
+void LU_copy_matrix(Int M, Int N, Float [Int,Int] lu, Float [Int,Int] A)
+  {
+    forloop1 (0,0,M,N,lu,A)
+  }
+
+Int LU_factor(Int M, Int N, Float [Int,Int] A,  Int [Int] pivot)
+{ 
+    Int minMN :=  minIMP(M,N);    
+    loop (0,minMN, M, N, A, pivot);
+    0
+}
+
+Void loop (Int j, Int minMN, Int M, Int N, Float [Int,Int] A, Int [Int] pivot)
+{
+   if(j<minMN) then
+    {
+-- find pivot in column j and  test for singularity.
+        Int jp := j;
+
+        Float t := fabs(subF2(A,j,j));
+        Float t1 := 0.0;
+	      jp := loopi_jp(j+1,j,M,A,t,j);
+        pivot[j] := jp;
+        -- jp now has the index of maximum element
+        -- of column j, below the diagonal         
+     if (and(j<=jp,jp<M)) then {
+  
+      	t1 := subF2(A,jp,j);
+        if (eqFF(t1,0.0)) then { Void } -- factorization failed because of zero pivot
+        else {
+          {
+            if (jp = j) then { Void }
+            else { array2D_swaprow(jp,j,M,A) } -- swap rows j and jp
+          };
+          { 
+            if (j<M-1) then            -- compute elements j+1:M of jth column
+            {
+              Float recp := divFF(1.0, subF2(A,j,j));	
+      	      loopk(j+1,M,j,recp,A)            
+            } else { Void }
+           };
+          {
+            if (j < minMN-1) then { loopii(j+1,j,M,N,A) }
+            else { Void }
+          };
+          loop (j+1,minMN, M, N, A, pivot)
+        }
+	} else { Void }
+    }
+  else { Void }
+}
+
+Int loopi_jp(Int i, Int j, Int M, Float [Int,Int] A, Float t, 
+	          Int r)
+{ 
+  if (i<M) then {
+      Float ab := fabs(subF2(A,i,j));
+      if (gtFF(ab,t)) then { loopi_jp(i+1,j,M,A,ab,i) }
+  		else { loopi_jp(i+1,j,M,A,ab,r) }
+	} 
+  else { r }
+     
+}
+
+
+Void loopjj (Int jj, Int ii, Int j, Int N, Float [Int,Int] A)
+{
+  if (jj<N) 
+	then {
+	      Float t1 := mulFF(subF2(A,ii,j), subF2(A,j,jj));
+	      Float t2 := minusFF(subF2(A,ii,jj), t1);
+	      assignF2(A,ii,jj,t2); 
+	      loopjj (jj+1, ii, j, N, A)}
+	else { Void }
+}
+
+Void loopii (Int ii, Int j, Int M, Int N, Float [Int,Int] A)
+{
+ if (ii<M) then 
+	 {
+	  loopjj(j+1,ii,j,N,A);
+	  loopii(ii+1,j,M,N,A)
+	 }
+	 else { Void }
+}
+
+Void loopk (Int k, Int M, Int j, Float recp, Float [Int,Int] A)
+{
+   if (k<M) then
+	{
+	 Float t1 := mulFF(subF2(A,k,j),recp);
+	 assignF2(A,k,j,t1);
+	 loopk(k+1,M,j,recp,A)
+	}
+   else { Void }
+}
+
+
+
+Void loopswap(Int i, Int jp, Int j, Int M, Float [Int,Int] A, Float [Int,Int] B)
+{
+  if (i<M) then
+	{
+	  Float t1 := subF2(A,j,i);
+    Float t2 := 0.0;
+    Float t3 := 0.0;
+	  assignF2(B,0,i,t1);
+	  t2 := subF2(A,jp,i);
+	  assignF2(A,j,i,t2);
+	  t3 := subF2(B,0,i);
+	  assignF2(A,jp,i,t3);
+	  loopswap(i+1,jp,j,M,A,B)
+	}
+  else { Void }
+}
+
+Void array2D_swaprow (Int jp, Int j, Int M, Float [Int,Int] A)
+{
+   Int dim := 1;
+   Float [Int,Int][dim,M] B := 0.0;
+   --   for(i=0;i<M;i++)
+   --    {	B[1,i]=A[j,i];
+   --	A[j,i]=A[jp,i];
+   --	A[jp,i] = B[1,i];
+   --    }
+   loopswap(0,jp,j,M,A,B)
+}
+
+--Float LU_num_flops(Int N)
+-- {
+---- rougly 2/3*N^3
+--  Int t1 := mul(N,mul(N,N));
+--  Float t2 := mulFI(2.0,t1);
+--  divFF(t2,3.0)
+-- }
+
+

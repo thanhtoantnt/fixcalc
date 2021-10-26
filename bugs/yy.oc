@@ -1,0 +1,38 @@
+
+K := {[x,k,res]:(((1 + 3res = 2x && (x >= 2 && 5 >= x)) && 1 = k) || ((x >= 3 && 4 >= x) && 2 = res && 0 = k) || (0 = 0 && 1 = x && 1 = res && 1 = k) || (0 = 0 && 0 = x && 0 = res && 0 = k))};
+K; 
+
+#M := {[m] : m=1 || m=3};
+#hull M;
+#ConvexHull M;
+
+ConvexHull K;
+#{[x,k,res]: 0, x-4 <= k <= x && k <= 1}
+
+#hull K;
+
+K1 := {[x,k,res]: 1 + 3res = 2x && x >= 2 && 5 >= x && 1 = k};
+K2 := {[x,k,res]: ((x >= 3 && 4 >= x) && 2 = res && 0 = k)};
+K3 := {[x,k,res]: 1 = x && 1 = res && 1 = k};
+K4 := {[x,k,res]: (0 = 0 && 0 = x && 0 = res && 0 = k)};
+
+K5:=hull (K2 union K4);
+K5;
+#{[x,0,res]: x <= 4, 2res && 3res <= 2x}
+
+
+#ConvexHull (K1 union K3);
+K6:=(K1 union K3);
+K6;
+#{[x,1,res]: 1+3res = 2x && 2 <= x <= 5} union {[1,1,1]}
+
+#PairWiseCheck K6;
+# segmentation fault
+#hull K6;
+# segmentation fault
+
+ConvexHull K6;
+#{[x,1,res]: 1 <= x <= 5}
+
+
+

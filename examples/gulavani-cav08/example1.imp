@@ -1,0 +1,27 @@
+-- Example p1 from Gulavani's paper in CAV'08
+#include "Primitives.imp"
+
+--void main() {
+--  int x:=0;
+--  int y:=100;
+--  int z:=randInt();
+--  int i:=0;
+--  while (x<40) do {
+--    if (z=0) then { x:=x+1 } else { x:=x+2 };
+--    i:=i+1
+--  };
+--  assert(i<41)
+--}
+
+-- Simpler version without condition on z.
+void main() {
+  int x:=0;
+  int y:=100;
+  int z:=randInt();
+  int i:=0;
+  while (x<40) do {
+    if (randBool()) then {x:=x+1} else {x:=x+2};
+    i:=i+1
+  };
+  assert(i<41)
+}

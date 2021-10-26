@@ -1,0 +1,23 @@
+R1:={[x,res]: x=0 && res=1 && x>=-1};
+#R2:=SatEQfromEQ(R1); 
+#SatEQfromEQ(R1);  
+#R2:= {[x,res]:x=0 && res=1 && x+1=res};
+#R2;
+R3:=PickGEQfromEQ(R1);
+R3;
+#SatGEQfromEQ(R2);
+#R3:= {[x,res]:x>=0 & 0>=x & res>=1 && 1<=res && res>=0 && x+1>=res & res>=x+1 & res>=x && x=0 && res=1 && x+1=res && x>=-1};
+
+R4:=SatGEQfromEQ(R1);
+R4;
+#R4:= {[x,res]:x>=0 & 0>=x & res>=1 && 1<=res && res>=0  && x=0 && res=1 && && x>=-1};
+
+
+# these commands require new operations to be implemented
+# it should work in conjunction with a more general form of
+# operations defined in sat1.fc
+
+
+
+
+

@@ -1,0 +1,22 @@
+Fixpoint calculator
+===================
+Files:
+- FixCalcParser.y
+- FixCalcLexer.hs
+- FixCalcMain.hs
+- ImpFixpoint2k.hs
+- FixCalc.txt
+===================
+Keywords: 
+bottomup, topdown, selhull, manualhull, widen, fixtestPost, fixtestInv, SimHeur, HausHeur
+subset, intersection, hull, PairwiseCheck
+
+Sample:
+
+changeM:={[s,n,i,h] -> [res] -> [s,n,i,h]: (i=h || changeM(s,n,i,h,res))};
+F1:={[s,n,i,h,res]: 0=1};
+F2:=changeM(F1);
+W2:=widen(F1,F2);
+fixtestPost(changeM,W2);
+Fn:=bottomup(changeM,3,SimHeur);
+

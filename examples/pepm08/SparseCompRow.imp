@@ -1,0 +1,51 @@
+#include "Primitives.imp"
+
+float loop3 (int i, int rowRp1, int [int] col, float [int] val, float [int] x, float sum)
+{ 
+  if (i<rowRp1) then {	
+    int temp1 := col[i];
+    int i1 := i+1;
+    float temp2 := subF(val,i); 
+	  float temp3 := subF(x,temp1);
+	  sum := plusFF(sum, mulFF(temp3,temp2));
+	  loop3 (i1, rowRp1, col, val, x, sum)
+	}
+	else { sum }
+}
+
+void loop2 (int r, int M, int [int] row, int [int] col, float [int] x, float [int] y, float [int] val)
+{
+  if (r<M) then {
+    int r1 := r+1;
+	  float sum := 0.0; 
+    int rowR := row[r];
+    int rowRp1 := row[r+1];
+	  sum := loop3 (rowR, rowRp1, col, val, x, sum);
+    assignF(y,r,sum);
+	  loop2 (r1, M, row, col, x, y, val)
+	}
+	else { void }
+}
+
+void loop1 (int reps, int NUM_ITERATIONS, int M, int [int] row, int [int] col, 
+		float [int] x, float [int] y, float [int] val) 
+{
+  if (reps<NUM_ITERATIONS) then {
+    int reps1 := reps+1;
+  	loop2 (0,M,row, col, x, y, val);     
+    loop1(reps1, NUM_ITERATIONS, M, row, col, x, y, val)
+	}
+	else { void }
+}
+
+void SparseCompRow_matmult(int M, float [int] y, float [int] val, int [int] row,
+    int [int] col, float [int] x, int NUM_ITERATIONS)
+{
+  loop1 (0, NUM_ITERATIONS, M, row, col, x, y, val)
+}
+
+float SparseCompRow_num_flops(int N, int nz, int num_iterations)
+{
+    int actual_nz := mul((nz/N),N);
+    mulIF(actual_nz,mulFI(2.0,num_iterations))
+}

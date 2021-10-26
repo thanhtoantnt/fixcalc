@@ -1,0 +1,86 @@
+#include "Primitives.imp"
+
+Void main()
+{
+  Int size := 100;
+  Int size2:= 10000;
+  Float[Int,Int][size,size] mtx := 2.0;
+  assignF2(mtx,1,1,0.0);
+  {
+    Float[Int][size2] sm := 0.0;
+    Int[Int][size2] indx := 0;
+    Int[Int][size2] jndx := 0;
+    Int noElem := smc(mtx,sm,indx,jndx);
+    {
+      Int k := 0;
+      Float[Int][size] x := 2.1;
+      Float[Int][size] y := 0.0;  
+      mvm(indx,jndx,sm,y,x,k);
+      printArrF2(mtx);
+      printArrF(sm);
+      printArrF(x);
+      printArrF(y)
+    }
+  };
+  printStats()
+}
+
+Int smc(Float[Int,Int] mtx, Float[Int] sm, Int[Int] indx, Int[Int] jndx)
+{
+  Int max_x := lenF2(mtx,1);
+  Int max_y := lenF2(mtx,2);
+  Int max_p := lenF(sm,1);
+  Int p := 0;
+  loop_x(mtx,sm,indx,jndx,0,max_x,max_y,p,max_p)
+}
+
+Int loop_x(Float[Int,Int] mtx, Float[Int] sm, Int[Int] indx, Int[Int] jndx,
+           Int x, Int max_x, Int max_y, Int p, Int max_p)
+{
+  if (x<max_x) then {
+    Int s := loop_y(mtx,sm,indx,jndx,x,0,max_y,p,max_p);
+    if (s = (0-1)) then { (0-1) }
+    else { loop_x(mtx,sm,indx,jndx,x+1,max_x,max_y,s,max_p) }
+  } else { p }
+}
+
+Int loop_y(Float[Int,Int] mtx, Float[Int] sm, Int[Int] indx, Int[Int] jndx,
+          Int x, Int y, Int max_y, Int p, Int max_p)
+{
+  if (y<max_y) then {
+    Float v := subF2(mtx,x,y);
+    if (eqFF(v,0.0)) then
+      { loop_y(mtx,sm,indx,jndx,x,y+1,max_y,p,max_p) }
+    else {
+      if (p<max_p) then {
+        assignF(sm,p,v);
+        assign(indx,p,x);
+        assign(jndx,p,y);
+        loop_y(mtx,sm,indx,jndx,x,y+1,max_y,p+1,max_p)
+      } else { (0-1) }
+    }
+  } else { p }
+}
+
+Void mvm(Int<a>[Int<s1>] indx,Int<b>[Int<s2>] jndx, Float[Int<s3>] val, Float[Int<s4>] y, Float[Int<s5>] x, Int<k> k)
+--  where 
+--    (a.min=a.min' && a.max=a.max' && b.min=b.min' && b.max=b.max' && 
+--    (k>=s3 || 0<=k<s1,s2,s3)),
+--  {},{},
+--    (a.min=a.min^ && a.max=a.max^ && b.min=b.min^ && b.max=b.max^ && s1=s1^ && s2=s2^ && s3=s3^ && s4=s4^ && s5=s5^ && 
+--    0<=k<k^<=s1,s2,s3)
+--  ,
+{
+  if (lt(k,lenF(val,1))) then {
+    Int i := indx[k];
+    Int j := jndx[k];
+    Float v1 := subF(y,i);
+    Float v2 := subF(val,k);
+    Float v3 := subF(x,j);
+    Float v4 := mulFF(v2,v3);
+    Float v5 := plusFF(v1,v4);
+    assignF(y,i,v5);
+    mvm(indx,jndx,val,y,x,k+1)
+  }
+  else { Void }
+}

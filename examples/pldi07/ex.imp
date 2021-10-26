@@ -1,0 +1,38 @@
+#include "Primitives.imp"
+
+{- OK post is imprecise:
+OK:={[f_3,f_4]:((0 = 0 && 0 = f_3) || (f_4 >= 10 && 10 = f_3))};
+-}
+--int f(int i) {
+--  if (i<=0) then { 0 }
+--  else {
+--    if (i>=10) then { 10 }
+--    else {
+--      int l:=f(i-1);
+--      f(l)
+--    }
+--  }
+--}
+
+{- should the ERRfstH/ERRrecH be false? does it matter which is false? -}
+--void f(int[int] a,int i) {
+--  if (i>=10) then { assign(a,3,0);void }
+--  else {
+--    f(a,11)
+--  }
+--}
+
+
+--DISJ: (x<=0 && x'=x && m'=m) || (x>0 && x'=0 && m'=m) || (x>0 && x'=0 && 0<m'<=x))
+--CONJ: (x'<=x && x'<=0)
+--INV: (0<=x^<x)
+void mnF(ref int x, ref int m) {
+  if (x>0) then {
+    if (randBool()) then {
+      m:=x
+    } else { void };
+    x:=x-1;
+    mnF(x,m)
+  } else { void }
+}
+
